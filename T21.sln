@@ -7,7 +7,12 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "T21", "T21\T21.sqlproj", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{46F78721-3FFC-4CCC-865B-56B39276EE60}"
 	ProjectSection(SolutionItems) = preProject
-		SqlQuery_1test.sql = SqlQuery_1test.sql
+		VSProjectT21.sql = VSProjectT21.sql
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{D4FCE5FB-4F4D-4E30-A289-A7C2847B3B22}"
+	ProjectSection(SolutionItems) = preProject
+		scripts\CreateAll_30112020.sql = scripts\CreateAll_30112020.sql
 	EndProjectSection
 EndProject
 Global
@@ -25,6 +30,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D4FCE5FB-4F4D-4E30-A289-A7C2847B3B22} = {46F78721-3FFC-4CCC-865B-56B39276EE60}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {389883CE-6C83-4391-B53E-B04C8C947009}
