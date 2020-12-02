@@ -1,0 +1,201 @@
+EmployeeID,ManagerID,RoleTitle,HireDate,IsActive
+1,75,Database Administrator IV,2020-07-12,0
+2,,Chemical Engineer,2020-03-10,1
+3,19,Environmental Specialist,2020-11-10,0
+4,83,Electrical Engineer,2020-12-01,1
+5,,Financial Advisor,2020-06-08,1
+6,37,Assistant Manager,2020-07-28,0
+7,36,Senior Financial Analyst,2020-05-28,1
+8,,Environmental Specialist,2020-03-15,1
+9,,Human Resources Assistant IV,2020-05-26,1
+10,,Internal Auditor,2020-09-08,0
+11,,Project Manager,2020-01-26,1
+12,,Office Assistant II,2019-12-27,0
+13,16,Pharmacist,2020-02-14,1
+14,91,Actuary,2020-08-02,0
+15,,Geologist I,2019-12-06,1
+16,32,Project Manager,2020-01-08,0
+17,87,Executive Secretary,2020-06-07,1
+18,,Accountant III,2020-11-22,1
+19,78,Legal Assistant,2019-12-23,0
+20,,Research Associate,2020-01-10,0
+21,73,Safety Technician IV,2020-01-22,1
+22,18,Payment Adjustment Coordinator,2020-09-19,1
+23,45,Sales Representative,2020-10-28,0
+24,,Staff Scientist,2020-08-16,1
+25,,Assistant Manager,2020-01-12,1
+26,,Senior Sales Associate,2020-01-23,1
+27,,Human Resources Manager,2020-09-12,0
+28,68,Structural Engineer,2020-08-09,0
+29,,Structural Engineer,2020-03-29,0
+30,44,Chief Design Engineer,2020-06-17,0
+31,34,VP Sales,2020-02-07,1
+32,5,Nuclear Power Engineer,2020-01-26,0
+33,98,Assistant Manager,2020-01-28,1
+34,,General Manager,2020-04-25,1
+35,,Librarian,2020-11-06,0
+36,82,Desktop Support Technician,2020-09-09,0
+37,,Senior Cost Accountant,2020-09-08,0
+38,32,Electrical Engineer,2020-07-16,0
+39,66,Dental Hygienist,2020-01-17,1
+40,87,Nurse,2020-05-09,0
+41,,Payment Adjustment Coordinator,2020-09-17,0
+42,27,Financial Advisor,2020-07-11,0
+43,,Product Engineer,2020-09-11,1
+44,69,Research Assistant II,2020-10-31,0
+45,36,Senior Sales Associate,2020-03-13,0
+46,39,Information Systems Manager,2020-07-20,0
+47,,Executive Secretary,2020-08-29,1
+48,,Occupational Therapist,2020-08-28,0
+49,,Nurse,2020-08-30,1
+50,,Automation Specialist IV,2020-11-11,0
+51,39,Editor,2020-05-23,0
+52,,General Manager,2019-12-26,0
+53,,Marketing Assistant,2020-08-29,0
+54,91,Senior Quality Engineer,2020-03-10,0
+55,,VP Product Management,2020-09-18,0
+56,,Senior Sales Associate,2020-06-05,0
+57,,Software Consultant,2020-01-03,0
+58,,Senior Sales Associate,2020-04-02,0
+59,91,Human Resources Assistant II,2020-08-17,1
+60,,Recruiter,2020-11-05,1
+61,,Administrative Assistant I,2020-01-06,0
+62,47,Staff Accountant III,2020-07-31,1
+63,45,VP Quality Control,2020-03-24,1
+64,,Analog Circuit Design manager,2020-01-21,0
+65,4,Senior Editor,2020-01-17,1
+66,,Administrative Assistant II,2020-09-20,0
+67,61,Senior Financial Analyst,2020-05-26,0
+68,50,Recruiter,2020-01-15,1
+69,,Web Designer I,2020-04-03,0
+70,,Environmental Specialist,2020-06-21,0
+71,,Operator,2020-06-03,1
+72,69,Junior Executive,2020-02-10,1
+73,,Registered Nurse,2020-11-27,0
+74,,Clinical Specialist,2020-10-24,0
+75,,Senior Financial Analyst,2020-11-18,0
+76,,Technical Writer,2020-06-13,1
+77,,Account Executive,2020-10-23,1
+78,33,GIS Technical Architect,2020-11-05,1
+79,,Account Coordinator,2019-12-26,1
+80,29,Dental Hygienist,2020-07-08,1
+81,,Nurse Practicioner,2020-07-08,0
+82,78,Teacher,2020-08-29,0
+83,,Paralegal,2020-05-21,1
+84,,Project Manager,2020-02-29,0
+85,67,Senior Cost Accountant,2020-11-11,0
+86,49,Office Assistant III,2020-03-20,0
+87,,Web Designer II,2020-09-25,0
+88,,Speech Pathologist,2020-11-07,0
+89,98,Research Assistant I,2020-11-27,0
+90,,Civil Engineer,2020-03-03,1
+91,50,Speech Pathologist,2020-06-02,1
+92,86,Design Engineer,2020-10-11,0
+93,65,Chief Design Engineer,2020-02-16,1
+94,,Data Coordiator,2019-12-10,1
+95,,Desktop Support Technician,2019-12-23,1
+96,,Help Desk Operator,2020-09-01,1
+97,18,Software Engineer III,2020-06-10,1
+98,98,Associate Professor,2020-05-19,1
+99,98,Biostatistician II,2020-09-20,0
+100,,Sales Associate,2020-05-16,0
+101,100,Assistant Professor,2020-07-04,1
+102,,Technical Writer,2019-12-05,1
+103,89,Junior Executive,2020-03-11,1
+104,,Software Test Engineer I,2020-09-05,0
+105,40,Engineer II,2020-08-24,1
+106,,Technical Writer,2020-08-19,1
+107,58,Staff Scientist,2020-01-09,0
+108,,Assistant Media Planner,2020-05-10,0
+109,79,Tax Accountant,2020-11-03,0
+110,63,Project Manager,2019-12-18,1
+111,5,Chief Design Engineer,2020-02-29,0
+112,47,Media Manager II,2020-11-05,1
+113,,Payment Adjustment Coordinator,2020-10-20,1
+114,,Senior Cost Accountant,2020-06-29,0
+115,33,VP Product Management,2020-04-14,0
+116,,Human Resources Assistant IV,2020-01-16,1
+117,,Speech Pathologist,2020-01-06,1
+118,82,Environmental Tech,2020-02-10,0
+119,,Dental Hygienist,2020-04-08,0
+120,25,Professor,2020-05-21,0
+121,,Office Assistant I,2020-01-24,1
+122,37,Assistant Media Planner,2019-12-26,0
+123,,Social Worker,2020-03-19,0
+124,26,Developer IV,2020-07-08,0
+125,8,Financial Advisor,2020-06-12,1
+126,62,Information Systems Manager,2020-01-07,0
+127,,VP Sales,2020-04-22,0
+128,91,Occupational Therapist,2020-05-15,0
+129,,Web Developer II,2020-02-07,0
+130,,Associate Professor,2020-04-11,1
+131,48,Accounting Assistant IV,2020-04-15,0
+132,,Senior Developer,2020-04-28,0
+133,,Senior Developer,2020-04-15,1
+134,56,Data Coordiator,2020-11-22,1
+135,,Database Administrator IV,2020-11-05,1
+136,,Paralegal,2020-06-30,0
+137,,Staff Scientist,2020-04-26,0
+138,49,Environmental Specialist,2020-07-26,0
+139,,Executive Secretary,2020-06-05,1
+140,,Registered Nurse,2020-05-22,1
+141,,VP Quality Control,2020-10-04,0
+142,,Automation Specialist IV,2020-10-26,0
+143,54,Sales Representative,2020-02-24,0
+144,94,Environmental Tech,2020-01-10,0
+145,54,Engineer IV,2020-08-12,1
+146,,Account Coordinator,2020-05-26,1
+147,35,Operator,2020-09-24,1
+148,,Web Designer II,2020-05-28,1
+149,10,Marketing Manager,2020-11-09,1
+150,95,Speech Pathologist,2020-03-15,0
+151,,Mechanical Systems Engineer,2020-10-17,1
+152,92,Senior Financial Analyst,2020-05-21,0
+153,,Safety Technician IV,2020-07-12,1
+154,5,Programmer Analyst II,2020-08-26,0
+155,,Staff Scientist,2020-06-15,1
+156,,Financial Advisor,2020-05-11,1
+157,,Health Coach I,2020-05-09,0
+158,41,Engineer IV,2020-05-30,0
+159,74,VP Marketing,2020-08-05,0
+160,,Marketing Assistant,2020-01-25,0
+161,,Project Manager,2020-11-10,1
+162,,Staff Scientist,2020-04-05,1
+163,,Marketing Manager,2020-06-24,1
+164,49,Mechanical Systems Engineer,2020-02-28,1
+165,6,Accountant I,2020-07-26,0
+166,,Web Designer I,2020-06-08,0
+167,48,Food Chemist,2020-03-08,1
+168,,Administrative Assistant II,2020-08-21,0
+169,59,Senior Sales Associate,2020-01-15,1
+170,27,Engineer II,2020-09-04,0
+171,,Data Coordiator,2020-01-09,0
+172,,Automation Specialist II,2020-03-12,0
+173,,Food Chemist,2020-08-05,1
+174,,Senior Developer,2020-10-18,0
+175,,Information Systems Manager,2020-01-30,0
+176,,Payment Adjustment Coordinator,2020-10-23,1
+177,85,Food Chemist,2020-01-02,1
+178,,Administrative Assistant II,2020-11-03,0
+179,19,Sales Associate,2020-05-18,0
+180,91,Software Consultant,2020-07-04,1
+181,41,Dental Hygienist,2020-07-05,0
+182,,Account Executive,2020-07-21,1
+183,,Occupational Therapist,2020-07-20,0
+184,87,Accountant II,2020-10-19,1
+185,91,Graphic Designer,2020-04-20,1
+186,,Help Desk Technician,2020-06-01,0
+187,79,Human Resources Assistant I,2020-08-23,1
+188,24,Software Consultant,2020-06-14,0
+189,79,Environmental Specialist,2020-11-24,1
+190,,VP Marketing,2020-05-16,1
+191,,Biostatistician III,2020-10-27,0
+192,80,Technical Writer,2020-02-04,1
+193,,Human Resources Manager,2020-06-03,1
+194,90,Recruiter,2020-03-10,1
+195,72,Account Representative III,2020-11-22,0
+196,82,Physical Therapy Assistant,2020-03-06,0
+197,37,Quality Engineer,2020-11-15,0
+198,47,Librarian,2020-11-30,1
+199,,Electrical Engineer,2020-10-14,1
+200,10,Administrative Assistant III,2020-02-26,0
