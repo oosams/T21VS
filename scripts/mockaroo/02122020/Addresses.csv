@@ -24,7 +24,7 @@ AddressID,CityID,AddressLine1,AddressLine2,PostalCode
 23,2529808,9 Carpenter Court,,6150-405
 24,2601103,0 Grover Alley,75 Haas Terrace,20000-000
 25,2558481,289 Morning Parkway,76 Clove Plaza,00000
-26,2610602,8 Pierstorff Point,,13253 CEDEX 06
+26,2610602,8 Pierstorff Point,,3455
 27,2542011,9119 Sachs Drive,,00000
 28,2578043,440 Tennessee Drive,,34310
 29,2544860,1601 Karstens Way,00 Holmberg Point,544529
@@ -53,8 +53,8 @@ AddressID,CityID,AddressLine1,AddressLine2,PostalCode
 52,2640962,0 New Castle Point,3 Mosinee Court,00000
 53,2617732,43583 Clove Pass,429 Golf Course Pass,00000
 54,2544084,79088 Glendale Place,64 Kenwood Street,00000
-55,2535679,1 Ludington Junction,2 Bayside Terrace,54529 CEDEX
-56,2641687,05133 Melody Alley,,172 29
+55,2535679,1 Ludington Junction,2 Bayside Terrace,54522
+56,2641687,05133 Melody Alley,,55555
 57,2651872,171 Bonner Parkway,,00000
 58,2586320,4907 Merrick Crossing,607 Monument Center,934-0099
 59,2628089,1728 Marcy Road,50133 Luster Terrace,00000
@@ -73,8 +73,8 @@ AddressID,CityID,AddressLine1,AddressLine2,PostalCode
 72,2625200,0123 Prairieview Terrace,52559 Thompson Parkway,23242
 73,2650654,10729 Beilfuss Center,174 Bay Court,515-2605
 74,2588066,6 Northport Way,9528 Londonderry Circle,00000
-75,2600221,5375 Springs Street,276 Elgar Junction,44307 CEDEX 3
-76,2661286,0342 Sutteridge Park,,644000
+75,2600221,5375 Springs Street,276 Elgar Junction,44302
+76,2661286,0342 Sutteridge Park,,555
 77,2610335,27 Cody Avenue,,00000
 78,2587783,541 Kensington Park,686 Pepper Wood Drive,00000
 79,2555134,563 Schurz Plaza,44666 West Avenue,7505
@@ -166,8 +166,8 @@ AddressID,CityID,AddressLine1,AddressLine2,PostalCode
 165,2602041,9600 Tony Crossing,766 Emmet Place,00000
 166,2627801,05441 Paget Terrace,42405 Mallard Plaza,21-007
 167,2528675,1514 Hermina Center,,333 24
-168,2536445,55 Superior Point,,59034 CEDEX
-169,2636094,8336 Mesta Trail,886 Buhler Street,00000
+168,2536445,55 Superior Point,,590342
+169,2636094,8336 Mesta Trail,886 Buhler Street, 5555
 170,2668075,7 Maryland Avenue,,742 91
 171,2595741,19783 Esker Avenue,,6227
 172,2646847,57473 Dorton Drive,,190990
@@ -223,18 +223,18 @@ AddressID,CityID,AddressLine1,AddressLine2,PostalCode
 222,2593547,3134 Morningstar Point,,00000
 223,2657314,7 Sommers Lane,4 Loomis Drive,00000
 224,2615184,5069 Waxwing Alley,,00000
-225,2543771,63911 Lerdahl Alley,,75659 CEDEX 13
-226,2557320,85457 Village Green Parkway,6554 Mockingbird Crossing,00000
+225,2543771,63911 Lerdahl Alley,,756591
+226,2557320,85457 Village Green Parkway,6554 Mockingbird Crossing,55555
 227,2652373,670 Hanover Avenue,,281 44
 228,2643383,564 Cordelia Alley,92 Mallard Parkway,00000
-229,2602879,85488 Westend Trail,,06306 CEDEX 4
-230,2532545,507 Northridge Drive,,00000
+229,2602879,85488 Westend Trail,,063061
+230,2532545,507 Northridge Drive,,555
 231,2561776,54073 Westerfield Place,,905-1413
 232,2593577,6 Mosinee Lane,,9240
 233,2594688,6312 Starling Trail,,175 49
-234,2655960,06337 Forest Run Alley,,75699 CEDEX 14
-235,2644700,30041 Vernon Pass,78837 Bluejay Road,681008
-236,2663291,1895 Texas Pass,,07104
+234,2655960,06337 Forest Run Alley,,1808
+235,2644700,30041 Vernon Pass,78837 Bluejay Road,1808
+236,2663291,1895 Texas Pass,,5555
 237,2579890,019 Village Green Park,7 Clyde Gallagher Court,1808
 238,2573952,86819 Laurel Crossing,,38-450
 239,2552004,9631 School Pass,,00000
