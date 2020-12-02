@@ -11,8 +11,8 @@
 
 
 20 [Master].[Categories]
-[Master].[Products]
-
+200 [Master].[Products]
+200 [Master].[Warehouse]
 
 
 
