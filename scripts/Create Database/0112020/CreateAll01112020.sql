@@ -7,7 +7,7 @@
 USE master;
 
 drop database if exists T21
-GOw
+GO
 
 /*==============================================================*/
 /* Database: T21                                                */
