@@ -93,26 +93,24 @@ with (fieldterminator = ',',rowterminator = '0x0a',FIRSTROW = 2)
 
 
 ---100    [Shop].[VersionTypes]    --in case of products -> version type for each product... for other enity -> for each enityID.
- delete [Shop].[VersionTypes]
- GO
-BULK INSERT [Shop].[VersionTypes]
-FROM 'D:\_Work\GitHub\T21VS\scripts\mockaroo\02122020\Warehouse.csv'
-with (fieldterminator = ',',rowterminator = '0x0a',FIRSTROW = 2) 
+ 
+---100 [Logs].[Versions] added
+
+
+---todo
 
 
 
-
-
---300 [Shop].[Orders]
+--???? [Shop].[Orders]
  delete [Shop].Orders;
  GO
 BULK INSERT [Shop].Orders
 FROM 'D:\_Work\GitHub\T21VS\scripts\mockaroo\02122020\Orders.csv'
 with (fieldterminator = ',',rowterminator = '0x0a',FIRSTROW = 2) 
 
+--likeorders-- [Shop].[OrderStatus]
 
-
---900 [Shop].[OrderDetails]
+--????? [Shop].[OrderDetails]
  delete [Shop].OrderDetails;
  GO
 BULK INSERT [Shop].OrderDetails
