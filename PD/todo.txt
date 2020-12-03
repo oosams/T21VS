@@ -1,5 +1,6 @@
 qq
  - version - пока надо каждый строку товара под своим operationRunID, или поменять....как вытянуть все версии на 1 продакт айди. 
+
 +создал концепт, проставил связи.
 
  - постпон !пейментс тоже странно, вот статус и тип можно расписать и вынести, а сами оба получаеться в ордеренавернео лучше
@@ -9,6 +10,8 @@ qq
  +added entityID in version Type
  + moved quanity to products
  +renamed warehouse to productPrice
+ + moved version to another schema
+ 
   
 TODO
 +сгенерить логик, проверить как выставило ключи подправить их
@@ -25,6 +28,8 @@ TODO
 + адрес генерим город страна регион
 
 - сгенерить данные
+	versions - 
+	
 
 
 in visual studio - include schema name in talbe name.

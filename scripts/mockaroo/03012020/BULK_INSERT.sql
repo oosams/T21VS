@@ -130,18 +130,9 @@ USE master;
 
 
 
-SELECT
-*
-FROM
-  	INFORMATION_SCHEMA.TABLES
 
 
 -------WHILE
-
-DECLARE @Counter INT 
-SET @Counter = (SELECT count(*) from INFORMATION_SCHEMA.TABLES)
-
-WHILE @Counter > 0
 
 
 DECLARE @sqlCommand varchar(1000);		
@@ -149,22 +140,16 @@ DECLARE @table varchar (75);
 DECLARE @FileExt VARCHAR(10);
 DECLARE @Path VARCHAR(100);
 
-set @table = @SchemaName + '.' + @TableName
 set @FileExt = '.csv'
 set @Path = 'D:\_Work\GitHub\T21VS\scripts\mockaroo\03012020\'
-DECLARE @TableName VARCHAR(100)
 
 DECLARE CUR CURSOR FAST_FORWARD FOR
     SELECT table_schema + '.' + table_name as tablename
     FROM   INFORMATION_SCHEMA.TABLES
-     
 OPEN CUR
-FETCH NEXT FROM CUR INTO @SchemaName, @TableName
- 
+FETCH NEXT FROM CUR INTO @table
 WHILE @@FETCH_STATUS = 0
-BEGIN
-	
-
+BEGIN	
 	SET @sqlCommand = 'delete ' + @table +
 		'; BULK INSERT ' + @table +
 		' FROM '''+ @Path + @table +@FileExt+''' '+
@@ -172,43 +157,11 @@ BEGIN
 	--select @sqlCommand
 	EXECUTE(@sqlCommand)
 
-   FETCH NEXT FROM CUR_TEST INTO @CursorTestID
+	FETCH NEXT FROM CUR INTO @table
 END
 CLOSE CUR
 DEALLOCATE CUR
 GO
-
-
-
-------------dynamic sql
-
-DECLARE @sqlCommand varchar(1000);		
-DECLARE @table varchar (75);
-DECLARE @FileExt VARCHAR(10);
-DECLARE @Path VARCHAR(100);
-
-set @table = 'Shop.Customers'
-set @FileExt = '.csv'
-set @Path = 'D:\_Work\GitHub\T21VS\scripts\mockaroo\03012020\'
-
-SET @sqlCommand = 'delete ' + @table +
-	'; BULK INSERT ' + @table +
-	' FROM '''+ @Path + @table +@FileExt+''' '+
-	' with (fieldterminator = '','',rowterminator = ''0x0a'',FIRSTROW = 2, KEEPIDENTITY)'
---select @sqlCommand
-EXECUTE(@sqlCommand)
-
-
-
-SELECT * FROM Shop.Customers;
-
---100 [Shop].[Customers] 
- delete [Shop].Customers;
-
-BULK INSERT [Shop].Customers
-FROM 'D:\_Work\GitHub\T21VS\scripts\mockaroo\02122020\Customers.csv'
-with (fieldterminator = ',',rowterminator = '0x0a',FIRSTROW = 2, KEEPIDENTITY) 
-
-
+-------------------------------
 
 
