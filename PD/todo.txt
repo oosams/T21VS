@@ -10,7 +10,7 @@ TODO
 +сгенерить физ - проверить типы данных.
 + +sqlserver ref name FK_%.U50:PARENTCHILD%_%.U50:CHILD%
 +схемы
-+сгенеритб код
++сгенерить код
 
 через гид исказился файл....закину вручную 
 + докрутить связку    гит - визуал студио - скл сервер.
@@ -18,6 +18,9 @@ TODO
 + проверить lenght nvarchar
 + version create date ( remove end date)
 + адрес генерим город страна регион
+
+- сгенерить данные
+
 
 in visual studio - include schema name in talbe name.
 
