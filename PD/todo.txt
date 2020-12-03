@@ -5,6 +5,10 @@ qq
  - постпон !пейментс тоже странно, вот статус и тип можно расписать и вынести, а сами оба получаеться в ордеренавернео лучше
  - постпон calendar????
  - постпон пока убрал address
+ 
+ +added entityID in version Type
+ + moved quanity to products
+ +renamed warehouse to productPrice
   
 TODO
 +сгенерить логик, проверить как выставило ключи подправить их
