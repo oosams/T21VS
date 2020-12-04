@@ -1,0 +1,6 @@
+StatusID,Status,StatusName,Description
+1,P,Pending,Operation is waiting for resource or quota availability.
+2,I,In Progress,Operation has started and is in progress.
+3,K,Killed,Operation stopped by the user.
+4,F,Failed,Operation failed. See the error logs for details.
+5,C,Completed,Operation completed successfully.

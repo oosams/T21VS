@@ -83,23 +83,23 @@ BULK INSERT [Shop].Products
 FROM 'D:\_Work\GitHub\T21VS\scripts\mockaroo\02122020\Products.csv'
 with (fieldterminator = ',',rowterminator = '0x0a',FIRSTROW = 2) 
  
---100 [Shop].[Warehouse]
+--100 [Shop].[ProductPrices]
 
- delete [Shop].Warehouse;
+ delete [Shop].[ProductPrices];
  GO
-BULK INSERT [Shop].Warehouse
-FROM 'D:\_Work\GitHub\T21VS\scripts\mockaroo\02122020\Warehouse.csv'
+BULK INSERT [Shop].[ProductPrices]
+FROM 'D:\_Work\GitHub\T21VS\scripts\mockaroo\02122020\ProductPrices.csv'
 with (fieldterminator = ',',rowterminator = '0x0a',FIRSTROW = 2) 
 
 
----100    [Shop].[VersionTypes]    --in case of products -> version type for each product... for other enity -> for each enityID.
+---100    [Shop].[VersionTypes] added   --in case of products -> version type for each product... for other enity -> for each enityID.
  
 ---100 [Logs].[Versions] added
 
 
 ---todo
 
-
+ -- 3 [Shop].[OrderStatus]
 
 --???? [Shop].[Orders]
  delete [Shop].Orders;
@@ -108,7 +108,7 @@ BULK INSERT [Shop].Orders
 FROM 'D:\_Work\GitHub\T21VS\scripts\mockaroo\02122020\Orders.csv'
 with (fieldterminator = ',',rowterminator = '0x0a',FIRSTROW = 2) 
 
---likeorders-- [Shop].[OrderStatus]
+
 
 --????? [Shop].[OrderDetails]
  delete [Shop].OrderDetails;
@@ -118,6 +118,10 @@ FROM 'D:\_Work\GitHub\T21VS\scripts\mockaroo\02122020\OrderDetails.csv'
 with (fieldterminator = ',',rowterminator = '0x0a',FIRSTROW = 2) 
 
 
+--5 [Logs].[OperationStatuses]
+--1 [Logs].[Operations]
+--1 [Logs].[OperationRuns]
+
 -- Enable all constraints for database
 EXEC sp_msforeachtable "ALTER TABLE ? WITH CHECK CHECK CONSTRAINT all"
 
@@ -126,7 +130,7 @@ EXEC sp_msforeachtable "ALTER TABLE ? WITH CHECK CHECK CONSTRAINT all"
 USE master;
 
 
-
+[Logs].[OperationRuns]
 
 
 
