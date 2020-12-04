@@ -97,27 +97,23 @@ with (fieldterminator = ',',rowterminator = '0x0a',FIRSTROW = 2)
 ---100 [Logs].[Versions] added
 
 
----todo
-
  -- 3 [Shop].[OrderStatus]
 
---???? [Shop].[Orders]
+--1000 [Shop].[Orders]
  delete [Shop].Orders;
  GO
 BULK INSERT [Shop].Orders
 FROM 'D:\_Work\GitHub\T21VS\scripts\mockaroo\02122020\Orders.csv'
 with (fieldterminator = ',',rowterminator = '0x0a',FIRSTROW = 2) 
 
-
-
---????? [Shop].[OrderDetails]
+--4000 [Shop].[OrderDetails]
  delete [Shop].OrderDetails;
  GO
 BULK INSERT [Shop].OrderDetails
-FROM 'D:\_Work\GitHub\T21VS\scripts\mockaroo\02122020\OrderDetails.csv'
+FROM 'D:\_Work\GitHub\T21VS\scripts\mockaroo\030122020\Shop.OrderDetails'
 with (fieldterminator = ',',rowterminator = '0x0a',FIRSTROW = 2) 
 
-
+SELECT * FROM  [Shop].[OrderDetails]
 --5 [Logs].[OperationStatuses]
 --1 [Logs].[Operations]
 --1 [Logs].[OperationRuns]
@@ -130,7 +126,7 @@ EXEC sp_msforeachtable "ALTER TABLE ? WITH CHECK CHECK CONSTRAINT all"
 USE master;
 
 
-[Logs].[OperationRuns]
+
 
 
 
