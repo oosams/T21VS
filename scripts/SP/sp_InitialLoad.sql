@@ -9,12 +9,26 @@ CREATE OR ALTER PROCEDURE sp_InitialLoad
 	@FileExt nvarchar(255)
 AS
 BEGIN
+	DECLARE @table nvarchar (1000); -- to concat table name from INFORMATION_SCHEMA.TABLES
+	DECLARE @vFileExists Table (FileExists int, FileDir int, ParentDirExists int); --use to check path existing
 
-	DECLARE @sqlCommand nvarchar(1000);		
-	DECLARE @table nvarchar (1000);
+	-- EXEC sp_StartOperation ( opID from operations,  
+	
+	--check path
+	INSERT INTO @vFileExists 
+       EXEC xp_fileexist 'D:\_Work\GitHub\T21VS\scripts\generatedData\mockaroo\20201203\'
+	IF (SELECT FileDir FROM @vFileExists) = 0 
+		BEGIN
+		--EXEC  sp_SetEvent
+		--EXEC  sp_SetError
+		--EXEC  sp_FailOperation
+		RETURN -1
+		END
+		
+		
 
-	-- exec  sp_StartOperation ( opID from operations,  
 
+	
 
 	--CURSOR to get table names from entire db
 	DECLARE CUR CURSOR FAST_FORWARD FOR
@@ -33,21 +47,52 @@ BEGIN
 				' with (fieldterminator = '','',rowterminator = ''0x0a'',FIRSTROW = 2, KEEPIDENTITY)')
 		END TRY
 		BEGIN CATCH
-		--to add
+		--EXEC sp_SetEvent
+		--EXEC  sp_SetError
+		--EXEC  sp_FailOperation -- not using here?  
 		END CATCH
 		FETCH NEXT FROM CUR INTO @table
 	END
 	CLOSE CUR
 	DEALLOCATE CUR
 
-	-- exec  sp_CompleteOperation
+	--EXEC  sp_CompleteOperation
 
 END
 GO
-
-EXEC dbo.InitialLoad @Path = 'D:\_Work\GitHub\T21VS\scripts\mockaroo\20201203\', @FileExt = '.csv';
-
-
-
+-----------------------------------------
+EXEC dbo.InitialLoad @Path = 'D:\_Work\GitHub\T21VS\scripts\generatedData\mockaroo\20201203\', @FileExt = '.csv';
+------------------------------------------
 
 
+
+
+--------
+
+DECLARE @table nvarchar (1000);
+ DECLARE @Path nvarchar(1000) = 'D:\_Work\GitHub\T21VS\scripts\generatedData\mockaroo\20201203\', @FileExt nvarchar(1000) = '.csv';
+
+	--CURSOR to get table names from entire db
+	DECLARE CUR CURSOR FAST_FORWARD FOR
+		SELECT 
+			table_schema + '.' + table_name as tablename
+		FROM   INFORMATION_SCHEMA.TABLES
+	OPEN CUR
+	FETCH NEXT FROM CUR INTO @table
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		--BEGIN TRY
+			--truncate each table and insert @Path + @table +@FileExt 
+			EXECUTE('truncate table ' + @table +
+				'; BULK INSERT ' + @table +
+				' FROM '''+ @Path + @table +@FileExt+''' '+
+				' with (fieldterminator = '','',rowterminator = ''0x0a'',FIRSTROW = 2, KEEPIDENTITY)')
+	--	END TRY
+	--	BEGIN CATCH
+		--EXEC  sp_SetError
+		--EXEC  sp_FailOperation -- not using here?  
+		--END CATCH
+		FETCH NEXT FROM CUR INTO @table
+	END
+	CLOSE CUR
+	DEALLOCATE CUR
