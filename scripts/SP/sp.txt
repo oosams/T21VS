@@ -1,6 +1,37 @@
+
+ sp_InitialLoad
+
  
- sp_SetEvents
+ 
+ sp_StartOperation - 1,R,Running,   id      setevent
+ 
+ sp_FailOperation  - 2,F,Failed,            setevent
+ 
+ sp_CompleteOperation  - 3,C,Completed      setevent
+  
+ 
+ sp_SetEvents 
+  
+ sp_SetErrors  
  
  
  
- sp_SetErrors
+ 
+ sp_SendDbEmail
+ 
+ 
+ sp_CreateCustomer
+ sp_CreateEmployee
+ 
+ sp_CreateAddress
+ sp_CreateContact
+ 
+ sp_CreateCategory
+ sp_CreateProduct
+ 
+ sp_UpdateProduct
+ 
+ sp_CreateOrder
+ sp_UpdateOrder
+ 
+ 
