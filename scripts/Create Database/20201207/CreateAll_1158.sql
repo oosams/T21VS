@@ -234,7 +234,7 @@ create table Logs.ErrorLogs (
    OperationRunID       int                  not null,
    ErrorNumber          int                  null,
    ErrorProcName        nvarchar(1024)       null,
-   Parameters           nvarchar(1024)       null,
+   Parameters           nvarchar(Max)       null,
    ErrorMessage         nvarchar(Max)        not null,
    ErrorDateTime        datetime             not null,
    constraint PK_ERRORLOGS primary key (ErrorID)
@@ -258,7 +258,7 @@ create table Logs.EventLogs (
    UserName             nvarchar(100)        null,
    AffectedRows         int                  null,
    EventProcName        nvarchar(1024)       null,
-   Parameters           nvarchar(1024)       null,
+   Parameters           nvarchar(Max)       null,
    EventMessage         nvarchar(Max)        not null,
    EventDateTime        datetime             not null,
    constraint PK_EVENTLOGS primary key (EventID)
