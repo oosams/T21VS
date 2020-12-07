@@ -16,6 +16,10 @@ BEGIN
 	--BEGIN TRY
 
 		DECLARE @procName NVARCHAR(1024) = OBJECT_SCHEMA_NAME(@procedureID) + '.' + OBJECT_NAME(@procedureID);
+		DECLARE @curentErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();  
+		DECLARE @curentErrorSeverity INT = ERROR_SEVERITY();  
+		DECLARE @curentErrorState INT = ERROR_STATE();
+		
 
 		INSERT INTO Logs.ErrorLogs
 		(
@@ -66,11 +70,6 @@ select 1/0
 END TRY
 BEGIN CATCH
 --SELECT ERROR_MESSAGE(), ERROR_SEVERITY(), ERROR_STATE(), ERROR_NUMBER()
-RAISERROR(
-END CATCH
-
-
-
 DECLARE @ErrorMessage NVARCHAR(4000);  
     DECLARE @ErrorSeverity INT;  
     DECLARE @ErrorState INT;  
@@ -87,3 +86,5 @@ DECLARE @ErrorMessage NVARCHAR(4000);
                @ErrorSeverity, -- Severity.  
                @ErrorState -- State.  
                );
+END CATCH
+
