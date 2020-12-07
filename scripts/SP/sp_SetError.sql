@@ -13,57 +13,60 @@ CREATE OR ALTER PROC logs.sp_SetError
 
 AS
 BEGIN
-	--BEGIN TRY
+	BEGIN TRY
 
 		DECLARE @procName NVARCHAR(1024) = OBJECT_SCHEMA_NAME(@procedureID) + '.' + OBJECT_NAME(@procedureID);
 		DECLARE @curentErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();  
 		DECLARE @curentErrorSeverity INT = ERROR_SEVERITY();  
 		DECLARE @curentErrorState INT = ERROR_STATE();
 		
-
-		INSERT INTO Logs.ErrorLogs
-		(
+		INSERT INTO Logs.ErrorLogs(
 			OperationRunID,
 			ErrorNumber,
 			ErrorProcName,
 			Parameters,
 			ErrorMessage,
-			ErrorDateTime
-		)
-		VALUES
-		(
+			ErrorDateTime)		
+		VALUES(
 			@runID,
 			ERROR_NUMBER(),
 			@procName,
 			@parameters,
-			@errorMessage,
-			CURRENT_TIMESTAMP
-		);
-
-		RAISERROR (@ErrorMessage, -- Message text.  
-               @ErrorSeverity, -- Severity.  
-               @ErrorState -- State.  
-               );
-	--END TRY
-	--BEGIN CATCH
+			CONCAT(@errorMessage,' ',@curentErrorMessage),
+			CURRENT_TIMESTAMP);
 		
-	--	RAISERROR
+		RAISERROR(
+			@curentErrorMessage,   
+			@curentErrorSeverity,   
+			@curentErrorState);    
+		
+	END TRY
+	BEGIN CATCH
 
-	--END CATCH
+		SELECT   
+			@curentErrorMessage = ERROR_MESSAGE(),  
+			@curentErrorSeverity = ERROR_SEVERITY(),  
+			@curentErrorState = ERROR_STATE();  
+		
+		RAISERROR(
+			@curentErrorMessage,   
+			@curentErrorSeverity,   
+			@curentErrorState); 
+
+	END CATCH
 END
 GO
---------------
+
+--------DEBUG---------
 DECLARE @parameters NVARCHAR(1024) =  CONCAT(
 		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10),
 		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10)
 		)
 
 EXEC logs.sp_SetError	 @runID = 112
-						
-						,@affectedRows = @@rowcount
 						,@procedureID = 111
 						,@parameters = @parameters
-						,@eventMessage = 'Test Message'
+						,@errorMessage = 'Test Error Message'
 						
 
 
@@ -91,4 +94,5 @@ DECLARE @ErrorMessage NVARCHAR(4000);
                @ErrorState -- State.  
                );
 END CATCH
+
 
