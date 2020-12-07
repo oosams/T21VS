@@ -255,11 +255,11 @@ go
 create table Logs.EventLogs (
    EventID              int                  identity,
    OperationRunID       int                  not null,
-   [User]               nvarchar(100)        null,
+   UserName             nvarchar(100)        null,
    AffectedRows         int                  null,
    EventProcName        nvarchar(1024)       null,
    Parameters           nvarchar(1024)       null,
-   EventMessage         real                 not null,
+   EventMessage         nvarchar(Max)        not null,
    EventDateTime        datetime             not null,
    constraint PK_EVENTLOGS primary key (EventID)
 )
