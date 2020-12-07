@@ -5,14 +5,14 @@
 /*==============================================================*/
 use master
 
-drop database T21
+drop database if exists T21
 go
 
 /*==============================================================*/
 /* Database: T21                                                */
 /*==============================================================*/
 create database T21
-on
+
 go
 
 use T21
@@ -483,22 +483,6 @@ create table Logs.VersionTypes (
    Description          nvarchar(Max)        not null,
    constraint PK_VERSIONTYPES primary key (VersionTypeID)
 )
-go
-
-if exists(select 1 from sys.extended_properties p where
-      p.major_id = object_id('Logs.VersionTypes')
-  and p.minor_id = (select c.column_id from sys.columns c where c.object_id = p.major_id and c.name = 'EntityID')
-)
-begin
-   execute sp_dropextendedproperty 'MS_Description', 
-   'user', 'Logs', 'table', 'VersionTypes', 'column', 'EntityID'
-
-end
-
-
-execute sp_addextendedproperty 'MS_Description', 
-   'In case VersionType is ProductPrice - EntityID mean ProductID',
-   'user', 'Logs', 'table', 'VersionTypes', 'column', 'EntityID'
 go
 
 /*==============================================================*/
