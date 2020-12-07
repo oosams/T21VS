@@ -1,4 +1,7 @@
-USE T21;
+USE MASTER
+GO
+
+USE T21
 GO
 
 --sample

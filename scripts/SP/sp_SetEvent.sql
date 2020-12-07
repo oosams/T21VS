@@ -1,8 +1,8 @@
-use master
-go
+USE MASTER
+GO
 
-use t21
-go
+USE T21
+GO
 
 -------------
 CREATE OR ALTER PROC logs.sp_SetEvent 
