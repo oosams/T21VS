@@ -47,16 +47,17 @@ BEGIN
 	--END CATCH
 END
 GO
---------------
+
+--------DEBUG---------
 DECLARE @parameters NVARCHAR(1024) =  CONCAT(
 		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10),
 		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10)
 		)
 
-EXEC logs.sp_SetEvent	 @runID = 112
+EXEC logs.sp_SetEvent	 @runID = -111
 						
 						,@affectedRows = @@rowcount
-						,@procedureID = 111
+						,@procedureID = -111
 						,@parameters = @parameters
 						,@eventMessage = 'Test Message'
 						
