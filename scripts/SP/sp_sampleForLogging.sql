@@ -10,10 +10,9 @@ CREATE OR ALTER PROCEDURE sp_sampleForLogging
 
 AS
 BEGIN
-	DECLARE @parameters NVARCHAR(1024) =  CONCAT(
+	DECLARE @parameters NVARCHAR(MAX) =  CONCAT(
 		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10),
-		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10)
-		)
+		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10))
  
  
 	-- EXEC sp_StartOperation ( opID from operations,  

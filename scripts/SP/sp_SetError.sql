@@ -8,7 +8,7 @@ GO
 CREATE OR ALTER PROC logs.sp_SetError
 	@runID INT,
 	@procedureID INT = NULL,
-	@parameters NVARCHAR(1024) = NULL,
+	@parameters NVARCHAR(MAX) = NULL,
 	@errorMessage NVARCHAR(MAX) = NULL
 
 AS
@@ -58,21 +58,21 @@ END
 GO
 
 --------DEBUG---------
-DECLARE @parameters NVARCHAR(1024) =  CONCAT(
+DECLARE @parameters NVARCHAR(MAX) =  CONCAT(
 		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10),
-		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10)
-		)
+		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10))
 
 BEGIN TRY
 select 1/0
 END TRY
 BEGIN CATCH
 --SELECT ERROR_MESSAGE(), ERROR_SEVERITY(), ERROR_STATE(), ERROR_NUMBER()
-EXEC logs.sp_SetError	 @runID = 112
+EXEC logs.sp_SetError	 @runID = -112
 						,@procedureID = 111
 						,@parameters = @parameters
-						,@errorMessage = 'Test Error Message.'
+						,@errorMessage = 'Test Error Message. '
 END CATCH
 
 select * FROM Logs.ErrorLogs
+
 
