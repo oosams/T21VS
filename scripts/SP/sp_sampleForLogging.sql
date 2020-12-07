@@ -7,14 +7,20 @@ CREATE OR ALTER PROCEDURE sp_sampleForLogging
 
 AS
 BEGIN
-	
-
+	DECLARE @parameters NVARCHAR(1024) =  CONCAT(
+		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10),
+		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10)
+		)
+ 
+ 
 	-- EXEC sp_StartOperation ( opID from operations,  
 	
 	-- EXEC sp_SetEvent start some checks
 	--some checks with errors
 	IF 1 = 0 
 		BEGIN
+
+ 
 		--EXEC  sp_SetEvent
 		--EXEC  sp_SetError
 		--EXEC  sp_FailOperation

@@ -1,4 +1,10 @@
+use master
+go
 
+use t21
+go
+
+-------------
 CREATE OR ALTER PROC logs.sp_SetEvent 
 	@runID INT,
 	@affectedRows INT = NULL,
@@ -10,7 +16,7 @@ AS
 BEGIN
 	--BEGIN TRY
 
-		DECLARE @procName NVARCHAR(1024) = OBJECT_NAME(@procedureID) + '.' +	OBJECT_SCHEMA_NAME(@procedureID);
+		DECLARE @procName NVARCHAR(1024) = OBJECT_SCHEMA_NAME(@procedureID) + '.' + OBJECT_NAME(@procedureID);
 
 		INSERT INTO Logs.EventLogs
 		(
@@ -42,12 +48,18 @@ BEGIN
 END
 GO
 --------------
-EXEC logs.sp_SetEvent	 @runID = 111
+DECLARE @parameters NVARCHAR(1024) =  CONCAT(
+		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10),
+		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10)
+		)
+
+EXEC logs.sp_SetEvent	 @runID = 112
 						
-						,@affectedRows = NULL
-						,@procedureID = NULL
-						,@parameters = NULL
+						,@affectedRows = @@rowcount
+						,@procedureID = 111
+						,@parameters = @parameters
 						,@eventMessage = 'Test Message'
 						
 
 
+select * FROM Logs.EventLogs
