@@ -63,36 +63,16 @@ DECLARE @parameters NVARCHAR(1024) =  CONCAT(
 		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10)
 		)
 
-EXEC logs.sp_SetError	 @runID = 112
-						,@procedureID = 111
-						,@parameters = @parameters
-						,@errorMessage = 'Test Error Message'
-						
-
-
-select * FROM Logs.ErrorLogs
-
 BEGIN TRY
 select 1/0
 END TRY
 BEGIN CATCH
 --SELECT ERROR_MESSAGE(), ERROR_SEVERITY(), ERROR_STATE(), ERROR_NUMBER()
-DECLARE @ErrorMessage NVARCHAR(4000);  
-    DECLARE @ErrorSeverity INT;  
-    DECLARE @ErrorState INT;  
-  
-    SELECT   
-        @ErrorMessage = ERROR_MESSAGE(),  
-        @ErrorSeverity = ERROR_SEVERITY(),  
-        @ErrorState = ERROR_STATE();  
-  
-    -- Use RAISERROR inside the CATCH block to return error  
-    -- information about the original error that caused  
-    -- execution to jump to the CATCH block.  
-    RAISERROR (@ErrorMessage, -- Message text.  
-               @ErrorSeverity, -- Severity.  
-               @ErrorState -- State.  
-               );
+EXEC logs.sp_SetError	 @runID = 112
+						,@procedureID = 111
+						,@parameters = @parameters
+						,@errorMessage = 'Test Error Message.'
 END CATCH
 
+select * FROM Logs.ErrorLogs
 
