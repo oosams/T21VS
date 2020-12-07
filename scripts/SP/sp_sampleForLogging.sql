@@ -10,7 +10,7 @@ CREATE OR ALTER PROCEDURE sp_sampleForLogging
 
 AS
 BEGIN
-	DECLARE @parameters NVARCHAR(MAX) =  CONCAT(
+	DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
 		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10),
 		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10))
  

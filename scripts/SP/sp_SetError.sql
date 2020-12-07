@@ -58,7 +58,7 @@ END
 GO
 
 --------DEBUG---------
-DECLARE @parameters NVARCHAR(MAX) =  CONCAT(
+DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
 		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10),
 		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10))
 
@@ -69,7 +69,7 @@ BEGIN CATCH
 --SELECT ERROR_MESSAGE(), ERROR_SEVERITY(), ERROR_STATE(), ERROR_NUMBER()
 EXEC logs.sp_SetError	 @runID = -112
 						,@procedureID = 111
-						,@parameters = @parameters
+						,@parameters = @curentParameters
 						,@errorMessage = 'Test Error Message. '
 END CATCH
 
