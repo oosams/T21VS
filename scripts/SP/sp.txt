@@ -1,8 +1,10 @@
 
- sp_InitialLoad
 
- 
- 
+ sp_SetError
+
+ sp_SetEvent   
+
+
  sp_StartOperation - 1,R,Running,   id      setevent
  
  sp_FailOperation  - 2,F,Failed,            setevent
@@ -10,11 +12,8 @@
  sp_CompleteOperation  - 3,C,Completed      setevent
   
  
- sp_SetEvents 
-  
- sp_SetErrors  
- 
- 
+ sp_InitialLoad
+
  
  
  sp_SendDbEmail

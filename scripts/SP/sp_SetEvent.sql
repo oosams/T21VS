@@ -15,6 +15,7 @@ CREATE OR ALTER PROC logs.sp_SetEvent
 AS
 BEGIN
 	BEGIN TRY
+
 		DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
 			CHAR(9), '@runID = ', @runID, CHAR(13), CHAR(10),
 			CHAR(9), '@affectedRows = ', @affectedRows, CHAR(13), CHAR(10),
@@ -40,8 +41,7 @@ BEGIN
 			@parameters,
 			@eventMessage,
 			CURRENT_TIMESTAMP);
-
-			select 1/0
+						
 	END TRY
 	BEGIN CATCH
 		
@@ -69,3 +69,6 @@ EXEC logs.sp_SetEvent	 @runID = -113
 						
 						
 select * FROM Logs.EventLogs
+select * FROM Logs.ErrorLogs
+
+ 

@@ -2,27 +2,32 @@ USE T21;
 GO
 
 --Truncate and populate all tables in database from provided folder
---EXEC dbo.InitialLoad @Path = 'D:\_Work\GitHub\T21VS\scripts\mockaroo\20201203\', @FileExt = '.csv';
+
 
 CREATE OR ALTER PROCEDURE sp_InitialLoad 
 	@Path nvarchar(1000),
 	@FileExt nvarchar(255)
 AS
 BEGIN
+
 	DECLARE @table nvarchar (1000); -- to concat table name from INFORMATION_SCHEMA.TABLES
 	DECLARE @vFileExists Table (FileExists int, FileDir int, ParentDirExists int); --use to check path existing
 
 	-- EXEC sp_StartOperation ( opID from operations,  
 	
-	--check path
+	--check path existing
 	INSERT INTO @vFileExists 
-       EXEC xp_fileexist 'D:\_Work\GitHub\T21VS\scripts\generatedData\mockaroo\20201203\'
+       EXEC xp_fileexist @Path
 	IF (SELECT FileDir FROM @vFileExists) = 0 
 		BEGIN
-		--EXEC  sp_SetEvent
-		--EXEC  sp_SetError
-		--EXEC  sp_FailOperation
-		RETURN -1
+
+			EXEC logs.sp_SetError	 @runID = -112
+							,@procedureID = 111
+							,@parameters = @parameters
+							,@errorMessage = 'Test Error Message. '
+
+			--EXEC  sp_FailOperation
+			RETURN -1
 		END
 		
 		
@@ -60,7 +65,7 @@ BEGIN
 
 END
 GO
------------------------------------------
+-------------DEBUG----------------------------
 EXEC dbo.InitialLoad @Path = 'D:\_Work\GitHub\T21VS\scripts\generatedData\mockaroo\20201203\', @FileExt = '.csv';
 ------------------------------------------
 
