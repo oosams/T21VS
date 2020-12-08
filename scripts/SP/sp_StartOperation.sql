@@ -1,43 +1,61 @@
+USE MASTER;
+GO
+
 USE T21;
 GO
 
---Truncate and populate all tables in database from provided folder
 
+-- Create new OperationRun 
 
+-------------
 CREATE OR ALTER PROCEDURE logs.sp_StartOperation
-	@OperationID nvarchar(1000),
+	@OperationID INT,
 	@Description nvarchar(255) = NULL
 
 AS
 BEGIN
 	BEGIN TRY
 
-		--to keep new OperationRunID 
+		-- for logging
+		DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
+			CHAR(9), '@OperationID = ', @OperationID, CHAR(13), CHAR(10),
+			CHAR(9), '@Description = ', @Description, CHAR(13), CHAR(10));
+
+		-- to keep new OperationRunID 
 		DECLARE @curentRunID INT;
 
+		-- get Operation Name and Description
+		DECLARE @OperationName nvarchar(255);
+		DECLARE @OperationDescription nvarchar(MAX);
+		
+		SELECT 
+			@OperationName = OperationName,
+			@OperationDescription = Description
+		FROM Logs.Operations
+		WHERE OperationID = @OperationID;
 
 
 		INSERT INTO Logs.OperationRuns(
 			StatusID,
 			OperationID,
 			StartTime,
-			EndTime,
 			Description)
 		VALUES(
-			1,
+			1, -- R,Running
 			@OperationID,
 			CURRENT_TIMESTAMP,
-			,
-			Description);
+			CONCAT(@Description, ' ', @OperationDescription));
 
-		SET @curentRunID = SCOPE_IDENTITY()
+		SET @curentRunID = SCOPE_IDENTITY();
 
+		-- throw event
+		EXEC logs.sp_SetEvent	 @runID = @curentRunID						
+								,@affectedRows = @@rowcount
+								,@procedureID = @@PROCID
+								,@parameters = @curentParameters
+								,@eventMessage = CONCAT('The task ',
 
-		SELECT CURRENT_TIMESTAMP 2020-12-08 18:12:43.647
-
-		--TODO EXEC sp_SetEvent
-
-		RETURN @curentRunID
+		RETURN @curentRunID;
 
 	END TRY
 	BEGIN CATCH
