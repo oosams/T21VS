@@ -281,7 +281,7 @@ create table Logs.OperationRuns (
    StatusID             int                  not null,
    OperationID          int                  not null,
    StartTime            datetime             not null,
-   EndTime              datetime             not null default '9999-12-31 23:59:59.999',
+   EndTime              datetime             not null default {ts'9999-12-31 23:59:59.999'},
 
    Description          nvarchar(Max)        not null,
    constraint PK_OPERATIONRUNS primary key (OperationRunID)
