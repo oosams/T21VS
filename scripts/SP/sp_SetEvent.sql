@@ -52,9 +52,10 @@ BEGIN
 								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
 								,@errorMessage = 'Cant log the event. '		-- NVARCHAR(MAX)
 
-	END CATCHs
+	END CATCH
 END
 GO
+
 
 --------DEBUG---------
 DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
@@ -71,4 +72,6 @@ EXEC logs.sp_SetEvent	 @runID = -113	-- INT
 						
 select * FROM Logs.EventLogs
 select * FROM Logs.ErrorLogs
+select * FROM Logs.OperationRuns
+
 

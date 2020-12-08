@@ -60,6 +60,7 @@ BEGIN
 END
 GO
 
+
 --------DEBUG---------
 DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
 		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10),
