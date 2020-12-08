@@ -13,13 +13,17 @@ CREATE OR ALTER PROCEDURE sp_InitialLoad
 
 AS
 BEGIN
-
-	-- TODO EXEC sp_StartOperation ( opID from operations 1, 
+	--BEGIN TRY
 
 	-- for logging
 	DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
 		CHAR(9), '@Path = ', @Path, CHAR(13), CHAR(10),
 		CHAR(9), '@FileExt = ', @FileExt, CHAR(13), CHAR(10));
+
+
+	-- TODO EXEC sp_StartOperation ( opID from operations = 1,  @OperationRunParameters = @curentParameters
+
+	
 
 	-- to concat table name from INFORMATION_SCHEMA.TABLES
 	DECLARE @table NVARCHAR (1000); 
