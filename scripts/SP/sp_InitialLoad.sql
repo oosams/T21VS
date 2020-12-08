@@ -20,7 +20,7 @@ BEGIN
        EXEC xp_fileexist @Path
 	IF (SELECT FileDir FROM @vFileExists) = 0 
 		BEGIN
-
+			--set Error
 			EXEC logs.sp_SetError	 @runID = -112
 							,@procedureID = 111
 							,@parameters = @parameters
@@ -52,6 +52,8 @@ BEGIN
 				' with (fieldterminator = '','',rowterminator = ''0x0a'',FIRSTROW = 2, KEEPIDENTITY)')
 		END TRY
 		BEGIN CATCH
+
+
 		--EXEC sp_SetEvent
 		--EXEC  sp_SetError
 		--EXEC  sp_FailOperation -- not using here?  
