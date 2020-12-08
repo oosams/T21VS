@@ -62,7 +62,8 @@ merge?
  + setEvent
  + setError
  
- sp_StartOperation - 1,R,Running,    
+ sp_StartOperation - 1,R,Running, 
+		если она падает - то еррор не логиниться так как не создался ран айди, просто райзеррор?
  sp_FailOperation  - 2,F,Failed,            
  sp_CompleteOperation  - 3,C,Completed
 	
