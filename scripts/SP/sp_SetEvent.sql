@@ -62,14 +62,13 @@ DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
 		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10)
 		)
 
-EXEC logs.sp_SetEvent	 @runID = -113						
-						,@affectedRows = @@rowcount
-						,@procedureID = -111
-						,@parameters = @curentParameters
-						,@eventMessage = 'Test event Message. '
+EXEC logs.sp_SetEvent	 @runID = -113	-- INT					
+						,@affectedRows = @@rowcount		-- INT, NULL
+						,@procedureID = -111	-- INT, NULL
+						,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
+						,@eventMessage = 'Test event Message. '		-- NVARCHAR(MAX), NULL
 						
 						
 select * FROM Logs.EventLogs
 select * FROM Logs.ErrorLogs
 
- 
