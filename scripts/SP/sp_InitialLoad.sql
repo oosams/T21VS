@@ -24,7 +24,7 @@ BEGIN
 			EXEC logs.sp_SetError	 @runID = -112
 							,@procedureID = 111
 							,@parameters = @parameters
-							,@errorMessage = 'Test Error Message. '
+							,@errorMessage = 'The path does not exists. '
 
 			--EXEC  sp_FailOperation
 			RETURN -1
