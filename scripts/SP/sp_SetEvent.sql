@@ -47,12 +47,12 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		
-		EXEC logs.sp_SetError	 @runID = @runID
-								,@procedureID = @@PROCID
-								,@parameters = @curentParameters
-								,@errorMessage = 'Cant log the event. '
+		EXEC logs.sp_SetError	 @runID = @runID	-- INT
+								,@procedureID = @@PROCID	-- INT, NULL
+								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
+								,@errorMessage = 'Cant log the event. '		-- NVARCHAR(MAX)
 
-	END CATCH
+	END CATCHs
 END
 GO
 
@@ -66,7 +66,7 @@ EXEC logs.sp_SetEvent	 @runID = -113	-- INT
 						,@affectedRows = @@rowcount		-- INT, NULL
 						,@procedureID = -111	-- INT, NULL
 						,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-						,@eventMessage = 'Test event Message. '		-- NVARCHAR(MAX), NULL
+						,@eventMessage = 'Test event Message. '		-- NVARCHAR(MAX)
 						
 						
 select * FROM Logs.EventLogs
