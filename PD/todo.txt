@@ -66,8 +66,9 @@ merge?
  sp_FailOperation  - 2,F,Failed,            
  sp_CompleteOperation  - 3,C,Completed
 	
-	LEFT('string', 1000) обрезать Message и @Description  тчо бы не превышать стринг поле
- 
+	-LEFT('string', 1000) обрезать Message и @Description  тчо бы не превышать стринг поле
+	
+	-variables code standart
  --------
  ????????может в схеме рисовать связи между процедурами???????
  -----------------
