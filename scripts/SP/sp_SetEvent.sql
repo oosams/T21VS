@@ -1,7 +1,7 @@
-USE MASTER
+USE MASTER;
 GO
 
-USE T21
+USE T21;
 GO
 
 -------------
@@ -16,7 +16,7 @@ AS
 BEGIN
 	BEGIN TRY
 		
-		--for logging
+		-- for logging
 		DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
 			CHAR(9), '@runID = ', @runID, CHAR(13), CHAR(10),
 			CHAR(9), '@affectedRows = ', @affectedRows, CHAR(13), CHAR(10),
@@ -24,7 +24,7 @@ BEGIN
 			CHAR(9), '@parameters = ', @parameters, CHAR(13), CHAR(10),
 			CHAR(9), '@eventMessage = ', @eventMessage, CHAR(13), CHAR(10));
 		
-		--concat Proc Name
+		-- concat Proc Name
 		DECLARE @procName NVARCHAR(1024) = OBJECT_SCHEMA_NAME(@procedureID) + '.' + OBJECT_NAME(@procedureID);
 
 		INSERT INTO Logs.EventLogs(
@@ -62,8 +62,7 @@ DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
 		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10)
 		)
 
-EXEC logs.sp_SetEvent	 @runID = -113
-						
+EXEC logs.sp_SetEvent	 @runID = -113						
 						,@affectedRows = @@rowcount
 						,@procedureID = -111
 						,@parameters = @curentParameters
