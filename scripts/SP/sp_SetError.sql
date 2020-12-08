@@ -66,14 +66,16 @@ DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
 		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10))
 
 BEGIN TRY
-select 1/0
+	select 1/0
 END TRY
 BEGIN CATCH
 -- SELECT ERROR_MESSAGE(), ERROR_SEVERITY(), ERROR_STATE(), ERROR_NUMBER()
-EXEC logs.sp_SetError	 @runID = -112
-						,@procedureID = -111
-						,@parameters = @curentParameters
-						,@errorMessage = 'Test Error Message. '
+
+EXEC logs.sp_SetError	 @runID = -112		-- INT, NULL
+						,@procedureID = -111		-- INT, NULL
+						,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
+						,@errorMessage = 'Test Error Message. '	-- NVARCHAR(MAX), NULL
+
 END CATCH
 
 select * FROM Logs.ErrorLogs
