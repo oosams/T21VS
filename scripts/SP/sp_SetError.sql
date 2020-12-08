@@ -35,7 +35,7 @@ BEGIN
 			ERROR_NUMBER(),
 			@procName,
 			@parameters,
-			CONCAT(@errorMessage,' ',@curentErrorMessage),
+			CONCAT(@curentErrorMessage,' ',@errorMessage),
 			CURRENT_TIMESTAMP);
 		
 		RAISERROR(
@@ -71,7 +71,7 @@ END TRY
 BEGIN CATCH
 -- SELECT ERROR_MESSAGE(), ERROR_SEVERITY(), ERROR_STATE(), ERROR_NUMBER()
 
-EXEC logs.sp_SetError	 @runID = -112		-- INT, NULL
+EXEC logs.sp_SetError	 @runID = -112		-- INT
 						,@procedureID = -111		-- INT, NULL
 						,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
 						,@errorMessage = 'Test Error Message. '	-- NVARCHAR(MAX), NULL
