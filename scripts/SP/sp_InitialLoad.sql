@@ -39,10 +39,10 @@ BEGIN
 	IF (SELECT FileDir FROM @vFileExists) = 0 
 		BEGIN
 			-- throw Error
-			EXEC logs.sp_SetError	 @runID = -112 -- get from sp_StartOperation
-									,@procedureID = @@PROCID
-									,@parameters = @curentParameters
-									,@errorMessage = 'The path does not exists. '
+			EXEC logs.sp_SetError	 @runID = -112 		-- INT       -- get from sp_StartOperation
+									,@procedureID = @@PROCID	-- INT, NULL
+									,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
+									,@errorMessage = 'The path does not exists. '	-- NVARCHAR(MAX), NULL
 
 			-- TODO EXEC  sp_FailOperation
 			RETURN -1
