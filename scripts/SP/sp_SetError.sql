@@ -71,7 +71,7 @@ END TRY
 BEGIN CATCH
 -- SELECT ERROR_MESSAGE(), ERROR_SEVERITY(), ERROR_STATE(), ERROR_NUMBER()
 EXEC logs.sp_SetError	 @runID = -112
-						,@procedureID = 111
+						,@procedureID = -111
 						,@parameters = @curentParameters
 						,@errorMessage = 'Test Error Message. '
 END CATCH
