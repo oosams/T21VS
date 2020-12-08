@@ -7,33 +7,40 @@ GO
 CREATE OR ALTER PROCEDURE sp_InitialLoad 
 	@Path nvarchar(1000),
 	@FileExt nvarchar(255)
+
 AS
 BEGIN
 
-	DECLARE @table nvarchar (1000); -- to concat table name from INFORMATION_SCHEMA.TABLES
-	DECLARE @vFileExists Table (FileExists int, FileDir int, ParentDirExists int); --use to check path existing
+	--TODO EXEC sp_StartOperation ( opID from operations 1, 
 
-	-- EXEC sp_StartOperation ( opID from operations,  
+	--for logging
+	DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
+		CHAR(9), '@Path = ', @Path, CHAR(13), CHAR(10),
+		CHAR(9), '@FileExt = ', @FileExt, CHAR(13), CHAR(10))
+
+	-- to concat table name from INFORMATION_SCHEMA.TABLES
+	DECLARE @table nvarchar (1000); 
+		
+			 
 	
 	--check path existing
+	DECLARE @vFileExists Table (FileExists int, FileDir int, ParentDirExists int);
+
 	INSERT INTO @vFileExists 
        EXEC xp_fileexist @Path
+
 	IF (SELECT FileDir FROM @vFileExists) = 0 
 		BEGIN
 			--set Error
-			EXEC logs.sp_SetError	 @runID = -112
-							,@procedureID = 111
-							,@parameters = @parameters
-							,@errorMessage = 'The path does not exists. '
+			EXEC logs.sp_SetError	 @runID = -112 -- get from sp_StartOperation
+									,@procedureID = @@PROCID
+									,@parameters = @curentParameters
+									,@errorMessage = 'The path does not exists. '
 
-			--EXEC  sp_FailOperation
+			--TODO EXEC  sp_FailOperation
 			RETURN -1
 		END
-		
-		
-
-
-	
+			
 
 	--CURSOR to get table names from entire db
 	DECLARE CUR CURSOR FAST_FORWARD FOR
@@ -63,10 +70,18 @@ BEGIN
 	CLOSE CUR
 	DEALLOCATE CUR
 
-	--EXEC  sp_CompleteOperation
+	--TODO EXEC  sp_CompleteOperation
 
 END
 GO
+
+----Add info in Logs.Operations------
+
+INSERT INTO Logs.Operations
+VALUES(
+	1,'sp_InitialLoad', 'First Initial Load after db created');
+GO
+
 -------------DEBUG----------------------------
 EXEC dbo.InitialLoad @Path = 'D:\_Work\GitHub\T21VS\scripts\generatedData\mockaroo\20201203\', @FileExt = '.csv';
 ------------------------------------------

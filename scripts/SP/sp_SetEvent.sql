@@ -15,14 +15,16 @@ CREATE OR ALTER PROC logs.sp_SetEvent
 AS
 BEGIN
 	BEGIN TRY
-
+		
+		--for logging
 		DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
 			CHAR(9), '@runID = ', @runID, CHAR(13), CHAR(10),
 			CHAR(9), '@affectedRows = ', @affectedRows, CHAR(13), CHAR(10),
 			CHAR(9), '@procedureID = ', @procedureID, CHAR(13), CHAR(10),
 			CHAR(9), '@parameters = ', @parameters, CHAR(13), CHAR(10),
-			CHAR(9), '@eventMessage = ', @eventMessage, CHAR(13), CHAR(10))
-
+			CHAR(9), '@eventMessage = ', @eventMessage, CHAR(13), CHAR(10));
+		
+		--concat Proc Name
 		DECLARE @procName NVARCHAR(1024) = OBJECT_SCHEMA_NAME(@procedureID) + '.' + OBJECT_NAME(@procedureID);
 
 		INSERT INTO Logs.EventLogs(
@@ -46,9 +48,9 @@ BEGIN
 	BEGIN CATCH
 		
 		EXEC logs.sp_SetError	 @runID = @runID
-						,@procedureID = @@PROCID
-						,@parameters = @curentParameters
-						,@errorMessage = 'Cant log the event. '
+								,@procedureID = @@PROCID
+								,@parameters = @curentParameters
+								,@errorMessage = 'Cant log the event. '
 
 	END CATCH
 END

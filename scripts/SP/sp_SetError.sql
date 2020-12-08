@@ -15,7 +15,10 @@ AS
 BEGIN
 	BEGIN TRY
 
+		--concat Proc Name
 		DECLARE @procName NVARCHAR(1024) = OBJECT_SCHEMA_NAME(@procedureID) + '.' + OBJECT_NAME(@procedureID);
+
+		--collect error info
 		DECLARE @curentErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();  
 		DECLARE @curentErrorSeverity INT = ERROR_SEVERITY();  
 		DECLARE @curentErrorState INT = ERROR_STATE();
