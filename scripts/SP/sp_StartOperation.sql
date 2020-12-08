@@ -31,9 +31,10 @@ print 1
 		-- for logging
 		DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
 			CHAR(9), '@OperationID = ', @OperationID, CHAR(13), CHAR(10),
-			CHAR(9), '@Description = ', @Description, CHAR(13), CHAR(10));
-		DECLARE @eventMessage INT = CONCAT('Operation ''', @OperationName, ''' has been started with Parameters: ', @OperationRunParameters);
-		DECLARE @errorMessage INT = CONCAT('Cant log the start of operation ''', @OperationName, '''  with Parameters: ', @OperationRunParameters);
+			CHAR(9), '@Description = ', @Description, CHAR(13), CHAR(10),
+			CHAR(9), '@OperationRunParameters = ', @OperationRunParameters, CHAR(13), CHAR(10)); 
+print 1	DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Operation ''', @OperationName, ''' has been started with Parameters: ', @OperationRunParameters);
+print 1	DECLARE @errorMessage NVARCHAR(MAX) = CONCAT('Cant log the start of operation ''', @OperationName, '''  with Parameters: ', @OperationRunParameters);
 print 2
 		-- to keep new OperationRunID 
 		DECLARE @curentRunID INT;		
@@ -65,10 +66,20 @@ print 5
 	BEGIN CATCH
 print 6
 		--not needed?
-		EXEC logs.sp_SetError	 @runID = @curentRunID		-- INT
-								,@procedureID = @@PROCID		-- INT, NULL
-								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@errorMessage = @errorMessage	-- NVARCHAR(MAX), NULL
+		--EXEC logs.sp_SetError	 @runID = @curentRunID		-- INT
+		--						,@procedureID = @@PROCID		-- INT, NULL
+		--						,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
+		--						,@errorMessage = @errorMessage	-- NVARCHAR(MAX), NULL
+
+		   
+			DECLARE @curentErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();  
+		DECLARE @curentErrorSeverity INT = ERROR_SEVERITY();  
+		DECLARE @curentErrorState INT = ERROR_STATE();  
+		
+		RAISERROR(
+			@curentErrorMessage,   
+			@curentErrorSeverity,   
+			@curentErrorState); 
 	
 	END CATCH
 END
@@ -86,4 +97,15 @@ EXEC logs.sp_StartOperation  @OperationID = 1	-- INT
 							,@OperationRunParameters = 'test1OperationRunParameters'	-- NVARCHAR(MAX), NULL
 
 
-SELECT 
+select * FROM Logs.EventLogs
+select * FROM Logs.ErrorLogs
+select * FROM Logs.OperationRuns
+
+
+
+
+
+
+DECLARE @time datetime
+set @time = '2020-12-09 00:13:23.363'
+SELECT @time 
