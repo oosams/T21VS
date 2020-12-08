@@ -10,7 +10,8 @@ GO
 -------------
 CREATE OR ALTER PROCEDURE logs.sp_StartOperation
 	@OperationID INT,
-	@Description NVARCHAR(255) = NULL
+	@Description NVARCHAR(255) = NULL,
+	@OperationRunParameters NVARCHAR(MAX) = NULL
 
 AS
 BEGIN
@@ -77,4 +78,6 @@ DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
 		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10)
 		)
 
-EXEC logs.sp_StartOperation 
+EXEC logs.sp_StartOperation  @OperationID = 1	-- INT
+							,@Description = 'test1Description'	-- NVARCHAR(255), NULL
+							,@OperationRunParameters = 'test1OperationRunParameters'	-- NVARCHAR(MAX), NULL
