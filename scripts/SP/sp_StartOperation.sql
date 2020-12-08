@@ -32,7 +32,7 @@ BEGIN
 		DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
 			CHAR(9), '@OperationID = ', @OperationID, CHAR(13), CHAR(10),
 			CHAR(9), '@Description = ', @Description, CHAR(13), CHAR(10));
-		DECLARE @Message INT = CONCAT('Operation ''', @OperationName, ''' has been started. ');
+		DECLARE @Message INT = CONCAT('Operation ''', @OperationName, ''' has been started with Parameters: ', @OperationRunParameters);
 
 		-- to keep new OperationRunID 
 		DECLARE @curentRunID INT;		
