@@ -8,8 +8,8 @@ GO
 
 -------------
 CREATE OR ALTER PROCEDURE sp_InitialLoad 
-	@Path nvarchar(1000),
-	@FileExt nvarchar(255)
+	@Path NVARCHAR(1000),
+	@FileExt NVARCHAR(255)
 
 AS
 BEGIN
@@ -22,19 +22,19 @@ BEGIN
 		CHAR(9), '@FileExt = ', @FileExt, CHAR(13), CHAR(10));
 
 	-- to concat table name from INFORMATION_SCHEMA.TABLES
-	DECLARE @table nvarchar (1000); 
+	DECLARE @table NVARCHAR (1000); 
 		
 			 
 	
 	-- check path existing
-	DECLARE @vFileExists Table (FileExists int, FileDir int, ParentDirExists int);
+	DECLARE @vFileExists Table (FileExists INT, FileDir INT, ParentDirExists INT);
 
 	INSERT INTO @vFileExists 
        EXEC xp_fileexist @Path
 
 	IF (SELECT FileDir FROM @vFileExists) = 0 
 		BEGIN
-			-- set Error
+			-- throw Error
 			EXEC logs.sp_SetError	 @runID = -112 -- get from sp_StartOperation
 									,@procedureID = @@PROCID
 									,@parameters = @curentParameters
@@ -48,7 +48,7 @@ BEGIN
 	-- CURSOR to get table names from entire db
 	DECLARE CUR CURSOR FAST_FORWARD FOR
 		SELECT 
-			table_schema + '.' + table_name as tablename
+			table_schema + '.' + table_name AS tablename
 		FROM   INFORMATION_SCHEMA.TABLES
 	OPEN CUR
 	FETCH NEXT FROM CUR INTO @table
