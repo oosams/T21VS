@@ -20,6 +20,7 @@ BEGIN
 		DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
 			CHAR(9), '@OperationID = ', @OperationID, CHAR(13), CHAR(10),
 			CHAR(9), '@Description = ', @Description, CHAR(13), CHAR(10));
+		DECLARE @eventMessage
 
 		-- to keep new OperationRunID 
 		DECLARE @curentRunID INT;
@@ -41,7 +42,7 @@ BEGIN
 			StartTime,
 			Description)
 		VALUES(
-			1, -- R,Running
+			1, -- R,Running in Logs.OperationStatuses
 			@OperationID,
 			CURRENT_TIMESTAMP,
 			CONCAT(@Description, ' ', @OperationDescription));
@@ -49,11 +50,13 @@ BEGIN
 		SET @curentRunID = SCOPE_IDENTITY();
 
 		-- throw event
+
+		DECLARE @curentRunID int = -1
 		EXEC logs.sp_SetEvent	 @runID = @curentRunID						
 								,@affectedRows = @@rowcount
 								,@procedureID = @@PROCID
-								,@parameters = @curentParameters
-								,@eventMessage = CONCAT('The task ',
+								,@parameters = '1'--@curentParameters
+								,@eventMessage = CONCAT('Operation ''', @OperationName, ''' has been started. ')
 
 		RETURN @curentRunID;
 
