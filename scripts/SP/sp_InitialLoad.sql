@@ -84,11 +84,19 @@ GO
 
 ----Add info in Logs.Operations------
 
-INSERT INTO Logs.Operations
-VALUES(
-	1,'sp_InitialLoad', 'First Initial Load after db created');
-GO
+SET IDENTITY_INSERT Logs.Operations ON;  
 
+INSERT INTO Logs.Operations(
+	OperationID,
+	OperationName,
+	Description)
+VALUES(
+	1,
+	'sp_InitialLoad', 
+	'First Initial Load after db created');
+SET IDENTITY_INSERT Logs.Operations OFF;
+GO
+SELECT * FROM Logs.Operations
 -------------DEBUG----------------------------
 EXEC dbo.InitialLoad @Path = 'D:\_Work\GitHub\T21VS\scripts\generatedData\mockaroo\20201203\', @FileExt = '.csv';
 ------------------------------------------
