@@ -93,12 +93,12 @@ BEGIN
 			BEGIN CATCH
 
 				-- throw Event
-				DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Warning! ''', @table,  @FileExt,''' was not found and was skipped. Check file existence');	
+				DECLARE @skipMessage NVARCHAR(MAX) = CONCAT('Warning! ''', @table,  @FileExt,''' was not found and was skipped. Check file existence');	
 				EXEC logs.sp_SetEvent	 @runID = @curentRunID	-- INT					
 										,@affectedRows = @@rowcount		-- INT, NULL
 										,@procedureID = @@PROCID	-- INT, NULL
 										,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-										,@eventMessage = @eventMessage		-- NVARCHAR(MAX)
+										,@eventMessage = @skipMessage		-- NVARCHAR(MAX)
 
 			END CATCH
 			FETCH NEXT FROM CUR INTO @table
