@@ -4,7 +4,6 @@ GO
 USE T21;
 GO
 
-
 -- Update OperationRun as completed
 
 -------------
