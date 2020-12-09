@@ -65,15 +65,20 @@ BEGIN
 		-- throw error if file or table doesn't exists and fetch next one
 		DECLARE CUR CURSOR FAST_FORWARD FOR
 
-			SELECT 
-				table_schema + '.' + table_name AS tablename
-			FROM   INFORMATION_SCHEMA.TABLES
+--TODO rebuild tebleinfo
+
+			--SELECT 
+			--	table_schema + '.' + table_name AS tablename
+			--FROM   INFORMATION_SCHEMA.TABLES
+			SELECT tablename AS tablename
+			FROM Config.temp_tableinfo
 
 		OPEN CUR
 		FETCH NEXT FROM CUR INTO @table
 		WHILE @@FETCH_STATUS = 0
 		BEGIN
 			BEGIN TRY
+--TODO rebuild error handling or bulkinsert, change to bcp at once?
 
 				-- truncate each table and insert @Path + @table +@FileExt 
 				EXECUTE('truncate table ' + @table +
@@ -145,7 +150,7 @@ SELECT * FROM Logs.Operations
 -------------DEBUG----------------------------
 
 
-EXEC dbo.sp_InitialLoad  @Path = 'D:\_Work\GitHub\T21VS\scripts\generatedData\mockaroo\20201203\2\', @FileExt = '.csv';
+EXEC dbo.sp_InitialLoad  @Path = 'D:\_Work\GitHub\T21VS\scripts\generatedData\mockaroo\20201203\1\', @FileExt = '.csv';
 
 select * FROM Logs.EventLogs
 select * FROM Logs.ErrorLogs
