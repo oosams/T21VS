@@ -38,13 +38,14 @@ BEGIN
 		-- to keep new OperationRunID 
 		DECLARE @curentRunID INT;		
 
+		-- log New OperationRun
 		INSERT INTO Logs.OperationRuns(
 			StatusID,
 			OperationID,
 			StartTime,
 			Description)
 		VALUES(
-			1, -- R,Running in Logs.OperationStatuses
+			1,	-- R,Running in Logs.OperationStatuses
 			@OperationID,
 			CURRENT_TIMESTAMP,
 			CONCAT(@OperationDescription, ' ', @Description));
