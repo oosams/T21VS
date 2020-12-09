@@ -17,12 +17,11 @@ BEGIN
 	BEGIN TRY
 
 		-- get Operation Name 
-		DECLARE @OperationName NVARCHAR(255);
-		
+		DECLARE @OperationName NVARCHAR(255);		
 		
 		SELECT 
-			@OperationName = OperationName,
-			@OperationDescription = Description
+			@OperationName = OperationName
+
 		FROM Logs.Operations
 		WHERE OperationID = @OperationID;
 
@@ -33,23 +32,15 @@ BEGIN
 			CHAR(9), '@OperationRunParameters = ', @OperationRunParameters, CHAR(13), CHAR(10)); 
 		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Operation ''', @OperationName, ''' has been started with Parameters: ', @OperationRunParameters);
 	
-		-- to keep new OperationRunID 
-		DECLARE @curentRunID INT;		
-
-		INSERT INTO Logs.OperationRuns(
-			StatusID,
-			OperationID,
-			StartTime,
-			Description)
-		VALUES(
-			1, -- R,Running in Logs.OperationStatuses
-			@OperationID,
-			CURRENT_TIMESTAMP,
-			CONCAT(@OperationDescription, ' ', @Description));
-
-			 
-		SET @curentRunID = SCOPE_IDENTITY();
-
+				
+		-- log OperationRun as failed
+		UPDATE Logs.OperationRuns
+		SET
+			StatusID = 2,	-- F,Failed in Logs.OperationStatuses
+			EndTime = CURRENT_TIMESTAMP
+		WHERE OperationRunID = @OperationRunID
+			   		 
+					 
 		-- throw event
 		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
 								,@affectedRows = @@rowcount		-- INT, NULL
