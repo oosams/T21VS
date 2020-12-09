@@ -16,15 +16,14 @@ AS
 BEGIN
 	BEGIN TRY
 
-		-- get Operation Name 
+		-- get Operation Name by OperationRunID
 		DECLARE @OperationName NVARCHAR(255);		
 		
 		SELECT 
 			@OperationName = OperationName
-
-		FROM Logs.Operations
-		WHERE OperationID = @OperationID;
-
+		FROM Logs.Operations op
+		JOIN Logs.OperationRuns opr ON op.OperationID = opr.OperationID
+		WHERE OperationRunID = @OperationRunID;
 
 		-- for logging
 		DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
@@ -32,7 +31,7 @@ BEGIN
 			CHAR(9), '@OperationRunParameters = ', @OperationRunParameters, CHAR(13), CHAR(10));
 
 		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Failed. Operation ''', @OperationName, ''' has been failed with Parameters: ', @OperationRunParameters);
-	
+		DECLARE @errorMessage NVARCHAR(MAX) = CONCAT('Cant log the fail of operation ''', @OperationName, '''  with Parameters: ', @OperationRunParameters);	
 				
 		-- log OperationRun as failed
 		UPDATE Logs.OperationRuns
@@ -49,19 +48,14 @@ BEGIN
 								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
 								,@eventMessage = @eventMessage		-- NVARCHAR(MAX)
 
-		RETURN @curentRunID;
-
 	END TRY
 	BEGIN CATCH
 
-		DECLARE @curentErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();  
-		DECLARE @curentErrorSeverity INT = ERROR_SEVERITY();  
-		DECLARE @curentErrorState INT = ERROR_STATE();
-
-		RAISERROR(
-			@curentErrorMessage,   
-			@curentErrorSeverity,   
-			@curentErrorState); 
+		-- throw error
+		EXEC logs.sp_SetError	 @runID = @OperationRunID		-- INT
+								,@procedureID = @@PROCID		-- INT, NULL
+								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
+								,@errorMessage = @errorMessage	-- NVARCHAR(MAX), NULL
 
 	END CATCH
 END
@@ -71,9 +65,8 @@ GO
 --------DEBUG---------
 
 
-EXEC logs.sp_StartOperation  @OperationID = 1	-- INT
-							,@Description = 'test1Description'	-- NVARCHAR(255), NULL
-							,@OperationRunParameters = 'test1OperationRunParameters'	-- NVARCHAR(MAX), NULL
+EXEC logs.sp_FailOperation   @OperationRunID = 	2	 -- INT
+							,@OperationRunParameters = 'test1OperationRunParameters'  -- NVARCHAR(MAX), NULL
 
 
 select * FROM Logs.EventLogs
