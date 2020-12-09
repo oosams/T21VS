@@ -28,9 +28,10 @@ BEGIN
 
 		-- for logging
 		DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
-			CHAR(9), '@OperationID = ', @OperationID, CHAR(13), CHAR(10),
-			CHAR(9), '@OperationRunParameters = ', @OperationRunParameters, CHAR(13), CHAR(10)); 
-		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Operation ''', @OperationName, ''' has been started with Parameters: ', @OperationRunParameters);
+			CHAR(9), '@OperationRunID = ', @OperationRunID, CHAR(13), CHAR(10),
+			CHAR(9), '@OperationRunParameters = ', @OperationRunParameters, CHAR(13), CHAR(10));
+
+		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Failed. Operation ''', @OperationName, ''' has been failed with Parameters: ', @OperationRunParameters);
 	
 				
 		-- log OperationRun as failed
@@ -42,7 +43,7 @@ BEGIN
 			   		 
 					 
 		-- throw event
-		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
+		EXEC logs.sp_SetEvent	 @runID = @OperationRunID		-- INT						
 								,@affectedRows = @@rowcount		-- INT, NULL
 								,@procedureID = @@PROCID		-- INT, NULL
 								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
