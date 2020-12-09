@@ -1,3 +1,3 @@
 OperationID,OperationName,Description
 -1,sp_InitialLoad,Hystorical - First Initial Load after db created
-1,sp_InitialLoad, First Initial Load after is db created
+
