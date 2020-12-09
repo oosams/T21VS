@@ -56,8 +56,11 @@ ____________operations has 1 Hystorical row ID: -1  ---- populated with sp creat
 ____________operationRuns has 1 Hystorical row ID: -1
 ____________OperationStatuses has 3 ststuses. --- should work with initial load
 
-
-
+-!!!!!!!!!!!!!!!! - get from INFORMATION_SCHEMA.TABLES not working as they truncate tables enyway
+________________________________________________________________
+		temp desision - to rebuild
+		
+		
 + заливка файлов в одной процке
 + заливка первого инитиал лоад - в процедурку. 
 merge?
