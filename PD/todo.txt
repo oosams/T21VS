@@ -52,8 +52,11 @@ ___do not do __проверить. разбить на секци и( по сх�
 
 
 ----------SP--------------------------------------
-____________operations populated with sp creating
+____________operations has 1 Hystorical row ID: -1  ---- populated with sp creating
 ____________operationRuns has 1 Hystorical row ID: -1
+____________OperationStatuses has 3 ststuses. --- should work with initial load
+
+
 
 + заливка файлов в одной процке
 + заливка первого инитиал лоад - в процедурку. 
