@@ -50,6 +50,13 @@ BEGIN
 
 				RETURN -1
 			END
+
+		-- throw Event
+		EXEC logs.sp_SetEvent	 @runID = @curentRunID	-- INT					
+								,@affectedRows = @@rowcount		-- INT, NULL
+								,@procedureID = @@PROCID	-- INT, NULL
+								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
+								,@eventMessage = 'Path exists. Starting the cursor.'		-- NVARCHAR(MAX)
 			
 		-- to concat table name from INFORMATION_SCHEMA.TABLES
 		DECLARE @table NVARCHAR (1000);
@@ -73,17 +80,25 @@ BEGIN
 					'; BULK INSERT ' + @table +
 					' FROM '''+ @Path + @table +@FileExt+''' '+
 					' with (fieldterminator = '','',rowterminator = ''0x0a'',FIRSTROW = 2, KEEPIDENTITY)')
+				
+				-- throw Event
+				DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('The ''', @table,  @FileExt,''' was inserted successfully');	
+				EXEC logs.sp_SetEvent	 @runID = @curentRunID	-- INT					
+										,@affectedRows = @@rowcount		-- INT, NULL
+										,@procedureID = @@PROCID	-- INT, NULL
+										,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
+										,@eventMessage = @eventMessage		-- NVARCHAR(MAX)
 
 			END TRY
 			BEGIN CATCH
 
-				DECLARE @errorMessage NVARCHAR(MAX) = CONCAT('Failed to insert from file ''', @table, '.', @FileExt,'''. Check for table or file existence');	
-		
-				-- throw Error
-				EXEC logs.sp_SetError	 @runID = @curentRunID 		-- INT       -- get from sp_StartOperation
+				-- throw Event
+				DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Warning! ''', @table,  @FileExt,''' was not found and was skipped. Check file existence');	
+				EXEC logs.sp_SetEvent	 @runID = @curentRunID	-- INT					
+										,@affectedRows = @@rowcount		-- INT, NULL
 										,@procedureID = @@PROCID	-- INT, NULL
 										,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-										,@errorMessage = @errorMessage	-- NVARCHAR(MAX), NULL
+										,@eventMessage = @eventMessage		-- NVARCHAR(MAX)
 
 			END CATCH
 			FETCH NEXT FROM CUR INTO @table
@@ -120,10 +135,8 @@ INSERT INTO Logs.Operations(
 	OperationID,
 	OperationName,
 	Description)
-VALUES(
-	1,
-	'sp_InitialLoad', 
-	'First Initial Load after db is created');
+VALUES
+	(1,'sp_InitialLoad','First Initial Load after db is created');
 SET IDENTITY_INSERT Logs.Operations OFF;
 GO
 SELECT * FROM Logs.Operations
@@ -137,7 +150,7 @@ EXEC dbo.sp_InitialLoad  @Path = 'D:\_Work\GitHub\T21VS\scripts\generatedData\mo
 select * FROM Logs.EventLogs
 select * FROM Logs.ErrorLogs
 select * FROM Logs.OperationRuns
-
+select * FROM Logs.Operations
 
 ------------------------------------------
 --CURSOR itself
