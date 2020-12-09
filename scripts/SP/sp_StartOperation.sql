@@ -34,8 +34,7 @@ BEGIN
 			CHAR(9), '@Description = ', @Description, CHAR(13), CHAR(10),
 			CHAR(9), '@OperationRunParameters = ', @OperationRunParameters, CHAR(13), CHAR(10)); 
 		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Operation ''', @OperationName, ''' has been started with Parameters: ', @OperationRunParameters);
-		DECLARE @errorMessage NVARCHAR(MAX) = CONCAT('Cant log the start of operation ''', @OperationName, '''  with Parameters: ', @OperationRunParameters);
-
+	
 		-- to keep new OperationRunID 
 		DECLARE @curentRunID INT;		
 
@@ -65,11 +64,14 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 
-		--not needed?
-		EXEC logs.sp_SetError	 @runID = @curentRunID		-- INT
-								,@procedureID = @@PROCID		-- INT, NULL
-								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@errorMessage = @errorMessage	-- NVARCHAR(MAX), NULL
+		DECLARE @curentErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();  
+		DECLARE @curentErrorSeverity INT = ERROR_SEVERITY();  
+		DECLARE @curentErrorState INT = ERROR_STATE();
+
+		RAISERROR(
+			@curentErrorMessage,   
+			@curentErrorSeverity,   
+			@curentErrorState); 
 
 	END CATCH
 END
