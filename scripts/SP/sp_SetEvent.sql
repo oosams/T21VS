@@ -46,7 +46,8 @@ BEGIN
 						
 	END TRY
 	BEGIN CATCH
-		
+
+		-- throw error		
 		EXEC logs.sp_SetError	 @runID = @runID	-- INT
 								,@procedureID = @@PROCID	-- INT, NULL
 								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
