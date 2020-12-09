@@ -64,7 +64,7 @@ GO
 --------DEBUG---------
 
 
-EXEC logs.sp_CompleteOperation   @OperationRunID = 	2	 -- INT
+EXEC logs.sp_CompleteOperation   @OperationRunID = 	2	 -- INT       -- get from sp_StartOperation
 								,@OperationRunParameters = 'test1OperationRunParameters'  -- NVARCHAR(MAX), NULL
 
 
