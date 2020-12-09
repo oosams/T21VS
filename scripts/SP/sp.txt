@@ -1,6 +1,7 @@
 
 generateall.sql
 InserHystOperationData.sql
+temp_tableinfo
 
   sp_SetError
 
