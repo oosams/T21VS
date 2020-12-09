@@ -64,8 +64,8 @@ GO
 --------DEBUG---------
 
 
-EXEC logs.sp_CompleteOperation  @OperationRunID = 	2	 -- INT
-							,@OperationRunParameters = 'test1OperationRunParameters'  -- NVARCHAR(MAX), NULL
+EXEC logs.sp_CompleteOperation   @OperationRunID = 	2	 -- INT
+								,@OperationRunParameters = 'test1OperationRunParameters'  -- NVARCHAR(MAX), NULL
 
 
 select * FROM Logs.EventLogs
