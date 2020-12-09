@@ -145,7 +145,7 @@ SELECT * FROM Logs.Operations
 -------------DEBUG----------------------------
 
 
-EXEC dbo.sp_InitialLoad  @Path = 'D:\_Work\GitHub\T21VS\scripts\generatedData\mockaroo\20201203\', @FileExt = '.csv';
+EXEC dbo.sp_InitialLoad  @Path = 'D:\_Work\GitHub\T21VS\scripts\generatedData\mockaroo\20201203\2\', @FileExt = '.csv';
 
 select * FROM Logs.EventLogs
 select * FROM Logs.ErrorLogs
