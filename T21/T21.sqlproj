@@ -59,44 +59,5 @@
   <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
   <ItemGroup>
     <Folder Include="Properties" />
-    <Folder Include="Master\" />
-    <Folder Include="Master\Tables\" />
-    <Folder Include="Logs\" />
-    <Folder Include="Logs\Tables\" />
-    <Folder Include="dbo\" />
-    <Folder Include="dbo\User Defined Types\" />
-    <Folder Include="Security\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Build Include="Master\Tables\Master.AddressCustomer.sql" />
-    <Build Include="Master\Tables\Master.AddressEmployee.sql" />
-    <Build Include="Master\Tables\Master.Addresses.sql" />
-    <Build Include="Master\Tables\Master.Categories.sql" />
-    <Build Include="Master\Tables\Master.Cities.sql" />
-    <Build Include="Master\Tables\Master.ContactCustomer.sql" />
-    <Build Include="Master\Tables\Master.ContactEmployee.sql" />
-    <Build Include="Master\Tables\Master.Contacts.sql" />
-    <Build Include="Master\Tables\Master.Countries.sql" />
-    <Build Include="Master\Tables\Master.Customers.sql" />
-    <Build Include="Master\Tables\Master.Employees.sql" />
-    <Build Include="Logs\Tables\Logs.ErrorLogs.sql" />
-    <Build Include="Logs\Tables\Logs.EventLogs.sql" />
-    <Build Include="Logs\Tables\Logs.OperationRuns.sql" />
-    <Build Include="Logs\Tables\Logs.OperationStatuses.sql" />
-    <Build Include="Logs\Tables\Logs.Operations.sql" />
-    <Build Include="Master\Tables\Master.OrderDetails.sql" />
-    <Build Include="Master\Tables\Master.Orders.sql" />
-    <Build Include="Master\Tables\Master.Payments.sql" />
-    <Build Include="Master\Tables\Master.Products.sql" />
-    <Build Include="Master\Tables\Master.Regions.sql" />
-    <Build Include="Master\Tables\Master.VersionTypes.sql" />
-    <Build Include="Master\Tables\Master.Versions.sql" />
-    <Build Include="Master\Tables\Master.Warehouse.sql" />
-    <Build Include="dbo\User Defined Types\dbo.nvarchar_max_.sql" />
-    <Build Include="Security\Config.sql" />
-    <Build Include="Security\Logs.sql" />
-    <Build Include="Security\Master.sql" />
-    <Build Include="Security\Reporting.sql" />
-    <Build Include="Security\Staging.sql" />
   </ItemGroup>
 </Project>
