@@ -1,3 +1,0 @@
-﻿CREATE LOGIN [SOFTSERVE\osams]
-    FROM WINDOWS WITH DEFAULT_LANGUAGE = [us_english];
-

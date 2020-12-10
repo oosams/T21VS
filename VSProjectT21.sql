@@ -1,1 +1,1 @@
-﻿SELECT * FROM Calls
+﻿SELECT 1

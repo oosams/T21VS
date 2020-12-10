@@ -1,3 +1,0 @@
-﻿CREATE LOGIN [sqlex]
-    WITH PASSWORD = N'wngxnmffhcgzroWroqfenpsemsFT7_&#$!~<6tpth|dejo@Q', SID = 0xD687827B650A6A4FBA773B59DCA72DCC, DEFAULT_DATABASE = [sql-ex], DEFAULT_LANGUAGE = [us_english], CHECK_EXPIRATION = ON;
-
