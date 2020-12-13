@@ -25,7 +25,7 @@ BEGIN
 
 		-- Start Operation and get new OperationRunID
 		EXEC @curentRunID = 
-			logs.sp_StartOperation   @OperationID = 1	-- INT     OperationID for sp_InitialLoad  from Logs.Operations
+			logs.sp_StartOperation   @OperationID = 1	-- INT     OperationID for Config.sp_InitialLoad   from Logs.Operations
 									,@Description = NULL	-- NVARCHAR(255), NULL
 									,@OperationRunParameters = @curentParameters	-- NVARCHAR(MAX), NULL
 		   
