@@ -68,7 +68,7 @@ EXEC logs.sp_CompleteOperation   @OperationRunID = 	2	 -- INT       -- get from 
 								,@OperationRunParameters = 'test1OperationRunParameters'  -- NVARCHAR(MAX), NULL
 
 
-select * FROM Logs.EventLogs
-select * FROM Logs.ErrorLogs
-select * FROM Logs.OperationRuns
+SELECT * FROM Logs.EventLogs
+SELECT * FROM Logs.ErrorLogs
+SELECT * FROM Logs.OperationRuns
 

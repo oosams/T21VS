@@ -71,8 +71,8 @@ EXEC logs.sp_SetEvent	 @runID = -113	-- INT
 						,@eventMessage = 'Test event Message. '		-- NVARCHAR(MAX)
 						
 						
-select * FROM Logs.EventLogs
-select * FROM Logs.ErrorLogs
-select * FROM Logs.OperationRuns
+SELECT * FROM Logs.EventLogs
+SELECT * FROM Logs.ErrorLogs
+SELECT * FROM Logs.OperationRuns
 
 

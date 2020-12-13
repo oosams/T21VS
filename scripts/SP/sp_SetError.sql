@@ -67,7 +67,7 @@ DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
 		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10))
 
 BEGIN TRY
-	select 1/0
+	SELECT 1/0
 END TRY
 BEGIN CATCH
 -- SELECT ERROR_MESSAGE(), ERROR_SEVERITY(), ERROR_STATE(), ERROR_NUMBER()
@@ -79,6 +79,6 @@ EXEC logs.sp_SetError	 @runID = -112		-- INT
 
 END CATCH
 
-select * FROM Logs.ErrorLogs
+SELECT * FROM Logs.ErrorLogs
 
 
