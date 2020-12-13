@@ -7,7 +7,7 @@ GO
 -- Truncate and populate all tables in database from provided folder
 
 -------------
-CREATE OR ALTER PROCEDURE sp_InitialLoad 
+CREATE OR ALTER PROCEDURE config.sp_InitialLoad 
 	@Path NVARCHAR(1000),
 	@FileExt NVARCHAR(255)
 
