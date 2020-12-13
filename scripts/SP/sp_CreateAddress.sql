@@ -21,10 +21,21 @@ BEGIN
 
 		-- for logging
 		DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
-			CHAR(9), '@OperationID = ', @OperationID, CHAR(13), CHAR(10),
-			CHAR(9), '@Description = ', @Description, CHAR(13), CHAR(10),
-			CHAR(9), '@OperationRunParameters = ', @OperationRunParameters, CHAR(13), CHAR(10)); 
+			CHAR(9), '@AddressLine1 = ', @AddressLine1, CHAR(13), CHAR(10),
+			CHAR(9), '@AddressLine2 = ', @AddressLine2, CHAR(13), CHAR(10),
+			CHAR(9), '@City = ', @City, CHAR(13), CHAR(10),
+			CHAR(9), '@Region = ', @Region, CHAR(13), CHAR(10),
+			CHAR(9), '@Country = ', @Country, CHAR(13), CHAR(10),
+			CHAR(9), '@PostalCode = ', @PostalCode, CHAR(13), CHAR(10));
 
+		-- to keep new OperationRunID 
+		DECLARE @curentRunID INT;	
+
+		-- Start Operation and get new OperationRunID
+		EXEC @curentRunID = 
+			logs.sp_StartOperation   @OperationID = 1	-- INT     OperationID for sp_InitialLoad  from Logs.Operations
+									,@Description = NULL	-- NVARCHAR(255), NULL
+									,@OperationRunParameters = @curentParameters	-- NVARCHAR(MAX), NULL
 		
 		-- to keep new OperationRunID 
 		DECLARE @curentRunID INT;		
@@ -69,6 +80,19 @@ BEGIN
 END
 GO
 
+----Add info in Logs.Operations------
+
+SET IDENTITY_INSERT Logs.Operations ON;  
+
+INSERT INTO Logs.Operations(
+	OperationID,
+	OperationName,
+	Description)
+VALUES
+	(2,'Shop.sp_CreateAddress','First Initial Load after db is created');
+SET IDENTITY_INSERT Logs.Operations OFF;
+GO
+SELECT * FROM Logs.Operations
 
 --------DEBUG---------
 
@@ -79,4 +103,5 @@ EXEC logs.sp_CompleteOperation   @OperationRunID = 	2	 -- INT       -- get from 
 select * FROM Logs.EventLogs
 select * FROM Logs.ErrorLogs
 select * FROM Logs.OperationRuns
+select * FROM Logs.Operations
 
