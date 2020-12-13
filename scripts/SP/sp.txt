@@ -3,6 +3,10 @@ generateall.sql
 InserHystOperationData.sql
 temp_tableinfo
 
+
+
+---logging
+
   sp_SetError
 
   sp_SetEvent   
@@ -14,12 +18,16 @@ temp_tableinfo
  
   sp_CompleteOperation  - 3,C,Completed      setevent
   
- 
+ ---Initial Load------------s
+
   sp_InitialLoad
 		insert in operations
 
 Constraint.sql
  
+
+-------------------
+
   sp_SendDbEmail
  
 
