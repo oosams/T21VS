@@ -60,7 +60,7 @@ BEGIN
 			@PostalCode);
 			 
 		SET @newAddressID = SCOPE_IDENTITY();
-print SCOPE_IDENTITY()
+
 		-- throw event
 		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
 								,@affectedRows = @@rowcount		-- INT, NULL
