@@ -128,6 +128,7 @@ BEGIN
 		EXEC logs.sp_FailOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
 									,@OperationRunParameters = @curentParameters  -- NVARCHAR(MAX), NULL
 
+		RETURN -1
 	END CATCH
 END
 GO
@@ -141,7 +142,7 @@ INSERT INTO Logs.Operations(
 	OperationName,
 	Description)
 VALUES
-	(1,'sp_InitialLoad','First Initial Load after db is created');
+	(1,'Config.sp_InitialLoadd','First Initial Load after db is created');
 SET IDENTITY_INSERT Logs.Operations OFF;
 GO
 SELECT * FROM Logs.Operations
