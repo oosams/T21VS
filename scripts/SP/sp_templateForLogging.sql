@@ -6,7 +6,7 @@ GO
 
 -- template
 
-CREATE OR ALTER PROCEDURE sp_templateForLogging
+CREATE OR ALTER PROCEDURE Log.sp_templateForLogging
 	@par1 INT,
 	@par2 NVARCHAR(255) = NULL
 
@@ -24,7 +24,7 @@ BEGIN
 
 		-- Start Operation and get new OperationRunID
 		EXEC @curentRunID = 
-			logs.sp_StartOperation   @OperationID = 1	-- INT     OperationID for sp_InitialLoad  from Logs.Operations
+			logs.sp_StartOperation   @OperationID = 999	-- INT     OperationID for Log.sp_templateForLogging  from Logs.Operations
 									,@Description = NULL	-- NVARCHAR(255), NULL
 									,@OperationRunParameters = @curentParameters	-- NVARCHAR(MAX), NULL
 		  
@@ -81,6 +81,21 @@ BEGIN
 	END CATCH
 END
 GO
+
+----Add info in Logs.Operations------
+
+SET IDENTITY_INSERT Logs.Operations ON;  
+
+INSERT INTO Logs.Operations(
+	OperationID,
+	OperationName,
+	Description)
+VALUES
+	(999,'Log.sp_templateForLogging ','template proc, not for running');
+SET IDENTITY_INSERT Logs.Operations OFF;
+GO
+SELECT * FROM Logs.Operations
+
 -----------------------------------------
 EXEC sp_sampleForLogging;
 ------------------------------------------
