@@ -151,42 +151,9 @@ SELECT * FROM Logs.Operations
 -------------DEBUG----------------------------
 
 
-EXEC dbo.sp_InitialLoad  @Path = 'D:\_Work\GitHub\T21VS\scripts\generatedData\mockaroo\20201203\1\', @FileExt = '.csv';
+EXEC config.sp_InitialLoad  @Path = 'D:\_Work\GitHub\T21VS\scripts\generatedData\mockaroo\20201203\1\', @FileExt = '.csv';
 
-select * FROM Logs.EventLogs
-select * FROM Logs.ErrorLogs
-select * FROM Logs.OperationRuns
-select * FROM Logs.Operations
-
-------------------------------------------
---CURSOR itself
-------------------------------------------
-
-
-DECLARE @table nvarchar (1000);
- DECLARE @Path nvarchar(1000) = 'D:\_Work\GitHub\T21VS\scripts\generatedData\mockaroo\20201203\', @FileExt nvarchar(1000) = '.csv';
-
-	--CURSOR to get table names from entire db
-	DECLARE CUR CURSOR FAST_FORWARD FOR
-		SELECT 
-			table_schema + '.' + table_name as tablename
-		FROM   INFORMATION_SCHEMA.TABLES
-	OPEN CUR
-	FETCH NEXT FROM CUR INTO @table
-	WHILE @@FETCH_STATUS = 0
-	BEGIN
-		--BEGIN TRY
-			--truncate each table and insert @Path + @table +@FileExt 
-			EXECUTE('truncate table ' + @table +
-				'; BULK INSERT ' + @table +
-				' FROM '''+ @Path + @table +@FileExt+''' '+
-				' with (fieldterminator = '','',rowterminator = ''0x0a'',FIRSTROW = 2, KEEPIDENTITY)')
-	--	END TRY
-	--	BEGIN CATCH
-		--EXEC  sp_SetError
-		--EXEC  sp_FailOperation -- not using here?  
-		--END CATCH
-		FETCH NEXT FROM CUR INTO @table
-	END
-	CLOSE CUR
-	DEALLOCATE CUR
+SELECT * FROM Logs.EventLogs
+SELECT * FROM Logs.ErrorLogs
+SELECT * FROM Logs.OperationRuns
+SELECT * FROM Logs.Operations
