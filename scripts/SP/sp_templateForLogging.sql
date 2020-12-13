@@ -13,6 +13,7 @@ CREATE OR ALTER PROCEDURE sp_templateForLogging
 AS
 BEGIN
 	BEGIN TRY
+
 		-- for logging
 		DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
 			CHAR(9), '@par1 = ', @par1, CHAR(13), CHAR(10),
@@ -36,7 +37,7 @@ BEGIN
 				EXEC logs.sp_SetError	 @runID = @curentRunID		-- INT       -- get from sp_StartOperation
 										,@procedureID = @@PROCID	-- INT, NULL
 										,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-										,@errorMessage = 'Check did not succssed  '	-- NVARCHAR(MAX), NULL
+										,@errorMessage = 'check failed  '	-- NVARCHAR(MAX), NULL
 
 				-- Fail Operation
 				EXEC logs.sp_FailOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
@@ -44,23 +45,40 @@ BEGIN
 
 				RETURN -1
 			END
-		-- EXEC sp_SetEvent start some checks completed	
 
-		-- EXEC sp_SetEvent some action started	
+		-- throw Event
+		EXEC logs.sp_SetEvent	 @runID = @curentRunID	-- INT					
+								,@affectedRows = @@rowcount		-- INT, NULL
+								,@procedureID = @@PROCID	-- INT, NULL
+								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
+								,@eventMessage = 'Some checks completed. Starting the operation.'		-- NVARCHAR(MAX)
+			
+
 		BEGIN TRY
-			-- some code
-			SELECT 1
-			-- SELECT 1/ 0
+
+
+		--
+		---
+		---
+
+		-- Complete Operation
+		EXEC logs.sp_CompleteOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
+										,@OperationRunParameters = @curentParameters  -- NVARCHAR(MAX), NULL
 		END TRY
 		BEGIN CATCH
-			-- EXEC sp_SetEvent
-			-- EXEC  sp_SetError
-			-- EXEC  sp_FailOperation  
-			RETURN -1
-		END CATCH
-	
-		-- EXEC  sp_CompleteOperation
+			 
+		-- throw Error
+		EXEC logs.sp_SetError	 @runID = @curentRunID 		-- INT       -- get from sp_StartOperation
+								,@procedureID = @@PROCID	-- INT, NULL
+								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
+								,@errorMessage = NULL	-- NVARCHAR(MAX), NULL
 
+		-- Fail Operation
+		EXEC logs.sp_FailOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
+									,@OperationRunParameters = @curentParameters  -- NVARCHAR(MAX), NULL
+
+		RETURN -1
+	END CATCH
 END
 GO
 -----------------------------------------
