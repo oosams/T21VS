@@ -68,25 +68,34 @@ BEGIN
 								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
 								,@eventMessage = @eventMessage		-- NVARCHAR(MAX)
 
+
+		-- Complete Operation
+		EXEC logs.sp_CompleteOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
+										,@OperationRunParameters = @curentParameters  -- NVARCHAR(MAX), NULL
+
 		RETURN @newAddressID;
 
 	END TRY
 	BEGIN CATCH
+	
+		-- throw Error
+		EXEC logs.sp_SetError	 @runID = @curentRunID 		-- INT       -- get from sp_StartOperation
+								,@procedureID = @@PROCID	-- INT, NULL
+								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
+								,@errorMessage = 'Can not create Address'	-- NVARCHAR(MAX), NULL
 
-		DECLARE @curentErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();  
-		DECLARE @curentErrorSeverity INT = ERROR_SEVERITY();  
-		DECLARE @curentErrorState INT = ERROR_STATE();
+		-- Fail Operation
+		EXEC logs.sp_FailOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
+									,@OperationRunParameters = @curentParameters  -- NVARCHAR(MAX), NULL
 
-		RAISERROR(
-			@curentErrorMessage,   
-			@curentErrorSeverity,   
-			@curentErrorState); 
+		RETURN -1
 
 	END CATCH
 END
 GO
 
 ----Add info in Logs.Operations------
+
 
 SET IDENTITY_INSERT Logs.Operations ON;  
 
@@ -101,21 +110,32 @@ GO
 SELECT * FROM Logs.Operations
 
 --------DEBUG---------
+DROP TABLE IF EXISTS #testID 
+CREATE TABLE #testID 
+(
+	id INT
+);
+INSERT INTO #testID (id)
+EXEC shop.sp_CreateAddress    @AddressLine1 = 'test Address 21 str App 89'	 -- NVARCHAR(500) 
+							,@AddressLine2 = NULL  -- NVARCHAR(500), NULL
+							,@City = 'testCityName'  -- NVARCHAR(255)
+							,@Region = NULL  -- NVARCHAR(255), NULL
+							,@Country = 'testUSA'  -- NVARCHAR(255)
+							,@PostalCode = '11665 69 7'  -- NVARCHAR(100), NULL
+SELECT * FROM #testID
 
-EXEC shop.sp_CreateAddress   @OperationRunID = 	2	 -- INT       -- get from sp_StartOperation
-							,@OperationRunParameters = 'test1OperationRunParameters'  -- NVARCHAR(MAX), NULL
+DELETE Shop.Addresses
+WHERE AddressID in ( 133,134)
 
+DBCC CHECKIDENT ('Shop.Addresses')
+DBCC CHECKIDENT ('Shop.Addresses', RESEED, 130)  
+  
+SELECT SCOPE_IDENTITY()
 
+SELECT * FROM Shop.Addresses
 
-	@AddressLine1 NVARCHAR(500),
-	@AddressLine2 NVARCHAR(500) = NULL,
-	@City NVARCHAR(255),
-	@Region NVARCHAR(255) = NULL,
-	@Country NVARCHAR(255),
-	@PostalCode NVARCHAR(100) = NULL
-
-select * FROM Logs.EventLogs
-select * FROM Logs.ErrorLogs
-select * FROM Logs.OperationRuns
-select * FROM Logs.Operations
+SELECT * FROM Logs.EventLogs
+SELECT * FROM Logs.ErrorLogs
+SELECT * FROM Logs.OperationRuns
+SELECT * FROM Logs.Operations
 
