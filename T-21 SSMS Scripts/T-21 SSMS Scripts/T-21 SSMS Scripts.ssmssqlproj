@@ -3,7 +3,19 @@
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
       <Items>
-        <ConnectionNode Name="LV4788:SOFTSERVE\osams">
+        <ConnectionNode Name="DESKTOP-R6UR3CV\SAMSSERVER:DESKTOP-R6UR3CV\alex">
+          <Created>2020-12-13T17:36:45.5935353+02:00</Created>
+          <Type>SQL</Type>
+          <Server>DESKTOP-R6UR3CV\SAMSSERVER</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName />
+        </ConnectionNode>
+        <ConnectionNode Name="LV4788:DESKTOP-R6UR3CV\alex">
           <Created>2020-12-10T21:04:10.6048453+02:00</Created>
           <Type>SQL</Type>
           <Server>LV4788</Server>
@@ -18,7 +30,56 @@
       </Items>
     </LogicalFolder>
     <LogicalFolder Name="Queries" Type="0" Sorted="true">
-      <Items />
+      <Items>
+        <FileNode Name="sp_CompleteOperation.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-R6UR3CV\SAMSSERVER:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-R6UR3CV\SAMSSERVER</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>sp_CompleteOperation.sql</FullPath>
+        </FileNode>
+        <FileNode Name="sp_CreateAddress.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-R6UR3CV\SAMSSERVER:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-R6UR3CV\SAMSSERVER</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>sp_CreateAddress.sql</FullPath>
+        </FileNode>
+        <FileNode Name="sp_FailOperation.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-R6UR3CV\SAMSSERVER:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-R6UR3CV\SAMSSERVER</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>sp_FailOperation.sql</FullPath>
+        </FileNode>
+        <FileNode Name="sp_InitialLoad.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-R6UR3CV\SAMSSERVER:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-R6UR3CV\SAMSSERVER</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>sp_InitialLoad.sql</FullPath>
+        </FileNode>
+        <FileNode Name="sp_SetError.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-R6UR3CV\SAMSSERVER:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-R6UR3CV\SAMSSERVER</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>sp_SetError.sql</FullPath>
+        </FileNode>
+        <FileNode Name="sp_SetEvent.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-R6UR3CV\SAMSSERVER:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-R6UR3CV\SAMSSERVER</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>sp_SetEvent.sql</FullPath>
+        </FileNode>
+        <FileNode Name="sp_StartOperation.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-R6UR3CV\SAMSSERVER:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-R6UR3CV\SAMSSERVER</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>sp_StartOperation.sql</FullPath>
+        </FileNode>
+        <FileNode Name="sp_templateForLogging.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DESKTOP-R6UR3CV\SAMSSERVER:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DESKTOP-R6UR3CV\SAMSSERVER</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>sp_templateForLogging.sql</FullPath>
+        </FileNode>
+      </Items>
     </LogicalFolder>
     <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
       <Items />
