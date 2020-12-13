@@ -28,6 +28,9 @@ BEGIN
 			CHAR(9), '@Country = ', @Country, CHAR(13), CHAR(10),
 			CHAR(9), '@PostalCode = ', @PostalCode, CHAR(13), CHAR(10));
 
+		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Created new Address with Parameters: ', @curentParameters);
+	
+
 		-- to keep new OperationRunID 
 		DECLARE @curentRunID INT;	
 
@@ -37,23 +40,26 @@ BEGIN
 									,@Description = NULL	-- NVARCHAR(255), NULL
 									,@OperationRunParameters = @curentParameters	-- NVARCHAR(MAX), NULL
 		
-		-- to keep new OperationRunID 
-		DECLARE @curentRunID INT;		
+		-- to keep new AddressID
+		DECLARE @newAddressID INT;		
 
-		-- log New OperationRun
-		INSERT INTO Logs.OperationRuns(
-			StatusID,
-			OperationID,
-			StartTime,
-			Description)
+		-- Create new Address
+		INSERT INTO Shop.Addresses(
+			AddressLine1,
+			AddressLine2,
+			City,
+			Region,
+			Country,
+			PostalCode)
 		VALUES(
-			1,	-- R,Running in Logs.OperationStatuses
-			@OperationID,
-			CURRENT_TIMESTAMP,
-			CONCAT(@OperationDescription, ' ', @Description));
-
+			@AddressLine1,
+			@AddressLine2,
+			@City,
+			@Region,
+			@Country,
+			@PostalCode);
 			 
-		SET @curentRunID = SCOPE_IDENTITY();
+		SET @newAddressID = SCOPE_IDENTITY();
 
 		-- throw event
 		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
@@ -62,7 +68,7 @@ BEGIN
 								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
 								,@eventMessage = @eventMessage		-- NVARCHAR(MAX)
 
-		RETURN @curentRunID;
+		RETURN @newAddressID;
 
 	END TRY
 	BEGIN CATCH
@@ -96,9 +102,17 @@ SELECT * FROM Logs.Operations
 
 --------DEBUG---------
 
-EXEC logs.sp_CompleteOperation   @OperationRunID = 	2	 -- INT       -- get from sp_StartOperation
-								,@OperationRunParameters = 'test1OperationRunParameters'  -- NVARCHAR(MAX), NULL
+EXEC shop.sp_CreateAddress   @OperationRunID = 	2	 -- INT       -- get from sp_StartOperation
+							,@OperationRunParameters = 'test1OperationRunParameters'  -- NVARCHAR(MAX), NULL
 
+
+
+	@AddressLine1 NVARCHAR(500),
+	@AddressLine2 NVARCHAR(500) = NULL,
+	@City NVARCHAR(255),
+	@Region NVARCHAR(255) = NULL,
+	@Country NVARCHAR(255),
+	@PostalCode NVARCHAR(100) = NULL
 
 select * FROM Logs.EventLogs
 select * FROM Logs.ErrorLogs
