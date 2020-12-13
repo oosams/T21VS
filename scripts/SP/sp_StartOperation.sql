@@ -33,8 +33,7 @@ BEGIN
 			CHAR(9), '@Description = ', @Description, CHAR(13), CHAR(10),
 			CHAR(9), '@OperationRunParameters = ', @OperationRunParameters, CHAR(13), CHAR(10)); 
 
-		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Started. Operation ''', @OperationName, ''' has been started with Parameters: ', @OperationRunParameters);
-	
+
 		-- to keep new OperationRunID 
 		DECLARE @curentRunID INT;		
 
@@ -52,6 +51,10 @@ BEGIN
 
 			 
 		SET @curentRunID = SCOPE_IDENTITY();
+
+		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Started. Operation ''', @OperationName, ''' has been started with:', CHAR(13), CHAR(10),
+																			CHAR(9), CHAR(9),CHAR(9), 'OperationRunID: ', @curentRunID, '.', CHAR(13), CHAR(10), 
+																			CHAR(9), CHAR(9),CHAR(9),'Parameters: ', @OperationRunParameters);
 
 		-- throw event
 		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
@@ -87,7 +90,7 @@ EXEC logs.sp_StartOperation  @OperationID = 1	-- INT
 							,@OperationRunParameters = 'test1OperationRunParameters'	-- NVARCHAR(MAX), NULL
 
 
-select * FROM Logs.EventLogs
-select * FROM Logs.ErrorLogs
-select * FROM Logs.OperationRuns
+SELECT * FROM Logs.EventLogs
+SELECT * FROM Logs.ErrorLogs
+SELECT * FROM Logs.OperationRuns
 
