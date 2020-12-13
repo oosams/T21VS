@@ -60,7 +60,7 @@ BEGIN
 			@PostalCode);
 			 
 		SET @newAddressID = SCOPE_IDENTITY();
-
+print SCOPE_IDENTITY()
 		-- throw event
 		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
 								,@affectedRows = @@rowcount		-- INT, NULL
@@ -115,17 +115,20 @@ CREATE TABLE #testID
 (
 	id INT
 );
-INSERT INTO #testID (id)
-EXEC shop.sp_CreateAddress    @AddressLine1 = 'test Address 21 str App 89'	 -- NVARCHAR(500) 
+declare @iddd int
+EXEC @iddd = shop.sp_CreateAddress    @AddressLine1 = 'test Address 21 str App 89'	 -- NVARCHAR(500) 
 							,@AddressLine2 = NULL  -- NVARCHAR(500), NULL
 							,@City = 'testCityName'  -- NVARCHAR(255)
 							,@Region = NULL  -- NVARCHAR(255), NULL
 							,@Country = 'testUSA'  -- NVARCHAR(255)
 							,@PostalCode = '11665 69 7'  -- NVARCHAR(100), NULL
-SELECT * FROM #testID
+
+INSERT INTO #testID (id)
+SELECT @iddd
+SELECT Top 1 id FROM #testID
 
 DELETE Shop.Addresses
-WHERE AddressID in ( 133,134)
+WHERE AddressID =  (SELECT Top 1 id FROM #testID) 
 
 DBCC CHECKIDENT ('Shop.Addresses')
 DBCC CHECKIDENT ('Shop.Addresses', RESEED, 130)  
