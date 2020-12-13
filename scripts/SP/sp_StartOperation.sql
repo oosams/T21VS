@@ -4,7 +4,7 @@ GO
 USE T21;
 GO
 
--- Create new OperationRun 
+-- Create new OperationRun, return new OperationRunID 
 
 -------------
 CREATE OR ALTER PROCEDURE logs.sp_StartOperation
