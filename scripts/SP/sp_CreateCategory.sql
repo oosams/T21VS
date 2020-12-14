@@ -8,7 +8,7 @@ GO
 
 -------------
 CREATE OR ALTER PROCEDURE shop.sp_CreateCategory
-	@CategoryName NVARCHAR(255) = NULL,
+	@CategoryName NVARCHAR(255),
 	@Description NVARCHAR(MAX)
 
 AS
@@ -20,9 +20,7 @@ BEGIN
 			CHAR(9), '@CategoryName = ', @CategoryName, CHAR(13), CHAR(10),
 			CHAR(9), '@Description = ', @Description, CHAR(13), CHAR(10));
 
-		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Created new Category with Parameters: ', @curentParameters);
-	
-
+		
 		-- to keep new OperationRunID 
 		DECLARE @curentRunID INT;	
 
@@ -58,7 +56,7 @@ BEGIN
 		EXEC logs.sp_CompleteOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
 										,@OperationRunParameters = @curentParameters  -- NVARCHAR(MAX), NULL
 
-		RETURN @newContactID;
+		RETURN @newCategoryID;
 
 	END TRY
 	BEGIN CATCH
@@ -67,7 +65,7 @@ BEGIN
 		EXEC logs.sp_SetError	 @runID = @curentRunID 		-- INT       -- get from sp_StartOperation
 								,@procedureID = @@PROCID	-- INT, NULL
 								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@errorMessage = 'Can not create Contact'	-- NVARCHAR(MAX), NULL
+								,@errorMessage = 'Can not create Category'	-- NVARCHAR(MAX), NULL
 
 		-- Fail Operation
 		EXEC logs.sp_FailOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
@@ -101,29 +99,23 @@ CREATE TABLE #testID
 	id INT
 );
 declare @iddd int
-EXEC @iddd = shop.sp_CreateContact   @Title = 'Tv'	 -- NVARCHAR(50), NULL
-									,@FirstName = 'Yuri'  -- NVARCHAR(255)
-									,@MiddleName = NULL  -- NVARCHAR(255), NULL
-									,@LastName = 'Ogarkov'  -- NVARCHAR(255)
-									,@Gender = 'Male'  -- NVARCHAR(50)
-									,@BirthDay = '1915-01-01'  -- NVARCHAR(50)
-									,@Email = 'YuriOgarkov@MVD.com'  -- NVARCHAR(255)
-									,@Phone = '66552956'  -- NVARCHAR(50)
+EXEC @iddd = shop.sp_CreateCategory  @CategoryName = 'TestCatName'	 -- NVARCHAR(255)
+									,@Description = 'Test Category discription'  -- NVARCHAR(MAX)
 
 INSERT INTO #testID (id)
 SELECT @iddd
 SELECT Top 1 id FROM #testID
 
 
-DELETE Shop.Contacts
-WHERE ContactID =  (SELECT Top 1 id FROM #testID) 
+DELETE Shop.Categories
+WHERE CategoryID =  (SELECT Top 1 id FROM #testID) 
 
-DBCC CHECKIDENT ('Shop.Contacts')
-DBCC CHECKIDENT ('Shop.Contacts', RESEED, 130)  
+DBCC CHECKIDENT ('Shop.Categories')
+DBCC CHECKIDENT ('Shop.Categories', RESEED, 10)  
   
 SELECT SCOPE_IDENTITY()
 
-SELECT * FROM Shop.Contacts
+SELECT * FROM Shop.Categories
 
 SELECT * FROM Logs.EventLogs
 SELECT * FROM Logs.ErrorLogs
