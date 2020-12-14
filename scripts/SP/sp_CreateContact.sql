@@ -32,9 +32,7 @@ BEGIN
 			CHAR(9), '@Email = ', @Email, CHAR(13), CHAR(10),
 			CHAR(9), '@Phone = ', @Phone, CHAR(13), CHAR(10));
 
-		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Created new Contact with Parameters: ', @curentParameters);
-	
-
+		
 		-- to keep new OperationRunID 
 		DECLARE @curentRunID INT;	
 
@@ -70,7 +68,7 @@ BEGIN
 		SET @newContactID = SCOPE_IDENTITY();
 
 		-- throw event
-		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Created new Contact with Parameters: ', @curentParameters);
+		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Created new Contact with ID: ', @newContactID);
 		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
 								,@affectedRows = @@rowcount		-- INT, NULL
 								,@procedureID = @@PROCID		-- INT, NULL

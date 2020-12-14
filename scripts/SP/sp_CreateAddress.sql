@@ -28,7 +28,7 @@ BEGIN
 			CHAR(9), '@Country = ', @Country, CHAR(13), CHAR(10),
 			CHAR(9), '@PostalCode = ', @PostalCode, CHAR(13), CHAR(10));
 
-		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Created new Address with Parameters: ', @curentParameters);
+		
 	
 
 		-- to keep new OperationRunID 
@@ -62,7 +62,7 @@ BEGIN
 		SET @newAddressID = SCOPE_IDENTITY();
 
 		-- throw event
-		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Created new Address with Parameters: ', @curentParameters);
+		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Created new Address with ID: ', @newAddressID);
 		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
 								,@affectedRows = @@rowcount		-- INT, NULL
 								,@procedureID = @@PROCID		-- INT, NULL
