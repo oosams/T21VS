@@ -5,6 +5,7 @@ USE T21;
 GO
 
 -- Create new Product, return new ProductID
+-- Create new Category if CategoryID is NULL. In that case @CategoryName and @CategoryDescription should be provided.
 
 -------------
 CREATE OR ALTER PROCEDURE shop.sp_CreateProduct
