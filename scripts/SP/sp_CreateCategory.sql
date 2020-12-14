@@ -4,18 +4,12 @@ GO
 USE T21;
 GO
 
--- Create new Contact, return new ContactID
+-- Create new Category, return new CategoryID
 
 -------------
-CREATE OR ALTER PROCEDURE shop.sp_CreateContact
-	@Title NVARCHAR(50) = NULL,
-	@FirstName NVARCHAR(255),
-	@MiddleName NVARCHAR(255) = NULL,
-	@LastName NVARCHAR(255),
-	@Gender NVARCHAR(50),
-	@BirthDay NVARCHAR(50),
-	@Email NVARCHAR(255),
-	@Phone NVARCHAR(50)
+CREATE OR ALTER PROCEDURE shop.sp_CreateCategory
+	@CategoryName NVARCHAR(255) = NULL,
+	@Description NVARCHAR(MAX)
 
 AS
 BEGIN
@@ -23,16 +17,10 @@ BEGIN
 
 		-- for logging
 		DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
-			CHAR(9), '@Title = ', @Title, CHAR(13), CHAR(10),
-			CHAR(9), '@FirstName = ', @FirstName, CHAR(13), CHAR(10),
-			CHAR(9), '@MiddleName = ', @MiddleName, CHAR(13), CHAR(10),
-			CHAR(9), '@LastName = ', @LastName, CHAR(13), CHAR(10),
-			CHAR(9), '@Gender = ', @Gender, CHAR(13), CHAR(10),
-			CHAR(9), '@BirthDay = ', @BirthDay, CHAR(13), CHAR(10),
-			CHAR(9), '@Email = ', @Email, CHAR(13), CHAR(10),
-			CHAR(9), '@Phone = ', @Phone, CHAR(13), CHAR(10));
+			CHAR(9), '@CategoryName = ', @CategoryName, CHAR(13), CHAR(10),
+			CHAR(9), '@Description = ', @Description, CHAR(13), CHAR(10));
 
-		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Created new Contact with Parameters: ', @curentParameters);
+		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Created new Category with Parameters: ', @curentParameters);
 	
 
 		-- to keep new OperationRunID 
@@ -40,37 +28,25 @@ BEGIN
 
 		-- Start Operation and get new OperationRunID
 		EXEC @curentRunID = 
-			logs.sp_StartOperation   @OperationID = 3	-- INT     OperationID for Shop.sp_CreateContact  from Logs.Operations
+			logs.sp_StartOperation   @OperationID = 6	-- INT     OperationID for Shop.sp_CreateCategory  from Logs.Operations
 									,@Description = NULL	-- NVARCHAR(255), NULL
 									,@OperationRunParameters = @curentParameters	-- NVARCHAR(MAX), NULL
 		
-		-- to keep new ContactID
-		DECLARE @newContactID INT;		
+		-- to keep new CategoryID
+		DECLARE @newCategoryID INT;		
 
-		-- Create new Contact
-		INSERT INTO Shop.Contacts(
-			Title,
-			FirstName,
-			MiddleName,
-			LastName,
-			Gender,
-			BirthDay,
-			Email,
-			Phone)
+		-- Create new Category
+		INSERT INTO Shop.Categories(
+			CategoryName,
+			Description)
 		VALUES(
-			@Title,
-			@FirstName,
-			@MiddleName,
-			@LastName,
-			@Gender,
-			@BirthDay,
-			@Email,
-			@Phone);
+			@CategoryName,
+			@Description);
 			 
-		SET @newContactID = SCOPE_IDENTITY();
+		SET @newCategoryID = SCOPE_IDENTITY();
 
 		-- throw event
-		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Created new Contact with Parameters: ', @curentParameters);
+		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Created new Category with ID: ', @newCategoryID);
 		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
 								,@affectedRows = @@rowcount		-- INT, NULL
 								,@procedureID = @@PROCID		-- INT, NULL
@@ -113,7 +89,7 @@ INSERT INTO Logs.Operations(
 	OperationName,
 	Description)
 VALUES
-	(3,'Shop.sp_CreateContact','Create new Contact, return new ContactID');
+	(6,'Shop.sp_CreateCategory','Create new Category, return new CategoryID');
 SET IDENTITY_INSERT Logs.Operations OFF;
 GO
 SELECT * FROM Logs.Operations
