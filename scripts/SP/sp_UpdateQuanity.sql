@@ -4,7 +4,7 @@ GO
 USE T21;
 GO
 
--- Update Product Quantity, return ...
+-- Update Product Quantity
 
 -------------
 CREATE OR ALTER PROCEDURE shop.sp_UpdateQuantity
