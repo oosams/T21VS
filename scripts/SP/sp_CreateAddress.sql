@@ -62,6 +62,7 @@ BEGIN
 		SET @newAddressID = SCOPE_IDENTITY();
 
 		-- throw event
+		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Created new Address with Parameters: ', @curentParameters);
 		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
 								,@affectedRows = @@rowcount		-- INT, NULL
 								,@procedureID = @@PROCID		-- INT, NULL
@@ -116,7 +117,8 @@ CREATE TABLE #testID
 	id INT
 );
 declare @iddd int
-EXEC @iddd = shop.sp_CreateAddress    @AddressLine1 = 'test Address 21 str App 89'	 -- NVARCHAR(500) 
+EXEC @iddd = 
+	shop.sp_CreateAddress    @AddressLine1 = 'test Address 21 str App 89'	 -- NVARCHAR(500) 
 							,@AddressLine2 = NULL  -- NVARCHAR(500), NULL
 							,@City = 'testCityName'  -- NVARCHAR(255)
 							,@Region = NULL  -- NVARCHAR(255), NULL
