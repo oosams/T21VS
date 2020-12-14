@@ -114,7 +114,7 @@ BEGIN
 		SET @newProductID = SCOPE_IDENTITY();
 
 		-- throw event
-		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Created new Product with ID: ', @newProductID, 'with CategoryID: ',@CategoryID );
+		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Created new Product with ID: ', @newProductID, ', with CategoryID: ',@CategoryID );
 		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
 								,@affectedRows = @@rowcount		-- INT, NULL
 								,@procedureID = @@PROCID		-- INT, NULL
