@@ -40,7 +40,7 @@ BEGIN
 
 		-- Start Operation and get new OperationRunID
 		EXEC @curentRunID = 
-			logs.sp_StartOperation   @OperationID = 3	-- INT     OperationID for Shop.sp_CreateAddress  from Logs.Operations
+			logs.sp_StartOperation   @OperationID = 3	-- INT     OperationID for Shop.sp_CreateContact  from Logs.Operations
 									,@Description = NULL	-- NVARCHAR(255), NULL
 									,@OperationRunParameters = @curentParameters	-- NVARCHAR(MAX), NULL
 		
@@ -70,6 +70,7 @@ BEGIN
 		SET @newContactID = SCOPE_IDENTITY();
 
 		-- throw event
+		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Created new Contact with Parameters: ', @curentParameters);
 		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
 								,@affectedRows = @@rowcount		-- INT, NULL
 								,@procedureID = @@PROCID		-- INT, NULL
@@ -132,6 +133,7 @@ EXEC @iddd = shop.sp_CreateContact   @Title = 'Tv'	 -- NVARCHAR(50), NULL
 									,@BirthDay = '1915-01-01'  -- NVARCHAR(50)
 									,@Email = 'YuriOgarkov@MVD.com'  -- NVARCHAR(255)
 									,@Phone = '66552956'  -- NVARCHAR(50)
+
 INSERT INTO #testID (id)
 SELECT @iddd
 SELECT Top 1 id FROM #testID
