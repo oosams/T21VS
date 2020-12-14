@@ -4,18 +4,23 @@ GO
 USE T21;
 GO
 
--- Create new Product, return new ProductID
+-- Update Product, return ...
+-- update price - add new price, mark old as not active
+-- update quanity -
+
+-- name and discr - create new product, mark old as not active
 
 -------------
-CREATE OR ALTER PROCEDURE shop.sp_CreateProduct
-	@CategoryID INT = NULL,
-	@CategoryName NVARCHAR(255) = NULL,
-	@CategoryDescription NVARCHAR(MAX) = NULL,
-	@ProductName NVARCHAR(255),
+CREATE OR ALTER PROCEDURE shop.sp_UpdateProduct
+	@ProductID INT,
+	--@CategoryID INT = NULL,
+	--@CategoryName NVARCHAR(255) = NULL,
+	--@CategoryDescription NVARCHAR(MAX) = NULL,
+	--@ProductName NVARCHAR(255),
 	@UnitPrice MONEY,
 	@Quantity INT,
-	@IsActive INT = 1,
-	@Description NVARCHAR(MAX)
+	--@IsActive INT = 1,
+	--@Description NVARCHAR(MAX)
 
 AS
 BEGIN
