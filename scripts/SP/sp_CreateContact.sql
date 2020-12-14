@@ -113,7 +113,7 @@ INSERT INTO Logs.Operations(
 	OperationName,
 	Description)
 VALUES
-	(3,'Shop.sp_CreateContact','Create new contact, return new ContactID');
+	(3,'Shop.sp_CreateContact','Create new Contact, return new ContactID');
 SET IDENTITY_INSERT Logs.Operations OFF;
 GO
 SELECT * FROM Logs.Operations

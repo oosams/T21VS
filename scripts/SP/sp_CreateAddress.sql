@@ -105,7 +105,7 @@ INSERT INTO Logs.Operations(
 	OperationName,
 	Description)
 VALUES
-	(2,'Shop.sp_CreateAddress','Create new address, return new AddressID');
+	(2,'Shop.sp_CreateAddress','Create new Address, return new AddressID');
 SET IDENTITY_INSERT Logs.Operations OFF;
 GO
 SELECT * FROM Logs.Operations

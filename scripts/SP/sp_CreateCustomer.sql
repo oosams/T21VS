@@ -193,7 +193,7 @@ INSERT INTO Logs.Operations(
 	OperationName,
 	Description)
 VALUES
-	(4,'Shop.sp_CreateCustomer','Create new customer, return new CustomerID');
+	(4,'Shop.sp_CreateCustomer','Create new Customer, return new CustomerID');
 SET IDENTITY_INSERT Logs.Operations OFF;
 GO
 SELECT * FROM Logs.Operations
@@ -237,7 +237,7 @@ DELETE Shop.ContactCustomer
 WHERE CustomerID =  (SELECT Top 1 id FROM #testID) 
 
 DBCC CHECKIDENT ('Shop.Customers')
-DBCC CHECKIDENT ('Shop.Customers', RESEED, 130)  
+DBCC CHECKIDENT ('Shop.Customers', RESEED, 100)  
   
 SELECT SCOPE_IDENTITY()
 
