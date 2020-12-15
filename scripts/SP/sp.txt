@@ -1,7 +1,9 @@
 
 generateall.sql
+
 InserHystOperationData.sql
 temp_tableinfo
+types.sql
 
 
 
@@ -45,7 +47,7 @@ Constraint.sql
   sp_CreateCategory
   sp_CreateProduct
  
-  sp_UpdateProduct
+  sp_UpdateProduct -> sp_UpdatePrice, sp_UpdateQuantity
  
   sp_CreateOrder
   sp_UpdateOrder
