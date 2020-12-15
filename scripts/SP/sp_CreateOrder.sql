@@ -48,15 +48,15 @@ BEGIN
 
 		-- Start Operation and get new OperationRunID
 		EXEC @curentRunID = 
-			logs.sp_StartOperation   @OperationID = 6	-- INT     OperationID for Shop.sp_CreateCategory  from Logs.Operations
+			logs.sp_StartOperation   @OperationID = 10	-- INT     OperationID for Shop.sp_CreateCategory  from Logs.Operations
 									,@Description = NULL	-- NVARCHAR(255), NULL
 									,@OperationRunParameters = @curentParameters	-- NVARCHAR(MAX), NULL
 		
 
 		-- to keep new OrderID
-		DECLARE @newCategoryID INT;		
+		DECLARE @newOrderID INT;		
 
-		-- Create new Category
+		-- Create new Order
 		INSERT INTO Shop.Categories(
 			CategoryName,
 			Description)
@@ -64,10 +64,10 @@ BEGIN
 			@CategoryName,
 			@Description);
 			 
-		SET @newCategoryID = SCOPE_IDENTITY();
+		SET @newOrderID = SCOPE_IDENTITY();
 
 		-- throw event
-		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Created new Category with ID: ', @newCategoryID);
+		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Created new Order with ID: ', @newOrderID);
 		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
 								,@affectedRows = @@rowcount		-- INT, NULL
 								,@procedureID = @@PROCID		-- INT, NULL
@@ -75,11 +75,14 @@ BEGIN
 								,@eventMessage = @eventMessage		-- NVARCHAR(MAX)
 
 
+
+
+
 		-- Complete Operation
 		EXEC logs.sp_CompleteOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
 										,@OperationRunParameters = @curentParameters  -- NVARCHAR(MAX), NULL
 
-		RETURN @newCategoryID;
+		RETURN @newOrderID;
 
 	END TRY
 	BEGIN CATCH
@@ -88,7 +91,7 @@ BEGIN
 		EXEC logs.sp_SetError	 @runID = @curentRunID 		-- INT       -- get from sp_StartOperation
 								,@procedureID = @@PROCID	-- INT, NULL
 								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@errorMessage = 'Can not create Category'	-- NVARCHAR(MAX), NULL
+								,@errorMessage = 'Can not create Order'	-- NVARCHAR(MAX), NULL
 
 		-- Fail Operation
 		EXEC logs.sp_FailOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
@@ -110,51 +113,12 @@ INSERT INTO Logs.Operations(
 	OperationName,
 	Description)
 VALUES
-	(10,'Shop.sp_CreateCategory','Create new Category, return new CategoryID');
+	(10,'Shop.sp_CreateOrder','Create new Order, return new OrderID');
 SET IDENTITY_INSERT Logs.Operations OFF;
 GO
 SELECT * FROM Logs.Operations
 
 --------DEBUG---------
- 
-EXEC @iddd = shop.sp_CreateOrder  @CategoryName = 'TestCatName'	 -- NVARCHAR(255)
-									,@Description = 'Test Category discription'  -- NVARCHAR(MAX)
- 
- 
-
-SELECT * FROM Shop.Orders
-SELECT * FROM Shop.OrderDetails
-
-SELECT * FROM Logs.EventLogs
-SELECT * FROM Logs.ErrorLogs
-SELECT * FROM Logs.OperationRuns
-SELECT * FROM Logs.Operations
-
-------------------------------
-------------------------------
-
--------------
-CREATE OR ALTER PROCEDURE shop.sp_CreateOrder
-	@EmployeeID	INT,
-	@CustomerID INT,
-	@AddressID INT = NULL,
-	@RequiredDate DATETIME = NULL,
-	@OrderDetails Staging.type_OrderDetails READONLY
-
-AS
-	DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
-			CHAR(9), '@EmployeeID = ', @EmployeeID, CHAR(13), CHAR(10),
-			CHAR(9), '@CustomerID = ', @CustomerID, CHAR(13), CHAR(10),
-			CHAR(9), '@AddressID = ', @AddressID, CHAR(13), CHAR(10),
-			CHAR(9), '@RequiredDate = ', @RequiredDate, CHAR(13), CHAR(10)
---todo			,CHAR(9), '@OrderDetails = ', @OrderDetails, CHAR(13), CHAR(10)
-			);
-
-	SELECT @curentParameters
-GO
-
-
-
 DECLARE @OrderDetails Staging.type_OrderDetails
 INSERT INTO @OrderDetails 
 VALUES
@@ -169,7 +133,16 @@ EXEC shop.sp_CreateOrder @EmployeeID = 11	-- INT
 						,@OrderDetails	= @OrderDetails -- Staging.type_OrderDetails 
 
 
+SELECT * FROM Shop.Orders
+SELECT * FROM Shop.OrderDetails
 
-EXEC shop.sp_UpdateQuantity  @ProductID = 1		-- INT
-							,@Quantity =  51	-- INT
+SELECT * FROM Logs.EventLogs
+SELECT * FROM Logs.ErrorLogs
+SELECT * FROM Logs.OperationRuns
+SELECT * FROM Logs.Operations
+
+------------------------------
+
+
+
 
