@@ -29,8 +29,8 @@ BEGIN
 			CHAR(9), '@OperationRunID = ', @OperationRunID, CHAR(13), CHAR(10),
 			CHAR(9), '@OperationRunParameters = ', @OperationRunParameters, CHAR(13), CHAR(10));
 
-		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Failed. Operation ''', @OperationName, ''' has been failed with Parameters: ', @OperationRunParameters);
-		DECLARE @errorMessage NVARCHAR(MAX) = CONCAT('Unable to log the failure of operation ''', @OperationName, '''  with Parameters: ', @OperationRunParameters);	
+		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Failed. Operation ''', @OperationName, ''' has been failed with Parameters: ', CHAR(13), CHAR(10), @OperationRunParameters);
+		DECLARE @errorMessage NVARCHAR(MAX) = CONCAT('Unable to log the failure of operation ''', @OperationName, '''  with Parameters: ', CHAR(13), CHAR(10), @OperationRunParameters);	
 				
 		-- log OperationRun as failed
 		UPDATE Logs.OperationRuns
