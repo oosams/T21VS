@@ -38,8 +38,9 @@ BEGIN
 			CHAR(9), '@EmployeeID = ', @EmployeeID, CHAR(13), CHAR(10),
 			CHAR(9), '@CustomerID = ', @CustomerID, CHAR(13), CHAR(10),
 			CHAR(9), '@AddressID = ', @AddressID, CHAR(13), CHAR(10),
-			CHAR(9), '@RequiredDate = ', @RequiredDate, CHAR(13), CHAR(10),
-			CHAR(9), '@OrderDetails = ', @OrderDetails, CHAR(13), CHAR(10));
+			CHAR(9), '@RequiredDate = ', @RequiredDate, CHAR(13), CHAR(10)
+--todo			,CHAR(9), '@OrderDetails = ', @OrderDetails, CHAR(13), CHAR(10)
+			);
 
 		
 		-- to keep new OperationRunID 
@@ -109,14 +110,14 @@ INSERT INTO Logs.Operations(
 	OperationName,
 	Description)
 VALUES
-	(6,'Shop.sp_CreateCategory','Create new Category, return new CategoryID');
+	(10,'Shop.sp_CreateCategory','Create new Category, return new CategoryID');
 SET IDENTITY_INSERT Logs.Operations OFF;
 GO
 SELECT * FROM Logs.Operations
 
 --------DEBUG---------
  
-EXEC @iddd = shop.sp_CreateCategory  @CategoryName = 'TestCatName'	 -- NVARCHAR(255)
+EXEC @iddd = shop.sp_CreateOrder  @CategoryName = 'TestCatName'	 -- NVARCHAR(255)
 									,@Description = 'Test Category discription'  -- NVARCHAR(MAX)
  
  
@@ -145,8 +146,9 @@ AS
 			CHAR(9), '@EmployeeID = ', @EmployeeID, CHAR(13), CHAR(10),
 			CHAR(9), '@CustomerID = ', @CustomerID, CHAR(13), CHAR(10),
 			CHAR(9), '@AddressID = ', @AddressID, CHAR(13), CHAR(10),
-			CHAR(9), '@RequiredDate = ', @RequiredDate, CHAR(13), CHAR(10),
-			CHAR(9), '@OrderDetails = ', @OrderDetails, CHAR(13), CHAR(10));
+			CHAR(9), '@RequiredDate = ', @RequiredDate, CHAR(13), CHAR(10)
+--todo			,CHAR(9), '@OrderDetails = ', @OrderDetails, CHAR(13), CHAR(10)
+			);
 
 	SELECT @curentParameters
 GO
@@ -154,15 +156,20 @@ GO
 
 
 DECLARE @OrderDetails Staging.type_OrderDetails
-
 INSERT INTO @OrderDetails 
 VALUES
 (1,11,12,13,14),
 (2,21,22,23,24),
 (3,31,32,33,34)
 
-EXEC shop.sp_CreateOrder
+EXEC shop.sp_CreateOrder @EmployeeID = 11	-- INT
+						,@CustomerID = 22	-- INT
+						,@AddressID = 33	-- INT, NULL
+						,@RequiredDate	= NULL	-- DATETIME, NULL
+						,@OrderDetails	= @OrderDetails -- Staging.type_OrderDetails 
 
 
 
-select 'tab-->' + char(9) + '<--tab'
+EXEC shop.sp_UpdateQuantity  @ProductID = 1		-- INT
+							,@Quantity =  51	-- INT
+
