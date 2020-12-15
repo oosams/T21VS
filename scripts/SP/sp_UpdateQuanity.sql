@@ -85,8 +85,8 @@ SELECT * FROM Logs.Operations
 
 --------DEBUG---------
 
-EXEC shop.sp_UpdateQuantity   @ProductID = 1		-- INT
-							,@Quantity =  51		-- INT
+EXEC shop.sp_UpdateQuantity  @ProductID = 1		-- INT
+							,@Quantity =  51	-- INT
 									
 
 SELECT * FROM Shop.Products
