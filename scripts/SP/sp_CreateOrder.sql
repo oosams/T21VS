@@ -8,9 +8,9 @@ GO
 
 -------------
 CREATE OR ALTER PROCEDURE shop.sp_CreateOrder
-	@EmployeeID	INT,
-	@CustomerID INT,
 	@AddressID INT = NULL,
+	@CustomerID INT,
+	@EmployeeID	INT,	
 	@RequiredDate DATETIME = NULL,
 	@OrderDetails Staging.type_OrderDetails READONLY
     
@@ -48,21 +48,30 @@ BEGIN
 
 		-- Start Operation and get new OperationRunID
 		EXEC @curentRunID = 
-			logs.sp_StartOperation   @OperationID = 10	-- INT     OperationID for Shop.sp_CreateCategory  from Logs.Operations
+			logs.sp_StartOperation   @OperationID = 10	-- INT     OperationID for Shop.sp_CreateOrder  from Logs.Operations
 									,@Description = NULL	-- NVARCHAR(255), NULL
 									,@OperationRunParameters = @curentParameters	-- NVARCHAR(MAX), NULL
 		
-
+		
 		-- to keep new OrderID
 		DECLARE @newOrderID INT;		
-
+		
 		-- Create new Order
-		INSERT INTO Shop.Categories(
-			CategoryName,
-			Description)
+		INSERT INTO Shop.Orders(
+			AddressID,
+			CustomerID,
+			EmployeeID,
+			OrderStatusID,
+			OrderDate,
+			RequiredDate,
+			ShipDate)
 		VALUES(
-			@CategoryName,
-			@Description);
+			@AddressID,
+			@CustomerID,
+			@EmployeeID,
+			1,				-- New, "New registered order, whait for payment" in Shop.OrderStatus			CURRENT_TIMESTAMP,
+			@RequiredDate,
+			NULL);
 			 
 		SET @newOrderID = SCOPE_IDENTITY();
 
