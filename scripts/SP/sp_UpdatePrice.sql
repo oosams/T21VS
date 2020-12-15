@@ -4,7 +4,7 @@ GO
 USE T21;
 GO
 
--- Update Product Price
+-- Update Product Price, return 1 if succeed
 
 -------------
 CREATE OR ALTER PROCEDURE shop.sp_UpdatePrice
@@ -114,6 +114,7 @@ BEGIN
 		EXEC logs.sp_CompleteOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
 										,@OperationRunParameters = @curentParameters  -- NVARCHAR(MAX), NULL
 
+		RETURN 1									
 	END TRY
 	BEGIN CATCH
 	
@@ -142,7 +143,7 @@ INSERT INTO Logs.Operations(
 	OperationName,
 	Description)
 VALUES
-	(9,'Shop.sp_UpdatePrice','Update Product Price');
+	(9,'Shop.sp_UpdatePrice','Update Product Price, return 1 if succeed');
 SET IDENTITY_INSERT Logs.Operations OFF;
 GO
 SELECT * FROM Logs.Operations

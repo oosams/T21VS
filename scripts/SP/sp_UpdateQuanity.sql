@@ -4,7 +4,7 @@ GO
 USE T21;
 GO
 
--- Update Product Quantity
+-- Update Product Quantity, return 1 if succeed
 
 -------------
 CREATE OR ALTER PROCEDURE shop.sp_UpdateQuantity
@@ -47,7 +47,8 @@ BEGIN
 		-- Complete Operation
 		EXEC logs.sp_CompleteOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
 										,@OperationRunParameters = @curentParameters  -- NVARCHAR(MAX), NULL
-
+		
+		RETURN 1
 	END TRY
 	BEGIN CATCH
 	
@@ -76,7 +77,7 @@ INSERT INTO Logs.Operations(
 	OperationName,
 	Description)
 VALUES
-	(8,'Shop.sp_UpdateQuantity','Update Product Quantity');
+	(8,'Shop.sp_UpdateQuantity','Update Product Quantity, return 1 if succeed');
 SET IDENTITY_INSERT Logs.Operations OFF;
 GO
 SELECT * FROM Logs.Operations
