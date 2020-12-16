@@ -5,8 +5,10 @@ USE T21;
 GO
 
  --TODO
--- Update Order, return new OrderID
+-- Update Order, return 1 if secceed
 -- Use top 1 Customer's Address if not provided
+
+-- update for paid and for shipped in same proc
 
 -------------
 CREATE OR ALTER PROCEDURE Shop.sp_UpdateOrder
