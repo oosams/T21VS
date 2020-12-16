@@ -45,7 +45,7 @@ BEGIN
 		WHERE 1 = 1
 			AND EntityID = @ProductID;
 
-		--get ProductName
+		--get ProductName for logging
 		DECLARE @ProductName NVARCHAR(255);
 		SELECT @ProductName = ProductName
 		FROM Shop.Products
