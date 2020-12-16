@@ -37,7 +37,14 @@ BEGIN
 			logs.sp_StartOperation   @OperationID = 12	-- INT     OperationID for Shop.sp_CreateOrder  from Logs.Operations
 									,@Description = NULL	-- NVARCHAR(255), NULL
 									,@OperationRunParameters = @curentParameters	-- NVARCHAR(MAX), NULL
-		
+
+		-- throw event
+		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
+								,@affectedRows = @@rowcount		-- INT, NULL
+								,@procedureID = @@PROCID		-- INT, NULL
+								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
+								,@eventMessage = 'Starting Product quanity check'		-- NVARCHAR(MAX)
+								  		
 		-- Check product quanity
 		DECLARE @i INT;
 		EXEC @i = Shop.sp_CheckQuantity  @OrderDetails = @OrderDetails 
@@ -48,7 +55,7 @@ BEGIN
 				EXEC logs.sp_SetError	 @runID = @curentRunID 		-- INT       -- get from sp_StartOperation
 										,@procedureID = @@PROCID	-- INT, NULL
 										,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-										,@errorMessage = 'Can not create Order'	-- NVARCHAR(MAX), NULL
+										,@errorMessage = 'There are not enough products to create Order'	-- NVARCHAR(MAX), NULL
 
 				-- Fail Operation
 				EXEC logs.sp_FailOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
@@ -58,6 +65,12 @@ BEGIN
 
 			END
 
+		-- throw event
+		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
+								,@affectedRows = @@rowcount		-- INT, NULL
+								,@procedureID = @@PROCID		-- INT, NULL
+								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
+								,@eventMessage = 'Checking Address'		-- NVARCHAR(MAX)
 
 		-- Check if Address was provided and use top 1 Customer's Address if not
 		IF @AddressID is NULL
@@ -181,16 +194,15 @@ SELECT * FROM Logs.Operations
 DECLARE @OrderDetails Staging.type_OrderDetails
 INSERT INTO @OrderDetails 
 VALUES
-(1,11,12,13,14),
-(2,21,22,23,24),
-(3,31,32,33,34)
+(1,11,12,1,14),
+(2,21,22,1,24),
+(3,31,32,1,34)
 
 EXEC shop.sp_CreateOrder @EmployeeID = 11	-- INT
-						,@CustomerID = 22	-- INT
-						,@AddressID = 33	-- INT, NULL
-						,@RequiredDate	= NULL	-- DATETIME, NULL
+						,@CustomerID = 2	-- INT
+						--,@AddressID = 33	-- INT, NULL
+					--	,@RequiredDate	= '2021-01-16'	-- DATETIME, NULL
 						,@OrderDetails	= @OrderDetails -- Staging.type_OrderDetails 
-
 
 SELECT * FROM Shop.Orders
 SELECT * FROM Shop.OrderDetails
@@ -201,28 +213,11 @@ SELECT * FROM Logs.OperationRuns
 SELECT * FROM Logs.Operations
 
 ------------------------------
-DECLARE @OrderID INT = 1;
-DECLARE @OrderDetails Staging.type_OrderDetails;
-
-INSERT INTO @OrderDetails 
-VALUES
-(NULL,11,12,13,14),
-(NULL,21,22,23,24),
-(NULL,31,32,33,34)
-
-SELECT
-	@OrderID, 
-	od.ProductID,
-	od.UnitPrice,
-	od.Quantity,
-	od.Discount
-FROM @OrderDetails od 
 
 
 
-DECLARE @OrderDetails1 Staging.type_OrderDetails
 
-INSERT INTO @OrderDetails1
-SELECT * FROM
+
+
 
 
