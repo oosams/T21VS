@@ -4,6 +4,7 @@ GO
 USE T21;
 GO
 
+--TODO
 -- Update Product, return ...
 -- update price - add new price, mark old as not active
 -- update quanity -
@@ -42,11 +43,13 @@ BEGIN
 
 		-- Start Operation and get new OperationRunID
 		EXEC @curentRunID = 
-			logs.sp_StartOperation   @OperationID = 7	-- INT     OperationID for Shop.sp_CreateProduct from Logs.Operations
+			logs.sp_StartOperation   @OperationID = 10	 -- INT     OperationID for Shop.sp_UpdateProduct from Logs.Operations
 									,@Description = NULL	-- NVARCHAR(255), NULL
 									,@OperationRunParameters = @curentParameters	-- NVARCHAR(MAX), NULL
 		
-
+	---
+	---
+	----
 		-------------------------------------------------------------
 		-----			    	   Category			    	    -----
 		-------------------------------------------------------------
@@ -225,9 +228,9 @@ SET IDENTITY_INSERT Logs.Operations ON;
 INSERT INTO Logs.Operations(
 	OperationID,
 	OperationName,
-	Description)
+	Description)		  
 VALUES
-	(7,'Shop.sp_CreateProduct','Create new Product, return new ProductID');
+	(10,'Shop.sp_UpdateProduct','Update Product....toadd');
 SET IDENTITY_INSERT Logs.Operations OFF;
 GO
 SELECT * FROM Logs.Operations

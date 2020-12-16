@@ -34,7 +34,7 @@ BEGIN
 
 		-- Start Operation and get new OperationRunID
 		EXEC @curentRunID = 
-			logs.sp_StartOperation   @OperationID = 11	-- INT     OperationID for Shop.sp_CreateOrder  from Logs.Operations
+			logs.sp_StartOperation   @OperationID = 12	-- INT     OperationID for Shop.sp_CreateOrder  from Logs.Operations
 									,@Description = NULL	-- NVARCHAR(255), NULL
 									,@OperationRunParameters = @curentParameters	-- NVARCHAR(MAX), NULL
 		
@@ -161,10 +161,11 @@ INSERT INTO Logs.Operations(
 	OperationName,
 	Description)
 VALUES
-	(11,'Shop.sp_CreateOrder','Create new Order, return new OrderID');
+	(12,'Shop.sp_CreateOrder','Create new Order, return new OrderID');
 SET IDENTITY_INSERT Logs.Operations OFF;
 GO
 SELECT * FROM Logs.Operations
+
 
 --------DEBUG---------
 DECLARE @OrderDetails Staging.type_OrderDetails

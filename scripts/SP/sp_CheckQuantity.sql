@@ -24,7 +24,7 @@ BEGIN
 
 		-- Start Operation and get new OperationRunID
 		EXEC @curentRunID = 
-			logs.sp_StartOperation   @OperationID = 10	-- INT     OperationID for Shop.sp_CheckQuantity from Logs.Operations
+			logs.sp_StartOperation   @OperationID = 11	-- INT     OperationID for Shop.sp_CheckQuantity from Logs.Operations
 									,@Description = NULL	-- NVARCHAR(255), NULL
 									,@OperationRunParameters = '!!!Logging for Dataset parameter curently not supported'	-- NVARCHAR(MAX), NULL
 		
@@ -130,7 +130,7 @@ INSERT INTO Logs.Operations(
 	OperationName,
 	Description)
 VALUES
-	(10,'Shop.sp_CheckQuantity','Check Product Quantity, return 1 if succeed');
+	(11,'Shop.sp_CheckQuantity','Check Product Quantity, return 1 if succeed');
 SET IDENTITY_INSERT Logs.Operations OFF;
 GO
 SELECT * FROM Logs.Operations
