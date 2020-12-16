@@ -110,6 +110,22 @@ BEGIN
 		-----			       Order Details   		    	    -----
 		-------------------------------------------------------------
 
+		-- Populate OrderDetails
+		INSERT INTO Shop.OrderDetails
+		SELECT
+			@newOrderID, 
+			od.ProductID,
+			od.UnitPrice,
+			od.Quantity,
+			od.Discount
+		FROM @OrderDetails od 
+
+
+
+
+
+
+
 
 
 
@@ -180,7 +196,26 @@ SELECT * FROM Logs.OperationRuns
 SELECT * FROM Logs.Operations
 
 ------------------------------
+DECLARE @OrderID INT = 1;
+DECLARE @OrderDetails Staging.type_OrderDetails;
+
+INSERT INTO @OrderDetails 
+VALUES
+(NULL,11,12,13,14),
+(NULL,21,22,23,24),
+(NULL,31,32,33,34)
+
+SELECT
+	@OrderID, 
+	od.ProductID,
+	od.UnitPrice,
+	od.Quantity,
+	od.Discount
+FROM @OrderDetails od 
 
 
 
+DECLARE @OrderDetails1 Staging.type_OrderDetails
 
+INSERT INTO @OrderDetails1
+SELECT * FROM
