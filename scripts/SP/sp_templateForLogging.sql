@@ -54,7 +54,7 @@ BEGIN
 								,@eventMessage = 'Some checks completed. Starting the operation.'		-- NVARCHAR(MAX)
 			
 
-		BEGIN TRY
+		
 
 
 		--
@@ -64,8 +64,8 @@ BEGIN
 		-- Complete Operation
 		EXEC logs.sp_CompleteOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
 										,@OperationRunParameters = @curentParameters  -- NVARCHAR(MAX), NULL
-		END TRY
-		BEGIN CATCH
+	END TRY
+	BEGIN CATCH
 			 
 		-- throw Error
 		EXEC logs.sp_SetError	 @runID = @curentRunID 		-- INT       -- get from sp_StartOperation
@@ -97,5 +97,6 @@ GO
 SELECT * FROM Logs.Operations
 
 -----------------------------------------
-EXEC sp_sampleForLogging;
+EXEC sp_sampleForLogging @par1 = 1 -- INT
+						,@par2 = '2' --  NVARCHAR(255), NULL
 ------------------------------------------
