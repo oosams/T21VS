@@ -49,7 +49,8 @@ Constraint.sql
  
   sp_UpdateProduct -> sp_UpdatePrice, sp_UpdateQuantity
  
-  sp_CreateOrder
+  sp_CreateOrder  -> sp_CheckQuantity   
+  
   sp_UpdateOrder
  
  
