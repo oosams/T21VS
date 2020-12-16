@@ -40,16 +40,26 @@ BEGIN
 		
 		-- Check product quanity
 		DECLARE @i INT;
-		--	EXEC  @i = Shop.sp_CheckQuantity
+		EXEC @i = Shop.sp_CheckQuantity  @OrderDetails = @OrderDetails 
 		IF 	@i != 1
 			BEGIN
 
-				--throw error
+				-- throw Error
+				EXEC logs.sp_SetError	 @runID = @curentRunID 		-- INT       -- get from sp_StartOperation
+										,@procedureID = @@PROCID	-- INT, NULL
+										,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
+										,@errorMessage = 'Can not create Order'	-- NVARCHAR(MAX), NULL
+
+				-- Fail Operation
+				EXEC logs.sp_FailOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
+											,@OperationRunParameters = @curentParameters  -- NVARCHAR(MAX), NULL
+
+				RETURN -1
 
 			END
 
 
-		-- Check if Address was procided and use top 1 Customer's Address if not
+		-- Check if Address was provided and use top 1 Customer's Address if not
 		IF @AddressID is NULL
 			BEGIN
 
