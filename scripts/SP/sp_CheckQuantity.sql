@@ -4,7 +4,7 @@ GO
 USE T21;
 GO
 
--- Check Product Quantity, return 1 if succeed
+-- Check Product Quantity, return 1 if order matches quantity, return -1 if not.
 
 -------------
 CREATE OR ALTER PROCEDURE Shop.sp_CheckQuantity
@@ -130,7 +130,7 @@ INSERT INTO Logs.Operations(
 	OperationName,
 	Description)
 VALUES
-	(11,'Shop.sp_CheckQuantity','Check Product Quantity, return 1 if succeed');
+	(11,'Shop.sp_CheckQuantity','Check Product Quantity, return 1 if order matches quantity, return -1 if not');
 SET IDENTITY_INSERT Logs.Operations OFF;
 GO
 SELECT * FROM Logs.Operations
@@ -141,7 +141,7 @@ SELECT * FROM Logs.Operations
 DECLARE @OrderDetails Staging.type_OrderDetails
 INSERT INTO @OrderDetails 
 VALUES
-(1,11,12,1,14),
+(1,11,12,155555,14),
 (2,21,1,1,24),
 (1,11,12,2,14),
 (1,21,2,2,24),
@@ -149,8 +149,10 @@ VALUES
 
 --SELECT * FROM @OrderDetails
 -------------------------
-
+		
 EXEC Shop.sp_CheckQuantity  @OrderDetails = @OrderDetails -- Staging.type_OrderDetails 
+
+
 
 
 SELECT * FROM Shop.Products
