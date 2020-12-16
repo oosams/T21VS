@@ -5,6 +5,7 @@ USE T21;
 GO
 
 -- Create new Order, return new OrderID
+-- Use top 1 Customer's Address if not provided
 
 -------------
 CREATE OR ALTER PROCEDURE shop.sp_CreateOrder
@@ -52,7 +53,28 @@ BEGIN
 									,@Description = NULL	-- NVARCHAR(255), NULL
 									,@OperationRunParameters = @curentParameters	-- NVARCHAR(MAX), NULL
 		
+		-- Use top 1 Customer's Address if not provided
+		IF @AddressID is NULL
+			BEGIN
+
+				SELECT TOP 1 @AddressID = AddressID 
+				FROM Shop.AddressCustomer
+				WHERE CustomerID = @CustomerID
+
+				-- throw event
+				DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Address were not provided. Using first Customer''s Address with ID: ', @AddressID);
+				EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
+										,@affectedRows = @@rowcount		-- INT, NULL
+										,@procedureID = @@PROCID		-- INT, NULL
+										,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
+										,@eventMessage = @eventMessage		-- NVARCHAR(MAX)
+
+			END
 		
+		-------------------------------------------------------------
+		-----			           Order    		    	    -----
+		-------------------------------------------------------------
+
 		-- to keep new OrderID
 		DECLARE @newOrderID INT;		
 		
@@ -69,7 +91,8 @@ BEGIN
 			@AddressID,
 			@CustomerID,
 			@EmployeeID,
-			1,				-- New, "New registered order, whait for payment" in Shop.OrderStatus			CURRENT_TIMESTAMP,
+			1,				-- New, "New registered order, whait for payment" in Shop.OrderStatus
+			CURRENT_TIMESTAMP,
 			@RequiredDate,
 			NULL);
 			 
@@ -82,6 +105,12 @@ BEGIN
 								,@procedureID = @@PROCID		-- INT, NULL
 								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
 								,@eventMessage = @eventMessage		-- NVARCHAR(MAX)
+
+		-------------------------------------------------------------
+		-----			       Order Details   		    	    -----
+		-------------------------------------------------------------
+
+
 
 
 
