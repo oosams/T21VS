@@ -5,7 +5,7 @@ USE T21;
 GO
 
 -- Create new Order, return new OrderID
--- Use top 1 Customer's Address if not provided
+-- Use top 1 Customer's Address if it not provided
 
 -------------
 CREATE OR ALTER PROCEDURE shop.sp_CreateOrder
@@ -14,21 +14,6 @@ CREATE OR ALTER PROCEDURE shop.sp_CreateOrder
 	@EmployeeID	INT,	
 	@RequiredDate DATETIME = NULL,
 	@OrderDetails Staging.type_OrderDetails READONLY
-    
-
-	   ,AddressID - opt input
-      ,CustomerID - input
-      ,EmployeeID - input
-      ,OrderStatusID new 1, update when paid and shipped
-      ,OrderDate current_timestamp
-      ,RequiredDate - opt input
-      ,ShipDate update when shipped
-
-	   OrderID
-      ,ProductID
-      ,UnitPrice
-      ,Quantity
-      ,Discount
 
 AS
 BEGIN
@@ -40,7 +25,7 @@ BEGIN
 			CHAR(9), '@CustomerID = ', @CustomerID, CHAR(13), CHAR(10),
 			CHAR(9), '@AddressID = ', @AddressID, CHAR(13), CHAR(10),
 			CHAR(9), '@RequiredDate = ', @RequiredDate, CHAR(13), CHAR(10)
---todo			,CHAR(9), '@OrderDetails = ', @OrderDetails, CHAR(13), CHAR(10)
+--TODO			,CHAR(9), '@OrderDetails = ', @OrderDetails, CHAR(13), CHAR(10)	   -- how to keep dataset for parameters logging?
 			);
 
 		
@@ -49,11 +34,22 @@ BEGIN
 
 		-- Start Operation and get new OperationRunID
 		EXEC @curentRunID = 
-			logs.sp_StartOperation   @OperationID = 10	-- INT     OperationID for Shop.sp_CreateOrder  from Logs.Operations
+			logs.sp_StartOperation   @OperationID = 11	-- INT     OperationID for Shop.sp_CreateOrder  from Logs.Operations
 									,@Description = NULL	-- NVARCHAR(255), NULL
 									,@OperationRunParameters = @curentParameters	-- NVARCHAR(MAX), NULL
 		
-		-- Use top 1 Customer's Address if not provided
+		-- Check product quanity
+		DECLARE @i INT;
+		--	EXEC  @i = Shop.sp_CheckQuantity
+		IF 	@i != 1
+			BEGIN
+
+				--throw error
+
+			END
+
+
+		-- Check if Address was procided and use top 1 Customer's Address if not
 		IF @AddressID is NULL
 			BEGIN
 
@@ -62,12 +58,12 @@ BEGIN
 				WHERE CustomerID = @CustomerID
 
 				-- throw event
-				DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Address were not provided. Using first Customer''s Address with ID: ', @AddressID);
+				DECLARE @eventMessage1 NVARCHAR(MAX) = CONCAT('Address was not provided. Using first Customer''s Address with ID: ', @AddressID);
 				EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
 										,@affectedRows = @@rowcount		-- INT, NULL
 										,@procedureID = @@PROCID		-- INT, NULL
 										,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-										,@eventMessage = @eventMessage		-- NVARCHAR(MAX)
+										,@eventMessage = @eventMessage1		-- NVARCHAR(MAX)
 
 			END
 		
@@ -99,12 +95,12 @@ BEGIN
 		SET @newOrderID = SCOPE_IDENTITY();
 
 		-- throw event
-		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Created new Order with ID: ', @newOrderID);
+		DECLARE @eventMessage2 NVARCHAR(MAX) = CONCAT('Created new Order with ID: ', @newOrderID);
 		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
 								,@affectedRows = @@rowcount		-- INT, NULL
 								,@procedureID = @@PROCID		-- INT, NULL
 								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@eventMessage = @eventMessage		-- NVARCHAR(MAX)
+								,@eventMessage = @eventMessage2		-- NVARCHAR(MAX)
 
 		-------------------------------------------------------------
 		-----			       Order Details   		    	    -----
@@ -120,16 +116,14 @@ BEGIN
 			od.Discount
 		FROM @OrderDetails od 
 
-
-
-
-
-
-
-
-
-
-
+		-- throw event
+		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('OrderDetails populated for Order ID: ', @newOrderID);
+		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
+								,@affectedRows = @@rowcount		-- INT, NULL
+								,@procedureID = @@PROCID		-- INT, NULL
+								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
+								,@eventMessage = @eventMessage		-- NVARCHAR(MAX)
+								
 
 
 		-- Complete Operation
@@ -167,7 +161,7 @@ INSERT INTO Logs.Operations(
 	OperationName,
 	Description)
 VALUES
-	(10,'Shop.sp_CreateOrder','Create new Order, return new OrderID');
+	(11,'Shop.sp_CreateOrder','Create new Order, return new OrderID');
 SET IDENTITY_INSERT Logs.Operations OFF;
 GO
 SELECT * FROM Logs.Operations
@@ -219,3 +213,5 @@ DECLARE @OrderDetails1 Staging.type_OrderDetails
 
 INSERT INTO @OrderDetails1
 SELECT * FROM
+
+
