@@ -198,9 +198,9 @@ VALUES
 (2,21,22,1,24),
 (3,31,32,1,34)
 
-EXEC shop.sp_CreateOrder @EmployeeID = 11	-- INT
-						,@CustomerID = 2	-- INT
-						--,@AddressID = 33	-- INT, NULL
+EXEC shop.sp_CreateOrder @EmployeeID = 9	-- INT
+						,@CustomerID = 4	-- INT
+					--	,@AddressID = 5	-- INT, NULL
 					--	,@RequiredDate	= '2021-01-16'	-- DATETIME, NULL
 						,@OrderDetails	= @OrderDetails -- Staging.type_OrderDetails 
 

@@ -109,7 +109,7 @@ BEGIN
 		EXEC logs.sp_SetError	 @runID = @curentRunID 		-- INT       -- get from sp_StartOperation
 								,@procedureID = @@PROCID	-- INT, NULL
 								,@parameters = '!!!Logging for Dataset parameter curently not supported'	-- NVARCHAR(MAX), NULL
-								,@errorMessage = 'Can not check Product Quantity'	-- NVARCHAR(MAX), NULL
+								,@errorMessage = 'Can''t check Product Quantity'	-- NVARCHAR(MAX), NULL
 
 		-- Fail Operation
 		EXEC logs.sp_FailOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
