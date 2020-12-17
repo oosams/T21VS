@@ -152,21 +152,21 @@ BEGIN
 			FROM Shop.Products
 			WHERE 1 = 1
 				AND ProductID = @ProductID)
-		BEGIN
+			BEGIN
 
-			-- throw event
-			EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-									,@affectedRows = @@rowcount		-- INT, NULL
-									,@procedureID = @@PROCID		-- INT, NULL
-									,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-									,@eventMessage = 'Quantity changed, setting new Quantity'		-- NVARCHAR(MAX)
+				-- throw event
+				EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
+										,@affectedRows = @@rowcount		-- INT, NULL
+										,@procedureID = @@PROCID		-- INT, NULL
+										,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
+										,@eventMessage = 'Quantity changed, setting new Quantity'		-- NVARCHAR(MAX)
 
-			SET @change = 1;
+				SET @change = 1;
 
-			EXEC shop.sp_UpdateQuantity  @ProductID = @ProductID		-- INT
-										,@Quantity =  @Quantity	-- INT			
+				EXEC shop.sp_UpdateQuantity  @ProductID = @ProductID		-- INT
+											,@Quantity =  @Quantity	-- INT			
 			
-		END
+			END
 
 
 		IF @change = 0
