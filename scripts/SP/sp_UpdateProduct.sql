@@ -20,8 +20,8 @@ CREATE OR ALTER PROCEDURE shop.sp_UpdateProduct
 	--@CategoryDescription NVARCHAR(MAX) = NULL,
 	--@ProductName NVARCHAR(255) = NULL,
 	@UnitPrice MONEY  = NULL,
-	@Quantity INT  = NULL,
-	--@IsActive INT = 1,
+	@Quantity INT  = NULL--,
+	--@IsActive INT = NULL,
 	--@Description NVARCHAR(MAX)  = NULL
 
 AS
@@ -36,10 +36,14 @@ BEGIN
 			--CHAR(9), '@CategoryDescription = ', @CategoryDescription, CHAR(13), CHAR(10),
 			--CHAR(9), '@ProductName = ', @ProductName, CHAR(13), CHAR(10),
 			CHAR(9), '@UnitPrice = ', @UnitPrice, CHAR(13), CHAR(10),
-			CHAR(9), '@Quantity = ', @Quantity, CHAR(13), CHAR(10),
+			CHAR(9), '@Quantity = ', @Quantity, CHAR(13), CHAR(10)--,
 			--CHAR(9), '@IsActive = ', @IsActive, CHAR(13), CHAR(10),
-			--CHAR(9), '@Description = ', @Description, CHAR(13), CHAR(10));
-					
+			--CHAR(9), '@Description = ', @Description, CHAR(13), CHAR(10)
+																			);
+		
+		-- change flag 
+		DECLARE @change int =  0;
+								 						 
 		-- to keep new OperationRunID 
 		DECLARE @curentRunID INT;	
 
@@ -115,14 +119,23 @@ BEGIN
 			WHERE 1 = 1
 				AND ProductID = @ProductID 
 				AND EndVersion = 999999999)
-		BEGIN
+			BEGIN
 
-			EXEC shop.sp_UpdatePrice @ProductID = @ProductID	-- INT
-									,@Price=  @UnitPrice		-- INT				
+				-- throw event
+				EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
+										,@affectedRows = @@rowcount		-- INT, NULL
+										,@procedureID = @@PROCID		-- INT, NULL
+										,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
+										,@eventMessage = 'Price changed, setting new price'		-- NVARCHAR(MAX)
+
+				SET @change = 1;
+
+				EXEC shop.sp_UpdatePrice @ProductID = @ProductID	-- INT
+										,@Price=  @UnitPrice		-- INT				
 			
-		END
+			END
 
-
+		
 		-------------------------------------------------------------
 		-----			    	   Quantity		    	        -----
 		-------------------------------------------------------------	
@@ -134,12 +147,21 @@ BEGIN
 								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
 								,@eventMessage = 'Checking Quantity'	 -- NVARCHAR(MAX)
 
-		IF @Quantity != (
+		 IF @Quantity != (
 			SELECT Quantity
 			FROM Shop.Products
 			WHERE 1 = 1
 				AND ProductID = @ProductID)
 		BEGIN
+
+			-- throw event
+			EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
+									,@affectedRows = @@rowcount		-- INT, NULL
+									,@procedureID = @@PROCID		-- INT, NULL
+									,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
+									,@eventMessage = 'Quantity changed, setting new Quantity'		-- NVARCHAR(MAX)
+
+			SET @change = 1;
 
 			EXEC shop.sp_UpdateQuantity  @ProductID = @ProductID		-- INT
 										,@Quantity =  @Quantity	-- INT			
@@ -147,22 +169,20 @@ BEGIN
 		END
 
 
-
-		--After cheks -> event 'nothing to update '
-
-
-
-
-
-
-
-
-													   			 		  		  		 	   		
+		IF @change = 0
+			-- throw event
+			EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
+									,@affectedRows = @@rowcount		-- INT, NULL
+									,@procedureID = @@PROCID		-- INT, NULL
+									,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
+									,@eventMessage = 'Nothing to update'
+								
+										   			 		  		  		 	   		
 		-- Complete Operation
 		EXEC logs.sp_CompleteOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
 										,@OperationRunParameters = @curentParameters  -- NVARCHAR(MAX), NULL
 
-		RETURN @newProductID;
+		RETURN 1;
 
 	END TRY
 	BEGIN CATCH
@@ -171,7 +191,7 @@ BEGIN
 		EXEC logs.sp_SetError	 @runID = @curentRunID 		-- INT       -- get from sp_StartOperation
 								,@procedureID = @@PROCID	-- INT, NULL
 								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@errorMessage = 'Can not create Product'	-- NVARCHAR(MAX), NULL
+								,@errorMessage = 'Can not update the Product'	-- NVARCHAR(MAX), NULL
 
 		-- Fail Operation
 		EXEC logs.sp_FailOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
@@ -192,7 +212,7 @@ INSERT INTO Logs.Operations(
 	OperationName,
 	Description)		  
 VALUES
-	(10,'Shop.sp_UpdateProduct','Update Product....toadd');
+	(10,'Shop.sp_UpdateProduct','Update Product, works for price and quanity for now');
 SET IDENTITY_INSERT Logs.Operations OFF;
 GO
 SELECT * FROM Logs.Operations
@@ -200,18 +220,22 @@ SELECT * FROM Logs.Operations
 
 --------DEBUG---------
 
-EXEC shop.sp_CreateProduct   @CategoryID = NULL	-- INT, NULL
-							,@CategoryName =   'TestCatNameForProduct'	 -- NVARCHAR(255), NULL
-							,@CategoryDescription =   'Test Category for Product discription'	 -- NVARCHAR(MAX), NULL
-							,@ProductName = 'testName1'   -- NVARCHAR(255)
-							,@UnitPrice =   232323 -- MONEY
-							,@Quantity =   10 -- INT
-							--,@IsActive = 1   -- INT, 1
-							,@Description =  'Test product Description' -- NVARCHAR(255)
+EXEC shop.sp_UpdateProduct   @ProductID = 102		-- INT
+							--not supported,@CategoryID = NULL		-- INT, NULL
+							--not supported,@CategoryName =   'testCatName1'	 -- NVARCHAR(255), NULL
+							--not supported,@CategoryDescription = 'Test Category for Product discription'	-- NVARCHAR(MAX), NULL
+							--not supported,@ProductName =   'testProdName1' -- NVARCHAR(255), NULL
+							,@UnitPrice =  49000 -- MONEY, NULL
+							,@Quantity =   15 -- INT, NULL
+							--not supported,@IsActive = 1   -- INT,  NULL
+							--not supported,@Description =  'Test product Description' --  NVARCHAR(MAX), NULL
+
 
 				
 SELECT * FROM Shop.Categories
 SELECT * FROM Shop.Products
+SELECT * FROM Shop.ProductPrices
+SELECT * FROM Logs.Versions
 
 SELECT * FROM Logs.EventLogs
 SELECT * FROM Logs.ErrorLogs
