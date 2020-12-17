@@ -30,7 +30,7 @@ Constraint.sql
 
 -------------------
 
-  sp_SendDbEmail
+--  sp_SendDbEmail
  
 
   sp_CreateAddress
@@ -44,17 +44,29 @@ Constraint.sql
 			sp_CreateAddress
 			sp_CreateContact
   
-  sp_CreateCategory
+  sp_CreateCategory  
   sp_CreateProduct
+			 sp_CreateCategory
  
-  sp_UpdateProduct -> sp_UpdatePrice, sp_UpdateQuantity
  
-  sp_CreateOrder  -> sp_CheckQuantity 
+  sp_UpdatePrice
+  sp_UpdateQuantity	
   
+  sp_UpdateProduct
+			sp_UpdatePrice, 
+			sp_UpdateQuantity
+ 
+ 
+  sp_CheckQuantity
+  
+  sp_CreateOrder 
+			sp_CheckQuantity
+			
+			
   sp_UpdateOrder
   
   
   
-  
+  sp_CreateOrder -> run together with sp_UpdateQuantity or sp_UpdateProduct in one transaction, to keep goods integrity 
  
  
