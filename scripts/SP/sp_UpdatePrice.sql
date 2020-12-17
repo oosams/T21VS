@@ -156,6 +156,7 @@ EXEC shop.sp_UpdatePrice   @ProductID = 102		-- INT
 									
 
 SELECT * FROM Shop.ProductPrices
+SELECT * FROM Logs.Versions
 
 SELECT * FROM Logs.EventLogs
 SELECT * FROM Logs.ErrorLogs
