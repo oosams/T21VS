@@ -168,7 +168,7 @@ INSERT INTO Logs.Operations(
 	OperationName,
 	Description)
 VALUES
-	(13,'Shop.sp_CreateOrder','Create new Order, return new OrderID');
+	(13,'Shop.sp_UpdateOrder','Update Order, return new OrderID');
 SET IDENTITY_INSERT Logs.Operations OFF;
 GO
 SELECT * FROM Logs.Operations
