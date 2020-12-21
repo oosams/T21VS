@@ -34,7 +34,7 @@ BEGIN
 			,EventProcName
 			,Parameters
 			,EventMessage
-			EventDateTime)
+			,EventDateTime)
 		VALUES(
 			 @RunID
 			,CURRENT_USER

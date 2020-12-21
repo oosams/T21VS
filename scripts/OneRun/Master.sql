@@ -1,16 +1,17 @@
 USE MASTER
 GO
 
-:setvar path "D:\_Work\GitHub\T21VS\scripts\OneRun"
+--:setvar path "D:\_Work\GitHub\T21VS\scripts\OneRun"
+:setvar path "c:\Users\osams\source\repos\T21\scripts\OneRun"
 -- :r $(path)\test.sql
 
 -- create database and tables
 :r $(path)\CreateAll.sql
 
 
-:r $(path)\additional objects\InserHystOperationData.sql	  
-:r $(path)\additional objects\temp_tableinfo.sql
-:r $(path)\additional objects\types.sql
+:r $(path)\additional_objects\InserHystOperationData.sql	  
+:r $(path)\additional_objects\temp_tableinfo.sql
+:r $(path)\additional_objects\types.sql
 
 --logging sp
 :r $(path)\sp\sp_SetError.sql
