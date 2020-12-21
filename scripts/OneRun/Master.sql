@@ -47,4 +47,14 @@ EXEC Config.sp_InitialLoad   @Path = 'D:\_Work\GitHub\T21VS\scripts\generatedDat
  :r $(path)\sp\sp_CreateOrder.sql
  :r $(path)\sp\sp_UpdateOrder.sql 
 
+ :r $(path)\Constraint.sql
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
