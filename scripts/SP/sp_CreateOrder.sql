@@ -28,7 +28,8 @@ BEGIN
 --TODO			,CHAR(9), '@OrderDetails = ', @OrderDetails, CHAR(13), CHAR(10)	   -- how to keep dataset for parameters logging?
 			);
 
-		
+		DECLARE @RowCount INT;
+
 		-- to keep new OperationRunID 
 		DECLARE @CurrentRunID INT;	
 
@@ -40,7 +41,7 @@ BEGIN
 
 		-- throw event
 		EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
-								,@AffectedRows = @@rowcount		-- INT, NULL
+								--,@AffectedRows = @@rowcount		-- INT, NULL
 								,@ProcedureID = @@PROCID		-- INT, NULL
 								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
 								,@EventMessage = 'Starting Product quanity check'		-- NVARCHAR(MAX)
@@ -67,7 +68,7 @@ BEGIN
 
 		-- throw event
 		EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
-								,@AffectedRows = @@rowcount		-- INT, NULL
+								--,@AffectedRows = @@rowcount		-- INT, NULL
 								,@ProcedureID = @@PROCID		-- INT, NULL
 								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
 								,@EventMessage = 'Checking Address'		-- NVARCHAR(MAX)
@@ -83,7 +84,7 @@ BEGIN
 				-- throw event
 				DECLARE @EventMessage1 NVARCHAR(MAX) = CONCAT('Address was not provided. Using first Customer''s Address with ID: ', @AddressID);
 				EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
-										,@AffectedRows = @@rowcount		-- INT, NULL
+										--,@AffectedRows = @@rowcount		-- INT, NULL
 										,@ProcedureID = @@PROCID		-- INT, NULL
 										,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
 										,@EventMessage = @EventMessage1		-- NVARCHAR(MAX)
@@ -114,13 +115,14 @@ BEGIN
 			,CURRENT_TIMESTAMP
 			,@RequiredDate
 			,NULL);
-			 
+	
+		SET @RowCount = @@rowcount;
 		SET @NewOrderID = SCOPE_IDENTITY();
 
 		-- throw event
 		DECLARE @EventMessage2 NVARCHAR(MAX) = CONCAT('Created new Order with ID: ', @NewOrderID);
 		EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
-								,@AffectedRows = @@rowcount		-- INT, NULL
+								,@AffectedRows = @RowCount		-- INT, NULL
 								,@ProcedureID = @@PROCID		-- INT, NULL
 								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
 								,@EventMessage = @EventMessage2		-- NVARCHAR(MAX)
@@ -139,10 +141,12 @@ BEGIN
 			,od.Discount
 		FROM @OrderDetails od 
 
+		SET @RowCount = @@rowcount;
+
 		-- throw event
 		DECLARE @EventMessage NVARCHAR(MAX) = CONCAT('OrderDetails populated for Order ID: ', @NewOrderID);
 		EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
-								,@AffectedRows = @@rowcount		-- INT, NULL
+								,@AffectedRows = @RowCount		-- INT, NULL
 								,@ProcedureID = @@PROCID		-- INT, NULL
 								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
 								,@EventMessage = @EventMessage		-- NVARCHAR(MAX)
@@ -180,7 +184,7 @@ GO
 SET IDENTITY_INSERT Logs.Operations ON;  
 
 INSERT INTO Logs.Operations(
-	OperationID
+	 OperationID
 	,OperationName
 	,Description)
 VALUES
@@ -195,11 +199,11 @@ DECLARE @OrderDetails Staging.type_OrderDetails
 INSERT INTO @OrderDetails 
 VALUES
  (1,11,12,1,14)
-,(2,21,22,1,24)
-,(3,31,32,1,34)
+,(1,21,22,1,24)
+,(1,31,32,1,34)
 
-EXEC Shop.sp_CreateOrder @EmployeeID = 9	-- INT
-						,@CustomerID = 4	-- INT
+EXEC Shop.sp_CreateOrder @EmployeeID = 11	-- INT
+						,@CustomerID = 11	-- INT
 					--	,@AddressID = 5	-- INT, NULL
 					--	,@RequiredDate	= '2021-01-16'	-- DATETIME, NULL
 						,@OrderDetails	= @OrderDetails -- Staging.type_OrderDetails 

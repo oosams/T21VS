@@ -83,10 +83,10 @@ BEGIN
 				-- throw event
 				DECLARE @EventMessageCategory NVARCHAR(MAX) = CONCAT('Created new Category: ', @CategoryID,' for Product with Name: ', @ProductName);
 				EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
-								,@AffectedRows = @@rowcount		-- INT, NULL
-								,@ProcedureID = @@PROCID		-- INT, NULL
-								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
-								,@EventMessage = @EventMessageCategory		-- NVARCHAR(MAX)
+										,@AffectedRows = @@rowcount		-- INT, NULL
+										,@ProcedureID = @@PROCID		-- INT, NULL
+										,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+										,@EventMessage = @EventMessageCategory		-- NVARCHAR(MAX)
 
 			END
 				
