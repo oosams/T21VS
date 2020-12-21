@@ -7,10 +7,10 @@ GO
 -- Create new OperationRun, return new OperationRunID 
 
 -------------
-CREATE OR ALTER PROCEDURE logs.sp_StartOperation
-	@OperationID INT,
-	@Description NVARCHAR(255) = NULL,
-	@OperationRunParameters NVARCHAR(MAX) = NULL
+CREATE OR ALTER PROCEDURE Logs.sp_StartOperation
+	 @OperationID INT
+	,@Description NVARCHAR(255) = NULL 
+	,@OperationRunParameters NVARCHAR(MAX) = NULL
 
 AS
 BEGIN
@@ -28,54 +28,54 @@ BEGIN
 
 
 		-- for logging
-		DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
+		DECLARE @CurrentParameters NVARCHAR(MAX) =  CONCAT(
 			CHAR(9), '@OperationID = ', @OperationID, CHAR(13), CHAR(10),
 			CHAR(9), '@Description = ', @Description, CHAR(13), CHAR(10),
 			CHAR(9), '@OperationRunParameters = ', @OperationRunParameters, CHAR(13), CHAR(10)); 
 
 
 		-- to keep new OperationRunID 
-		DECLARE @curentRunID INT;		
+		DECLARE @CurrentRunID INT;		
 
 		-- log New OperationRun
 		INSERT INTO Logs.OperationRuns(
-			StatusID,
-			OperationID,
-			StartTime,
-			Description)
+			 StatusID 
+			,OperationID 
+			,StartTime 
+			,Description)
 		VALUES(
-			1,	-- R,Running in Logs.OperationStatuses
-			@OperationID,
-			CURRENT_TIMESTAMP,
-			CONCAT(@OperationDescription, ' ', @Description));
+			1 	-- R,Running in Logs.OperationStatuses
+			,@OperationID 
+			,CURRENT_TIMESTAMP 
+			,CONCAT(@OperationDescription, ' ', @Description));
 
 			 
-		SET @curentRunID = SCOPE_IDENTITY();
+		SET @CurrentRunID = SCOPE_IDENTITY();
 
-		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Started. Operation ''', @OperationName, ''' has been started with:', CHAR(13), CHAR(10),
-																			CHAR(9), 'OperationRunID: ', @curentRunID, '.', CHAR(13), CHAR(10), 
+		DECLARE @EventMessage NVARCHAR(MAX) = CONCAT('Started. Operation ''', @OperationName, ''' has been started with:', CHAR(13), CHAR(10),
+																			CHAR(9), 'OperationRunID: ', @CurrentRunID, '.', CHAR(13), CHAR(10), 
 																			CHAR(9), 'Parameters: ', CHAR(13), CHAR(10), @OperationRunParameters);
 
 		-- throw event
-		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-								,@affectedRows = @@rowcount		-- INT, NULL
-								,@procedureID = @@PROCID		-- INT, NULL
-								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@eventMessage = @eventMessage		-- NVARCHAR(MAX)
+		EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+								,@AffectedRows = @@rowcount		-- INT, NULL
+								,@ProcedureID = @@PROCID		-- INT, NULL
+								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+								,@EventMessage = @EventMessage		-- NVARCHAR(MAX)
 
-		RETURN @curentRunID;
+		RETURN @CurrentRunID;
 
 	END TRY
 	BEGIN CATCH
 
-		DECLARE @curentErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();  
-		DECLARE @curentErrorSeverity INT = ERROR_SEVERITY();  
-		DECLARE @curentErrorState INT = ERROR_STATE();
+		DECLARE @CurrentErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();  
+		DECLARE @CurrentErrorSeverity INT = ERROR_SEVERITY();  
+		DECLARE @CurrentErrorState INT = ERROR_STATE();
 
 		RAISERROR(
-			@curentErrorMessage,   
-			@curentErrorSeverity,   
-			@curentErrorState); 
+			 @CurrentErrorMessage   
+			,@CurrentErrorSeverity    
+			,@CurrentErrorState); 
 
 	END CATCH
 END
@@ -85,7 +85,7 @@ GO
 --------DEBUG---------
 
 
-EXEC logs.sp_StartOperation  @OperationID = 1	-- INT
+EXEC Logs.sp_StartOperation  @OperationID = 1	-- INT
 							,@Description = 'test1Description'	-- NVARCHAR(255), NULL
 							,@OperationRunParameters = 'test1OperationRunParameters'	-- NVARCHAR(MAX), NULL
 

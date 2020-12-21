@@ -8,10 +8,10 @@ GO
 
 -------------
 CREATE OR ALTER PROCEDURE Shop.sp_UpdateOrder
-	@OrderID INT,
-	@ManagerID INT = NULL,	 
-	@OrderStatusID INT,	 --   2 for Paid, 3 for Shipped, 4 for Cancelled
-	@RequiredDate DATETIME = NULL--,   
+	 @OrderID INT
+	,@ManagerID INT = NULL 	 
+	,@OrderStatusID INT 	 --   2 for Paid, 3 for Shipped, 4 for Cancelled
+	,@RequiredDate DATETIME = NULL    
 	--@OrderDetails Staging.type_OrderDetails READONLY	-- could be added. change list of ordered products in existing order
      
 		
@@ -20,7 +20,7 @@ BEGIN
 	BEGIN TRY
 
 		-- for logging
-		DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
+		DECLARE @CurrentParameters NVARCHAR(MAX) =  CONCAT(
 			CHAR(9), '@OrderID = ', @OrderID, CHAR(13), CHAR(10),
 			--CHAR(9), '@EmployeeID = ', @EmployeeID, CHAR(13), CHAR(10),
 			CHAR(9), '@OrderStatusID = ', @OrderStatusID, CHAR(13), CHAR(10)--,
@@ -29,16 +29,16 @@ BEGIN
 			);
 
 		-- change flag 
-		DECLARE @change int =  0;
+		DECLARE @Change int =  0;
 
 		-- to keep new OperationRunID 
-		DECLARE @curentRunID INT;	
+		DECLARE @CurrentRunID INT;	
 
 		-- Start Operation and get new OperationRunID
-		EXEC @curentRunID = 
-			logs.sp_StartOperation   @OperationID = 13	-- INT     OperationID for Shop.sp_UpdateOrder  from Logs.Operations
+		EXEC @CurrentRunID = 
+			Logs.sp_StartOperation   @OperationID = 13	-- INT     OperationID for Shop.sp_UpdateOrder  from Logs.Operations
 									,@Description = NULL	-- NVARCHAR(255), NULL
-									,@OperationRunParameters = @curentParameters	-- NVARCHAR(MAX), NULL
+									,@OperationRunParameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
 		
 
 		-------------------------------------------------------------
@@ -47,11 +47,11 @@ BEGIN
 		-----     2 for Paid, 3 for Shipped, 4 for Cancelled    -----
 
 		-- throw event
-		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-								,@affectedRows = @@rowcount		-- INT, NULL
-								,@procedureID = @@PROCID		-- INT, NULL
-								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@eventMessage = 'Checking OrderStatus'		-- NVARCHAR(MAX)
+		EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+								,@AffectedRows = @@rowcount		-- INT, NULL
+								,@ProcedureID = @@PROCID		-- INT, NULL
+								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+								,@EventMessage = 'Checking OrderStatus'		-- NVARCHAR(MAX)
 
 		IF @OrderStatusID != (
 			SELECT OrderStatusID
@@ -61,13 +61,13 @@ BEGIN
 			BEGIN
 
 				-- throw event
-				EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-										,@affectedRows = @@rowcount		-- INT, NULL
-										,@procedureID = @@PROCID		-- INT, NULL
-										,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-										,@eventMessage = 'OrderStatus changed, setting new OrderStatus'		-- NVARCHAR(MAX)
+				EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+										,@AffectedRows = @@rowcount		-- INT, NULL
+										,@ProcedureID = @@PROCID		-- INT, NULL
+										,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+										,@EventMessage = 'OrderStatus changed, setting new OrderStatus'		-- NVARCHAR(MAX)
 
-				SET @change = 1;
+				SET @Change = 1;
 
 				-- Update status
 				UPDATE Shop.Orders
@@ -90,12 +90,12 @@ BEGIN
 				WHERE OrderStatusID = @OrderStatusID
 						   
 				-- throw event
-				DECLARE @eventMessage1 NVARCHAR(MAX) = CONCAT('Setted new OrderStatus ''', @OrderStatusName, ''' with id: ', @OrderStatusID, ' - ', @Description );
-				EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-										,@affectedRows = @@rowcount		-- INT, NULL
-										,@procedureID = @@PROCID		-- INT, NULL
-										,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-										,@eventMessage = @eventMessage1		-- NVARCHAR(MAX)			
+				DECLARE @EventMessage1 NVARCHAR(MAX) = CONCAT('Setted new OrderStatus ''', @OrderStatusName, ''' with id: ', @OrderStatusID, ' - ', @Description );
+				EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+										,@AffectedRows = @@rowcount		-- INT, NULL
+										,@ProcedureID = @@PROCID		-- INT, NULL
+										,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+										,@EventMessage = @EventMessage1		-- NVARCHAR(MAX)			
 						   
 			END
 
@@ -104,11 +104,11 @@ BEGIN
 		-------------------------------------------------------------	
 
 		-- throw event
-		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-								,@affectedRows = @@rowcount		-- INT, NULL
-								,@procedureID = @@PROCID		-- INT, NULL
-								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@eventMessage = 'Checking Manager'		-- NVARCHAR(MAX)
+		EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+								,@AffectedRows = @@rowcount		-- INT, NULL
+								,@ProcedureID = @@PROCID		-- INT, NULL
+								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+								,@EventMessage = 'Checking Manager'		-- NVARCHAR(MAX)
 
 		IF @ManagerID != (
 			SELECT EmployeeID
@@ -119,13 +119,13 @@ BEGIN
 			BEGIN
 
 				-- throw event
-				EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-										,@affectedRows = @@rowcount		-- INT, NULL
-										,@procedureID = @@PROCID		-- INT, NULL
-										,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-										,@eventMessage = 'Manager changed, setting new Manager for order'		-- NVARCHAR(MAX)
+				EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+										,@AffectedRows = @@rowcount		-- INT, NULL
+										,@ProcedureID = @@PROCID		-- INT, NULL
+										,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+										,@EventMessage = 'Manager changed, setting new Manager for order'		-- NVARCHAR(MAX)
 
-				SET @change = 1;
+				SET @Change = 1;
 
 				-- Update Employee
 				UPDATE Shop.Orders
@@ -137,10 +137,10 @@ BEGIN
 				DECLARE @Name NVARCHAR(1000);
 				SELECT 
 					@Name =
-					CASE
-						WHEN c.Title IS NULL THEN 	CONCAT(c.FirstName, ' ', c.MiddleName, ' ', c.LastName)
-						ELSE   CONCAT(c.Title, '. ', c.FirstName, ' ', c.MiddleName, ' ', c.LastName)
-					END
+						CASE
+							WHEN c.Title IS NULL THEN 	CONCAT(c.FirstName, ' ', c.MiddleName, ' ', c.LastName)
+							ELSE   CONCAT(c.Title, '. ', c.FirstName, ' ', c.MiddleName, ' ', c.LastName)
+						END
 				FROM Shop.Employees e
 				JOIN Shop.ContactEmployee ce ON e.EmployeeID = ce.EmployeeID
 				JOIN Shop.Contacts c ON ce.ContactID = c.ContactID 
@@ -148,12 +148,12 @@ BEGIN
 
 
 				-- throw event
-				DECLARE @eventMessage2 NVARCHAR(MAX) = CONCAT('Setted new Manager ''', @Name, ''' with id: ', @ManagerID);
-				EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-										,@affectedRows = @@rowcount		-- INT, NULL
-										,@procedureID = @@PROCID		-- INT, NULL
-										,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-										,@eventMessage = @eventMessage2		-- NVARCHAR(MAX)			
+				DECLARE @EventMessage2 NVARCHAR(MAX) = CONCAT('Setted new Manager ''', @Name, ''' with id: ', @ManagerID);
+				EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+										,@AffectedRows = @@rowcount		-- INT, NULL
+										,@ProcedureID = @@PROCID		-- INT, NULL
+										,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+										,@EventMessage = @EventMessage2		-- NVARCHAR(MAX)			
 						   
 			END
 						 
@@ -162,11 +162,11 @@ BEGIN
 		-------------------------------------------------------------	
 
 		-- throw event
-		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-								,@affectedRows = @@rowcount		-- INT, NULL
-								,@procedureID = @@PROCID		-- INT, NULL
-								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@eventMessage = 'Checking Required Date'		-- NVARCHAR(MAX)
+		EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+								,@AffectedRows = @@rowcount		-- INT, NULL
+								,@ProcedureID = @@PROCID		-- INT, NULL
+								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+								,@EventMessage = 'Checking Required Date'		-- NVARCHAR(MAX)
 
 		IF @RequiredDate != (
 			SELECT RequiredDate
@@ -177,13 +177,13 @@ BEGIN
 			BEGIN
 
 				-- throw event
-				EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-										,@affectedRows = @@rowcount		-- INT, NULL
-										,@procedureID = @@PROCID		-- INT, NULL
-										,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-										,@eventMessage = 'Required Date changed, setting new one'	-- NVARCHAR(MAX)
+				EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+										,@AffectedRows = @@rowcount		-- INT, NULL
+										,@ProcedureID = @@PROCID		-- INT, NULL
+										,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+										,@EventMessage = 'Required Date changed, setting new one'	-- NVARCHAR(MAX)
 
-				SET @change = 1;
+				SET @Change = 1;
 
 				-- Update Required Date
 				UPDATE Shop.Orders
@@ -191,27 +191,27 @@ BEGIN
 				WHERE OrderID = @OrderID
 				 
 				-- throw event
-				DECLARE @eventMessage3 NVARCHAR(MAX) = CONCAT('Setted new Required Date: ', @RequiredDate );
-				EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-										,@affectedRows = @@rowcount		-- INT, NULL
-										,@procedureID = @@PROCID		-- INT, NULL
-										,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-										,@eventMessage = @eventMessage3		-- NVARCHAR(MAX)			
+				DECLARE @EventMessage3 NVARCHAR(MAX) = CONCAT('Setted new Required Date: ', @RequiredDate );
+				EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+										,@AffectedRows = @@rowcount		-- INT, NULL
+										,@ProcedureID = @@PROCID		-- INT, NULL
+										,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+										,@EventMessage = @EventMessage3		-- NVARCHAR(MAX)			
 						   
 			END
 
-		IF @change = 0
+		IF @Change = 0
 			-- throw event
-			EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-									,@affectedRows = @@rowcount		-- INT, NULL
-									,@procedureID = @@PROCID		-- INT, NULL
-									,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-									,@eventMessage = 'Nothing to update'		  
+			EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+									,@AffectedRows = @@rowcount		-- INT, NULL
+									,@ProcedureID = @@PROCID		-- INT, NULL
+									,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+									,@EventMessage = 'Nothing to update'		  
 								
 								  
 		-- Complete Operation
-		EXEC logs.sp_CompleteOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
-										,@OperationRunParameters = @curentParameters  -- NVARCHAR(MAX), NULL
+		EXEC Logs.sp_CompleteOperation   @OperationRunID = 	@CurrentRunID	 -- INT       -- get from sp_StartOperation
+										,@OperationRunParameters = @CurrentParameters  -- NVARCHAR(MAX), NULL
 
 		RETURN 1;
 
@@ -219,14 +219,14 @@ BEGIN
 	BEGIN CATCH
 	
 		-- throw Error
-		EXEC logs.sp_SetError	 @runID = @curentRunID 		-- INT       -- get from sp_StartOperation
-								,@procedureID = @@PROCID	-- INT, NULL
-								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@errorMessage = 'Can not Update Order'	-- NVARCHAR(MAX), NULL
+		EXEC Logs.sp_SetError	 @RunID = @CurrentRunID 		-- INT       -- get from sp_StartOperation
+								,@ProcedureID = @@PROCID	-- INT, NULL
+								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+								,@ErrorMessage = 'Can not Update Order'	-- NVARCHAR(MAX), NULL
 
 		-- Fail Operation
-		EXEC logs.sp_FailOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
-									,@OperationRunParameters = @curentParameters  -- NVARCHAR(MAX), NULL
+		EXEC Logs.sp_FailOperation   @OperationRunID = 	@CurrentRunID	 -- INT       -- get from sp_StartOperation
+									,@OperationRunParameters = @CurrentParameters  -- NVARCHAR(MAX), NULL
 
 		RETURN -1
 
@@ -240,9 +240,9 @@ GO
 SET IDENTITY_INSERT Logs.Operations ON;  
 
 INSERT INTO Logs.Operations(
-	OperationID,
-	OperationName,
-	Description)
+	 OperationID
+	,OperationName
+	,Description)
 VALUES
 	(13,'Shop.sp_UpdateOrder','Update Order, return 1 if succeed');
 SET IDENTITY_INSERT Logs.Operations OFF;
@@ -253,40 +253,40 @@ SELECT * FROM Logs.Operations
 DECLARE @OrderDetails Staging.type_OrderDetails
 INSERT INTO @OrderDetails 
 VALUES
-(1,11,12,13,14),
-(2,21,22,23,24),
-(3,31,32,33,34)
+ (1,11,12,13,14)
+,(2,21,22,23,24) 
+,(3,31,32,33,34)
 
 --  paid and set req date
-EXEC shop.sp_UpdateOrder @OrderID = 1001	-- INT
+EXEC Shop.sp_UpdateOrder @OrderID = 1001	-- INT
 						,@ManagerID = NULL	-- INT, NULL
 						,@OrderStatusID = 2	-- INT, NULL  --   2 for Paid, 3 for Shipped, 4 for Cancelled
 						,@RequiredDate	= '2021-01-16'	-- DATETIME, NULL
 						--,@OrderDetails	= @OrderDetails -- Staging.type_OrderDetails  -- could be added. change list of ordered products in existing order
 
 -- paid and set new manager
-EXEC shop.sp_UpdateOrder @OrderID = 1002	-- INT
+EXEC Shop.sp_UpdateOrder @OrderID = 1002	-- INT
 						,@ManagerID = 19	-- INT, NULL
 						,@OrderStatusID = 2	-- INT, NULL  --   2 for Paid, 3 for Shipped, 4 for Cancelled
 						,@RequiredDate	= NULL	-- DATETIME, NULL
 						--,@OrderDetails	= @OrderDetails -- Staging.type_OrderDetails  -- could be added. change list of ordered products in existing order
 
 -- shipped 
-EXEC shop.sp_UpdateOrder @OrderID = 1003	-- INT
+EXEC Shop.sp_UpdateOrder @OrderID = 1003	-- INT
 						,@ManagerID = NULL	-- INT, NULL
 						,@OrderStatusID = 3	-- INT, NULL  --   2 for Paid, 3 for Shipped, 4 for Cancelled
 						,@RequiredDate	= NULL	-- DATETIME, NULL
 						--,@OrderDetails	= @OrderDetails -- Staging.type_OrderDetails  -- could be added. change list of ordered products in existing order
  
 -- canceled
-EXEC shop.sp_UpdateOrder @OrderID = 1004	-- INT
+EXEC Shop.sp_UpdateOrder @OrderID = 1004	-- INT
 						--,@ManagerID = 1	-- INT, NULL
 						,@OrderStatusID = 4	-- INT, NULL  --   2 for Paid, 3 for Shipped, 4 for Cancelled
 						,@RequiredDate	= NULL	-- DATETIME, NULL
 						--,@OrderDetails	= @OrderDetails -- Staging.type_OrderDetails  -- could be added. change list of ordered products in existing order
 
 -- no change
-EXEC shop.sp_UpdateOrder @OrderID = 1005	-- INT
+EXEC Shop.sp_UpdateOrder @OrderID = 1005	-- INT
 						,@ManagerID = 9	-- INT, NULL
 						,@OrderStatusID = 1	-- INT, NULL  --   2 for Paid, 3 for Shipped, 4 for Cancelled
 						,@RequiredDate	= NULL	-- DATETIME, NULL

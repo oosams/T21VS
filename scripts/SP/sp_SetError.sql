@@ -5,56 +5,56 @@ USE T21;
 GO
 
 -------------
-CREATE OR ALTER PROC logs.sp_SetError
-	@runID INT,
-	@procedureID INT = NULL,
-	@parameters NVARCHAR(MAX) = NULL,
-	@errorMessage NVARCHAR(MAX) = NULL
+CREATE OR ALTER PROC Logs.sp_SetError
+	 @RunID INT
+	,@ProcedureID INT = NULL
+	,@Parameters NVARCHAR(MAX) = NULL
+	,@ErrorMessage NVARCHAR(MAX) = NULL
 
 AS
 BEGIN
 	BEGIN TRY
 
 		-- concat Proc Name
-		DECLARE @procName NVARCHAR(1024) = OBJECT_SCHEMA_NAME(@procedureID) + '.' + OBJECT_NAME(@procedureID);
+		DECLARE @ProcName NVARCHAR(1024) = OBJECT_SCHEMA_NAME(@ProcedureID) + '.' + OBJECT_NAME(@ProcedureID);
 
 		-- collect error info
-		DECLARE @curentErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();  
-		DECLARE @curentErrorSeverity INT = ERROR_SEVERITY();  
-		DECLARE @curentErrorState INT = ERROR_STATE();
+		DECLARE @CurrentErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();  
+		DECLARE @CurrentErrorSeverity INT = ERROR_SEVERITY();  
+		DECLARE @CurrentErrorState INT = ERROR_STATE();
 		
 		INSERT INTO Logs.ErrorLogs(
-			OperationRunID,
-			ErrorNumber,
-			ErrorProcName,
-			Parameters,
-			ErrorMessage,
-			ErrorDateTime)		
+			 OperationRunID
+			,ErrorNumber
+			,ErrorProcName
+			,Parameters
+			,ErrorMessage
+			,ErrorDateTime)		
 		VALUES(
-			@runID,
-			ERROR_NUMBER(),
-			@procName,
-			@parameters,
-			CONCAT(@curentErrorMessage,' ',@errorMessage),
-			CURRENT_TIMESTAMP);
+			 @RunID
+			,ERROR_NUMBER()
+			,@ProcName
+			,@Parameters
+			,CONCAT(@CurrentErrorMessage,' ',@ErrorMessage)
+			,CURRENT_TIMESTAMP);
 		
 		RAISERROR(
-			@curentErrorMessage,   
-			@curentErrorSeverity,   
-			@curentErrorState);    
+			 @CurrentErrorMessage   
+			,@CurrentErrorSeverity   
+			,@CurrentErrorState);    
 		
 	END TRY
 	BEGIN CATCH
 
 		SELECT   
-			@curentErrorMessage = ERROR_MESSAGE(),  
-			@curentErrorSeverity = ERROR_SEVERITY(),  
-			@curentErrorState = ERROR_STATE();  
+			 @CurrentErrorMessage = ERROR_MESSAGE()  
+			,@CurrentErrorSeverity = ERROR_SEVERITY()  
+			,@CurrentErrorState = ERROR_STATE();  
 		
 		RAISERROR(
-			@curentErrorMessage,   
-			@curentErrorSeverity,   
-			@curentErrorState); 
+			 @CurrentErrorMessage   
+			,@CurrentErrorSeverity  
+			,@CurrentErrorState); 
 
 	END CATCH
 END
@@ -62,7 +62,7 @@ GO
 
 
 --------DEBUG---------
-DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
+DECLARE @CurrentParameters NVARCHAR(MAX) =  CONCAT(
 		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10),
 		CHAR(9), '@par1 = ', 'par1', CHAR(13), CHAR(10))
 
@@ -72,10 +72,10 @@ END TRY
 BEGIN CATCH
 -- SELECT ERROR_MESSAGE(), ERROR_SEVERITY(), ERROR_STATE(), ERROR_NUMBER()
 
-EXEC logs.sp_SetError	 @runID = -112		-- INT
-						,@procedureID = -111		-- INT, NULL
-						,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-						,@errorMessage = 'Test Error Message. '	-- NVARCHAR(MAX), NULL
+EXEC Logs.sp_SetError	 @RunID = -112		-- INT
+						,@ProcedureID = -111		-- INT, NULL
+						,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+						,@ErrorMessage = 'Test Error Message. '	-- NVARCHAR(MAX), NULL
 
 END CATCH
 
