@@ -7,27 +7,27 @@ GO
 -- Update Product Price, return 1 if succeed
 
 -------------
-CREATE OR ALTER PROCEDURE shop.sp_UpdatePrice
-	@ProductID INT,
-	@Price INT
+CREATE OR ALTER PROCEDURE Shop.sp_UpdatePrice
+	 @ProductID INT
+	,@Price INT
 
 AS
 BEGIN
 	BEGIN TRY
 
 		-- for logging
-		DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
+		DECLARE @CurrentParameters NVARCHAR(MAX) =  CONCAT(
 			CHAR(9), '@ProductID = ', @ProductID, CHAR(13), CHAR(10),
 			CHAR(9), '@Price = ', @Price, CHAR(13), CHAR(10));
 					
 		-- to keep new OperationRunID 
-		DECLARE @curentRunID INT;	
+		DECLARE @CurrentRunID INT;	
 
 		-- Start Operation and get new OperationRunID
-		EXEC @curentRunID = 
-			logs.sp_StartOperation   @OperationID = 9	-- INT     OperationID for Shop.sp_UpdatePrice from Logs.Operations
+		EXEC @CurrentRunID = 
+			Logs.sp_StartOperation   @OperationID = 9	-- INT     OperationID for Shop.sp_UpdatePrice from Logs.Operations
 									,@Description = NULL	-- NVARCHAR(255), NULL
-									,@OperationRunParameters = @curentParameters	-- NVARCHAR(MAX), NULL
+									,@OperationRunParameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
 	
 
 		-- get the last Price version
@@ -62,71 +62,71 @@ BEGIN
 			AND EndVersion = 999999999;
 
 		-- throw event
-		DECLARE @eventMessage1 NVARCHAR(MAX) = CONCAT('Price for Product: ', @ProductName, ' with id: ', @ProductID, ' was closed with Version: ', @Version + 10000);
-		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-								,@affectedRows = @@rowcount		-- INT, NULL
-								,@procedureID = @@PROCID		-- INT, NULL
-								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@eventMessage = @eventMessage1		-- NVARCHAR(MAX)
+		DECLARE @EventMessage1 NVARCHAR(MAX) = CONCAT('Price for Product: ', @ProductName, ' with id: ', @ProductID, ' was closed with Version: ', @Version + 10000);
+		EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+								,@AffectedRows = @@rowcount		-- INT, NULL
+								,@ProcedureID = @@PROCID		-- INT, NULL
+								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+								,@EventMessage = @EventMessage1		-- NVARCHAR(MAX)
 
 		-- Insert new Price for Product
 		INSERT INTO Shop.ProductPrices(
-			ProductID,
-			UnitPrice,
-			StartVersion)
+			 ProductID
+			,UnitPrice 
+			,StartVersion)
 		VALUES(
-			@ProductID,
-			@Price,
-			@Version + 10000);
+			 @ProductID 
+			,@Price 
+			,@Version + 10000);
 
 		-- throw event
-		DECLARE @eventMessage2 NVARCHAR(MAX) = CONCAT('New Price for Product: ', @ProductName, ' with id: ', @ProductID, ' was added with Version: ', @Version + 10000);
-		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-								,@affectedRows = @@rowcount		-- INT, NULL
-								,@procedureID = @@PROCID		-- INT, NULL
-								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@eventMessage = @eventMessage2		-- NVARCHAR(MAX)
+		DECLARE @EventMessage2 NVARCHAR(MAX) = CONCAT('New Price for Product: ', @ProductName, ' with id: ', @ProductID, ' was added with Version: ', @Version + 10000);
+		EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+								,@AffectedRows = @@rowcount		-- INT, NULL
+								,@ProcedureID = @@PROCID		-- INT, NULL
+								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+								,@EventMessage = @EventMessage2		-- NVARCHAR(MAX)
 															   								 
 
 		-- Insert new Version for new Price
 		INSERT INTO Logs.Versions(
-			VersionTypeID,
-			OperationRunID,
-			VersionNumber,
-			Description,
-			CreateDate)
+			 VersionTypeID
+			,OperationRunID 
+			,VersionNumber 
+			,Description 
+			,CreateDate)
 		VALUES(
-			@VersionType,
-			@curentRunID,
-			@Version + 10000,
-			CONCAT('Update Price for the Product ''', @ProductName ,''' with ID: ', @ProductID),
-			CURRENT_TIMESTAMP);
+			 @VersionType 
+			,@CurrentRunID 
+			,@Version + 10000 
+			,CONCAT('Update Price for the Product ''', @ProductName ,''' with ID: ', @ProductID) 
+			,CURRENT_TIMESTAMP);
 
 		-- throw event
-		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-								,@affectedRows = @@rowcount		-- INT, NULL
-								,@procedureID = @@PROCID		-- INT, NULL
-								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@eventMessage = 'Added new Version for new Price'		-- NVARCHAR(MAX)
+		EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+								,@AffectedRows = @@rowcount		-- INT, NULL
+								,@ProcedureID = @@PROCID		-- INT, NULL
+								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+								,@EventMessage = 'Added new Version for new Price'		-- NVARCHAR(MAX)
 
 													   			 		  		  		 	   		
 		-- Complete Operation
-		EXEC logs.sp_CompleteOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
-										,@OperationRunParameters = @curentParameters  -- NVARCHAR(MAX), NULL
+		EXEC Logs.sp_CompleteOperation   @OperationRunID = 	@CurrentRunID	 -- INT       -- get from sp_StartOperation
+										,@OperationRunParameters = @CurrentParameters  -- NVARCHAR(MAX), NULL
 
 		RETURN 1									
 	END TRY
 	BEGIN CATCH
 	
 		-- throw Error
-		EXEC logs.sp_SetError	 @runID = @curentRunID 		-- INT       -- get from sp_StartOperation
-								,@procedureID = @@PROCID	-- INT, NULL
-								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@errorMessage = 'Can not update Product Price'	-- NVARCHAR(MAX), NULL
+		EXEC Logs.sp_SetError	 @RunID = @CurrentRunID 		-- INT       -- get from sp_StartOperation
+								,@ProcedureID = @@PROCID	-- INT, NULL
+								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+								,@ErrorMessage = 'Can not update Product Price'	-- NVARCHAR(MAX), NULL
 
 		-- Fail Operation
-		EXEC logs.sp_FailOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
-									,@OperationRunParameters = @curentParameters  -- NVARCHAR(MAX), NULL
+		EXEC Logs.sp_FailOperation   @OperationRunID = 	@CurrentRunID	 -- INT       -- get from sp_StartOperation
+									,@OperationRunParameters = @CurrentParameters  -- NVARCHAR(MAX), NULL
 
 		RETURN -1
 	END CATCH
@@ -139,9 +139,9 @@ GO
 SET IDENTITY_INSERT Logs.Operations ON;  
 
 INSERT INTO Logs.Operations(
-	OperationID,
-	OperationName,
-	Description)
+	 OperationID 
+	,OperationName 
+	,Description)
 VALUES
 	(9,'Shop.sp_UpdatePrice','Update Product Price, return 1 if succeed');
 SET IDENTITY_INSERT Logs.Operations OFF;
@@ -151,8 +151,8 @@ SELECT * FROM Logs.Operations
 
 --------DEBUG---------
 
-EXEC shop.sp_UpdatePrice   @ProductID = 102		-- INT
-							,@Price=  51000		-- INT
+EXEC Shop.sp_UpdatePrice @ProductID = 102		-- INT
+						,@Price=  51000		-- INT
 									
 
 SELECT * FROM Shop.ProductPrices

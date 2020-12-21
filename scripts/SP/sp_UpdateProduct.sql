@@ -13,23 +13,23 @@ GO
 -- category
 
 -------------
-CREATE OR ALTER PROCEDURE shop.sp_UpdateProduct
-	@ProductID INT,
-	--@CategoryID INT = NULL,
-	--@CategoryName NVARCHAR(255) = NULL,
-	--@CategoryDescription NVARCHAR(MAX) = NULL,
-	--@ProductName NVARCHAR(255) = NULL,
-	@UnitPrice MONEY  = NULL,
-	@Quantity INT  = NULL--,
-	--@IsActive INT = NULL,
-	--@Description NVARCHAR(MAX)  = NULL
+CREATE OR ALTER PROCEDURE Shop.sp_UpdateProduct
+	 @ProductID INT
+	--,@CategoryID INT = NULL 
+	--,@CategoryName NVARCHAR(255) = NULL 
+	--,@CategoryDescription NVARCHAR(MAX) = NULL 
+	--,@ProductName NVARCHAR(255) = NULL 
+	,@UnitPrice MONEY  = NULL 
+	,@Quantity INT  = NULL 
+	--,@IsActive INT = NULL 
+	--,@Description NVARCHAR(MAX)  = NULL
 
 AS
 BEGIN
 	BEGIN TRY
 
 		-- for logging
-		DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
+		DECLARE @CurrentParameters NVARCHAR(MAX) =  CONCAT(
 			CHAR(9), '@ProductID = ', @ProductID, CHAR(13), CHAR(10),
 			--CHAR(9), '@CategoryID = ', @CategoryID, CHAR(13), CHAR(10),
 			--CHAR(9), '@CategoryName = ', @CategoryName, CHAR(13), CHAR(10),
@@ -42,16 +42,16 @@ BEGIN
 																			);
 		
 		-- change flag 
-		DECLARE @change int =  0;
+		DECLARE @Change int =  0;
 								 						 
 		-- to keep new OperationRunID 
-		DECLARE @curentRunID INT;	
+		DECLARE @CurrentRunID INT;	
 
 		-- Start Operation and get new OperationRunID
-		EXEC @curentRunID = 
-			logs.sp_StartOperation   @OperationID = 10	 -- INT     OperationID for Shop.sp_UpdateProduct from Logs.Operations
+		EXEC @CurrentRunID = 
+			Logs.sp_StartOperation   @OperationID = 10	 -- INT     OperationID for Shop.sp_UpdateProduct from Logs.Operations
 									,@Description = NULL	-- NVARCHAR(255), NULL
-									,@OperationRunParameters = @curentParameters	-- NVARCHAR(MAX), NULL
+									,@OperationRunParameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
 		
 	---
 	---
@@ -78,11 +78,11 @@ BEGIN
 
 
 		---- throw event
-		--EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-		--						,@affectedRows = @@rowcount		-- INT, NULL
-		--						,@procedureID = @@PROCID		-- INT, NULL
-		--						,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-		--						,@eventMessage = 'Checking Name and Discription'	 -- NVARCHAR(MAX)
+		--EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+		--						,@AffectedRows = @@rowcount		-- INT, NULL
+		--						,@ProcedureID = @@PROCID		-- INT, NULL
+		--						,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+		--						,@EventMessage = 'Checking Name and Discription'	 -- NVARCHAR(MAX)
 
 		--IF @ProductName != (
 		--	SELECT ProductName
@@ -107,11 +107,11 @@ BEGIN
 		-------------------------------------------------------------	
 
 		-- throw event
-		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-								,@affectedRows = @@rowcount		-- INT, NULL
-								,@procedureID = @@PROCID		-- INT, NULL
-								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@eventMessage = 'Checking Price'		-- NVARCHAR(MAX)
+		EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+								,@AffectedRows = @@rowcount		-- INT, NULL
+								,@ProcedureID = @@PROCID		-- INT, NULL
+								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+								,@EventMessage = 'Checking Price'		-- NVARCHAR(MAX)
 
 		IF @UnitPrice != (
 			SELECT UnitPrice
@@ -122,15 +122,15 @@ BEGIN
 			BEGIN
 
 				-- throw event
-				EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-										,@affectedRows = @@rowcount		-- INT, NULL
-										,@procedureID = @@PROCID		-- INT, NULL
-										,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-										,@eventMessage = 'Price changed, setting new price'		-- NVARCHAR(MAX)
+				EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+										,@AffectedRows = @@rowcount		-- INT, NULL
+										,@ProcedureID = @@PROCID		-- INT, NULL
+										,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+										,@EventMessage = 'Price changed, setting new price'		-- NVARCHAR(MAX)
 
-				SET @change = 1;
+				SET @Change = 1;
 
-				EXEC shop.sp_UpdatePrice @ProductID = @ProductID	-- INT
+				EXEC Shop.sp_UpdatePrice @ProductID = @ProductID	-- INT
 										,@Price=  @UnitPrice		-- INT				
 			
 			END
@@ -141,11 +141,11 @@ BEGIN
 		-------------------------------------------------------------	
 
 		-- throw event
-		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-								,@affectedRows = @@rowcount		-- INT, NULL
-								,@procedureID = @@PROCID		-- INT, NULL
-								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@eventMessage = 'Checking Quantity'	 -- NVARCHAR(MAX)
+		EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+								,@AffectedRows = @@rowcount		-- INT, NULL
+								,@ProcedureID = @@PROCID		-- INT, NULL
+								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+								,@EventMessage = 'Checking Quantity'	 -- NVARCHAR(MAX)
 
 		 IF @Quantity != (
 			SELECT Quantity
@@ -155,32 +155,32 @@ BEGIN
 			BEGIN
 
 				-- throw event
-				EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-										,@affectedRows = @@rowcount		-- INT, NULL
-										,@procedureID = @@PROCID		-- INT, NULL
-										,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-										,@eventMessage = 'Quantity changed, setting new Quantity'		-- NVARCHAR(MAX)
+				EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+										,@AffectedRows = @@rowcount		-- INT, NULL
+										,@ProcedureID = @@PROCID		-- INT, NULL
+										,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+										,@EventMessage = 'Quantity changed, setting new Quantity'		-- NVARCHAR(MAX)
 
-				SET @change = 1;
+				SET @Change = 1;
 
-				EXEC shop.sp_UpdateQuantity  @ProductID = @ProductID		-- INT
+				EXEC Shop.sp_UpdateQuantity  @ProductID = @ProductID		-- INT
 											,@Quantity =  @Quantity	-- INT			
 			
 			END
 
 
-		IF @change = 0
+		IF @Change = 0
 			-- throw event
-			EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-									,@affectedRows = @@rowcount		-- INT, NULL
-									,@procedureID = @@PROCID		-- INT, NULL
-									,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-									,@eventMessage = 'Nothing to update'
+			EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+									,@AffectedRows = @@rowcount		-- INT, NULL
+									,@ProcedureID = @@PROCID		-- INT, NULL
+									,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+									,@EventMessage = 'Nothing to update'
 								
 										   			 		  		  		 	   		
 		-- Complete Operation
-		EXEC logs.sp_CompleteOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
-										,@OperationRunParameters = @curentParameters  -- NVARCHAR(MAX), NULL
+		EXEC Logs.sp_CompleteOperation   @OperationRunID = 	@CurrentRunID	 -- INT       -- get from sp_StartOperation
+										,@OperationRunParameters = @CurrentParameters  -- NVARCHAR(MAX), NULL
 
 		RETURN 1;
 
@@ -188,14 +188,14 @@ BEGIN
 	BEGIN CATCH
 	
 		-- throw Error
-		EXEC logs.sp_SetError	 @runID = @curentRunID 		-- INT       -- get from sp_StartOperation
-								,@procedureID = @@PROCID	-- INT, NULL
-								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@errorMessage = 'Can not update the Product'	-- NVARCHAR(MAX), NULL
+		EXEC Logs.sp_SetError	 @RunID = @CurrentRunID 		-- INT       -- get from sp_StartOperation
+								,@ProcedureID = @@PROCID	-- INT, NULL
+								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+								,@ErrorMessage = 'Can not update the Product'	-- NVARCHAR(MAX), NULL
 
 		-- Fail Operation
-		EXEC logs.sp_FailOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
-									,@OperationRunParameters = @curentParameters  -- NVARCHAR(MAX), NULL
+		EXEC Logs.sp_FailOperation   @OperationRunID = 	@CurrentRunID	 -- INT       -- get from sp_StartOperation
+									,@OperationRunParameters = @CurrentParameters  -- NVARCHAR(MAX), NULL
 
 		RETURN -1
 	END CATCH
@@ -208,9 +208,9 @@ GO
 SET IDENTITY_INSERT Logs.Operations ON;  
 
 INSERT INTO Logs.Operations(
-	OperationID,
-	OperationName,
-	Description)		  
+	 OperationID
+	,OperationName 
+	,Description)		  
 VALUES
 	(10,'Shop.sp_UpdateProduct','Update Product, works for price and quanity for now');
 SET IDENTITY_INSERT Logs.Operations OFF;
@@ -219,8 +219,8 @@ SELECT * FROM Logs.Operations
 
 
 --------DEBUG---------
-
-EXEC shop.sp_UpdateProduct   @ProductID = 102		-- INT
+								   5511
+EXEC Shop.sp_UpdateProduct   @ProductID = 102		-- INT
 							--not supported,@CategoryID = NULL		-- INT, NULL
 							--not supported,@CategoryName =   'testCatName1'	 -- NVARCHAR(255), NULL
 							--not supported,@CategoryDescription = 'Test Category for Product discription'	-- NVARCHAR(MAX), NULL

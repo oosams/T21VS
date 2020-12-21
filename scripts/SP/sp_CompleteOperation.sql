@@ -7,9 +7,9 @@ GO
 -- Update OperationRun as completed
 
 -------------
-CREATE OR ALTER PROCEDURE logs.sp_CompleteOperation
-	@OperationRunID INT,
-	@OperationRunParameters NVARCHAR(MAX) = NULL
+CREATE OR ALTER PROCEDURE Logs.sp_CompleteOperation
+	 @OperationRunID INT
+	,@OperationRunParameters NVARCHAR(MAX) = NULL
 
 AS
 BEGIN
@@ -25,36 +25,36 @@ BEGIN
 		WHERE OperationRunID = @OperationRunID;
 
 		-- for logging
-		DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
+		DECLARE @CurrentParameters NVARCHAR(MAX) =  CONCAT(
 			CHAR(9), '@OperationRunID = ', @OperationRunID, CHAR(13), CHAR(10),
 			CHAR(9), '@OperationRunParameters = ', @OperationRunParameters, CHAR(13), CHAR(10));
 
-		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Completed. Operation ''', @OperationName, ''' has been completed with Parameters: ', CHAR(13), CHAR(10), @OperationRunParameters);
-		DECLARE @errorMessage NVARCHAR(MAX) = CONCAT('Unable to log the completion of operation ''', @OperationName, '''  with Parameters: ', CHAR(13), CHAR(10), @OperationRunParameters);	
+		DECLARE @EventMessage NVARCHAR(MAX) = CONCAT('Completed. Operation ''', @OperationName, ''' has been completed with Parameters: ', CHAR(13), CHAR(10), @OperationRunParameters);
+		DECLARE @ErrorMessage NVARCHAR(MAX) = CONCAT('Unable to log the completion of operation ''', @OperationName, '''  with Parameters: ', CHAR(13), CHAR(10), @OperationRunParameters);	
 				
 		-- log OperationRun as completed
 		UPDATE Logs.OperationRuns
 		SET
-			StatusID = 3,	-- C,Completed in Logs.OperationStatuses
-			EndTime = CURRENT_TIMESTAMP
+			 StatusID = 3	-- C,Completed in Logs.OperationStatuses
+			,EndTime = CURRENT_TIMESTAMP
 		WHERE OperationRunID = @OperationRunID
 			   		 
 					 
 		-- throw event
-		EXEC logs.sp_SetEvent	 @runID = @OperationRunID		-- INT						
-								,@affectedRows = @@rowcount		-- INT, NULL
-								,@procedureID = @@PROCID		-- INT, NULL
-								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@eventMessage = @eventMessage		-- NVARCHAR(MAX)
+		EXEC Logs.sp_SetEvent	 @RunID = @OperationRunID		-- INT						
+								,@AffectedRows = @@rowcount		-- INT, NULL
+								,@ProcedureID = @@PROCID		-- INT, NULL
+								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+								,@EventMessage = @EventMessage		-- NVARCHAR(MAX)
 
 	END TRY
 	BEGIN CATCH
 
 		-- throw error
-		EXEC logs.sp_SetError	 @runID = @OperationRunID		-- INT
-								,@procedureID = @@PROCID		-- INT, NULL
-								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@errorMessage = @errorMessage	-- NVARCHAR(MAX), NULL
+		EXEC Logs.sp_SetError	 @RunID = @OperationRunID		-- INT
+								,@ProcedureID = @@PROCID		-- INT, NULL
+								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+								,@ErrorMessage = @ErrorMessage	-- NVARCHAR(MAX), NULL
 
 	END CATCH
 END
@@ -64,7 +64,7 @@ GO
 --------DEBUG---------
 
 
-EXEC logs.sp_CompleteOperation   @OperationRunID = 	2	 -- INT       -- get from sp_StartOperation
+EXEC Logs.sp_CompleteOperation   @OperationRunID = 	2	 -- INT       -- get from sp_StartOperation
 								,@OperationRunParameters = 'test1OperationRunParameters'  -- NVARCHAR(MAX), NULL
 
 

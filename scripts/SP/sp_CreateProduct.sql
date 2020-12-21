@@ -8,22 +8,22 @@ GO
 -- Create new Category if CategoryID is NULL. In that case @CategoryName and @CategoryDescription should be provided.
 
 -------------
-CREATE OR ALTER PROCEDURE shop.sp_CreateProduct
-	@CategoryID INT = NULL,
-	@CategoryName NVARCHAR(255) = NULL,
-	@CategoryDescription NVARCHAR(MAX) = NULL,
-	@ProductName NVARCHAR(255),
-	@UnitPrice MONEY,
-	@Quantity INT,
-	@IsActive INT = 1,
-	@Description NVARCHAR(MAX)
+CREATE OR ALTER PROCEDURE Shop.sp_CreateProduct
+	 @CategoryID INT = NULL
+	,@CategoryName NVARCHAR(255) = NULL
+	,@CategoryDescription NVARCHAR(MAX) = NULL
+	,@ProductName NVARCHAR(255)
+	,@UnitPrice MONEY
+	,@Quantity INT
+	,@IsActive INT = 1
+	,@Description NVARCHAR(MAX)
 
 AS
 BEGIN
 	BEGIN TRY
 
 		-- for logging
-		DECLARE @curentParameters NVARCHAR(MAX) =  CONCAT(
+		DECLARE @CurrentParameters NVARCHAR(MAX) =  CONCAT(
 			CHAR(9), '@CategoryID = ', @CategoryID, CHAR(13), CHAR(10),
 			CHAR(9), '@CategoryName = ', @CategoryName, CHAR(13), CHAR(10),
 			CHAR(9), '@CategoryDescription = ', @CategoryDescription, CHAR(13), CHAR(10),
@@ -34,13 +34,13 @@ BEGIN
 			CHAR(9), '@Description = ', @Description, CHAR(13), CHAR(10));
 					
 		-- to keep new OperationRunID 
-		DECLARE @curentRunID INT;	
+		DECLARE @CurrentRunID INT;	
 
 		-- Start Operation and get new OperationRunID
-		EXEC @curentRunID = 
-			logs.sp_StartOperation   @OperationID = 7	-- INT     OperationID for Shop.sp_CreateProduct from Logs.Operations
+		EXEC @CurrentRunID = 
+			Logs.sp_StartOperation   @OperationID = 7	-- INT     OperationID for Shop.sp_CreateProduct from Logs.Operations
 									,@Description = NULL	-- NVARCHAR(255), NULL
-									,@OperationRunParameters = @curentParameters	-- NVARCHAR(MAX), NULL
+									,@OperationRunParameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
 		
 
 		-------------------------------------------------------------
@@ -52,41 +52,41 @@ BEGIN
 			BEGIN
 
 				-- throw event
-				EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-										,@affectedRows = @@rowcount		-- INT, NULL
-										,@procedureID = @@PROCID		-- INT, NULL
-										,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-										,@eventMessage = 'Category were not provided. Creating new one ...'	-- NVARCHAR(MAX)
+				EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+										,@AffectedRows = @@rowcount		-- INT, NULL
+										,@ProcedureID = @@PROCID		-- INT, NULL
+										,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+										,@EventMessage = 'Category were not provided. Creating new one ...'	-- NVARCHAR(MAX)
 
 				-- Check if details for new category were provided otherwise throw error
 				IF @CategoryName is NUll OR @CategoryDescription is NUll
 					BEGIN
 
 						-- throw Error
-						EXEC logs.sp_SetError	 @runID = @curentRunID		-- INT       -- get from sp_StartOperation
-												,@procedureID = @@PROCID	-- INT, NULL
-												,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-												,@errorMessage = 'CategoryID along with Category details were not provided. Please provide @CategoryID or @CategoryName with @CategoryDescription to create new Category'	-- NVARCHAR(MAX), NULL
+						EXEC Logs.sp_SetError	 @RunID = @CurrentRunID		-- INT       -- get from sp_StartOperation
+												,@ProcedureID = @@PROCID	-- INT, NULL
+												,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+												,@ErrorMessage = 'CategoryID along with Category details were not provided. Please provide @CategoryID or @CategoryName with @CategoryDescription to create new Category'	-- NVARCHAR(MAX), NULL
 
 						-- Fail Operation
-						EXEC logs.sp_FailOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
-													,@OperationRunParameters = @curentParameters  -- NVARCHAR(MAX), NULL
+						EXEC Logs.sp_FailOperation   @OperationRunID = 	@CurrentRunID	 -- INT       -- get from sp_StartOperation
+													,@OperationRunParameters = @CurrentParameters  -- NVARCHAR(MAX), NULL
 
 						RETURN -1	
 					END
 
 				-- Create new Category for Product
 				EXEC @CategoryID = 
-					shop.sp_CreateCategory   @CategoryName = @CategoryName	 -- NVARCHAR(255)
+					Shop.sp_CreateCategory   @CategoryName = @CategoryName	 -- NVARCHAR(255)
 											,@Description = @CategoryDescription  -- NVARCHAR(MAX)
 
 				-- throw event
-				DECLARE @eventMessageCategory NVARCHAR(MAX) = CONCAT('Created new Category: ', @CategoryID,' for Product with Name: ', @ProductName);
-				EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-								,@affectedRows = @@rowcount		-- INT, NULL
-								,@procedureID = @@PROCID		-- INT, NULL
-								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@eventMessage = @eventMessageCategory		-- NVARCHAR(MAX)
+				DECLARE @EventMessageCategory NVARCHAR(MAX) = CONCAT('Created new Category: ', @CategoryID,' for Product with Name: ', @ProductName);
+				EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+										,@AffectedRows = @@rowcount		-- INT, NULL
+										,@ProcedureID = @@PROCID		-- INT, NULL
+										,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+										,@EventMessage = @EventMessageCategory		-- NVARCHAR(MAX)
 
 			END
 				
@@ -96,31 +96,31 @@ BEGIN
 		-------------------------------------------------------------				
 
 		-- to keep new ProductID
-		DECLARE @newProductID INT;		
+		DECLARE @NewProductID INT;		
 
 		-- Create new Product
 		INSERT INTO Shop.Products(
-			CategoryID,
-			ProductName,
-			Quantity,
-			IsActive,
-			Description)
+			 CategoryID
+			,ProductName
+			,Quantity
+			,IsActive
+			,Description)
 		VALUES(
-			@CategoryID,
-			@ProductName,
-			@Quantity,
-			@IsActive,
-			@Description);
+			 @CategoryID
+			,@ProductName
+			,@Quantity
+			,@IsActive
+			,@Description);
 			 
-		SET @newProductID = SCOPE_IDENTITY();
+		SET @NewProductID = SCOPE_IDENTITY();
 
 		-- throw event
-		DECLARE @eventMessage NVARCHAR(MAX) = CONCAT('Created new Product with ID: ', @newProductID, ', with CategoryID: ',@CategoryID );
-		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-								,@affectedRows = @@rowcount		-- INT, NULL
-								,@procedureID = @@PROCID		-- INT, NULL
-								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@eventMessage = @eventMessage		-- NVARCHAR(MAX)
+		DECLARE @EventMessage NVARCHAR(MAX) = CONCAT('Created new Product with ID: ', @NewProductID, ', with CategoryID: ',@CategoryID );
+		EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+								,@AffectedRows = @@rowcount		-- INT, NULL
+								,@ProcedureID = @@PROCID		-- INT, NULL
+								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+								,@EventMessage = @EventMessage		-- NVARCHAR(MAX)
 
 		-------------------------------------------------------------
 		-----			    	   Price		    	        -----
@@ -128,85 +128,85 @@ BEGIN
 
 		-- Insert new Price for new Product
 		INSERT INTO Shop.ProductPrices(
-			ProductID,
-			UnitPrice,
-			StartVersion)
+			 ProductID
+			,UnitPrice
+			,StartVersion)
 		VALUES(
-			@newProductID,
-			@UnitPrice,
-			10000);
+			 @NewProductID
+			,@UnitPrice
+			,10000);
 
 		-- throw event
-		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-								,@affectedRows = @@rowcount		-- INT, NULL
-								,@procedureID = @@PROCID		-- INT, NULL
-								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@eventMessage = 'Added price for new Product'		-- NVARCHAR(MAX)
+		EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+								,@AffectedRows = @@rowcount		-- INT, NULL
+								,@ProcedureID = @@PROCID		-- INT, NULL
+								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+								,@EventMessage = 'Added price for new Product'		-- NVARCHAR(MAX)
 
 
 		-- to keep new VersionTypeID
-		DECLARE @newVersionTypeID INT;	
+		DECLARE @NewVersionTypeID INT;	
 
 		-- Insert new VersionType for new Version
 		INSERT INTO Logs.VersionTypes(
-			VersionTypeName,
-			EntityID,
-			Description)
+			 VersionTypeName
+			,EntityID
+			,Description)
 		VALUES(
-			'Product price version',
-			@newProductID,
-			CONCAT('Version of product price. EntityID refers to ProductID. Created on OperationRun: ',@curentRunID));
+			 'Product price version'
+			,@NewProductID
+			,CONCAT('Version of product price. EntityID refers to ProductID. Created on OperationRun: ',@CurrentRunID));
 
-		SET @newVersionTypeID = SCOPE_IDENTITY();
+		SET @NewVersionTypeID = SCOPE_IDENTITY();
 
 		-- throw event
-		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-								,@affectedRows = @@rowcount		-- INT, NULL
-								,@procedureID = @@PROCID		-- INT, NULL
-								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@eventMessage = 'Added VersionType for new Version'		-- NVARCHAR(MAX)
+		EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+								,@AffectedRows = @@rowcount		-- INT, NULL
+								,@ProcedureID = @@PROCID		-- INT, NULL
+								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+								,@EventMessage = 'Added VersionType for new Version'		-- NVARCHAR(MAX)
 		
 
 		-- Insert new Version for new Price
 		INSERT INTO Logs.Versions(
-			VersionTypeID,
-			OperationRunID,
-			VersionNumber,
-			Description,
-			CreateDate)
+			 VersionTypeID
+			,OperationRunID
+			,VersionNumber
+			,Description
+			,CreateDate)
 		VALUES(
-			@newVersionTypeID,
-			@curentRunID,
-			10000,
-			CONCAT('Initial Price for new Product ''', @ProductName ,''' with ID: ', @newProductID),
-			CURRENT_TIMESTAMP);
+			 @NewVersionTypeID
+			,@CurrentRunID
+			,10000
+			,CONCAT('Initial Price for new Product ''', @ProductName ,''' with ID: ', @NewProductID)
+			,CURRENT_TIMESTAMP);
 
 		-- throw event
-		EXEC logs.sp_SetEvent	 @runID = @curentRunID		-- INT						
-								,@affectedRows = @@rowcount		-- INT, NULL
-								,@procedureID = @@PROCID		-- INT, NULL
-								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@eventMessage = 'Added Version for new Price'		-- NVARCHAR(MAX)
+		EXEC Logs.sp_SetEvent	 @RunID = @CurrentRunID		-- INT						
+								,@AffectedRows = @@rowcount		-- INT, NULL
+								,@ProcedureID = @@PROCID		-- INT, NULL
+								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+								,@EventMessage = 'Added Version for new Price'		-- NVARCHAR(MAX)
 
 													   			 		  		  		 	   		
 		-- Complete Operation
-		EXEC logs.sp_CompleteOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
-										,@OperationRunParameters = @curentParameters  -- NVARCHAR(MAX), NULL
+		EXEC Logs.sp_CompleteOperation   @OperationRunID = 	@CurrentRunID	 -- INT       -- get from sp_StartOperation
+										,@OperationRunParameters = @CurrentParameters  -- NVARCHAR(MAX), NULL
 
-		RETURN @newProductID;
+		RETURN @NewProductID;
 
 	END TRY
 	BEGIN CATCH
 	
 		-- throw Error
-		EXEC logs.sp_SetError	 @runID = @curentRunID 		-- INT       -- get from sp_StartOperation
-								,@procedureID = @@PROCID	-- INT, NULL
-								,@parameters = @curentParameters	-- NVARCHAR(MAX), NULL
-								,@errorMessage = 'Can not create Product'	-- NVARCHAR(MAX), NULL
+		EXEC Logs.sp_SetError	 @RunID = @CurrentRunID 		-- INT       -- get from sp_StartOperation
+								,@ProcedureID = @@PROCID	-- INT, NULL
+								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
+								,@ErrorMessage = 'Can not create Product'	-- NVARCHAR(MAX), NULL
 
 		-- Fail Operation
-		EXEC logs.sp_FailOperation   @OperationRunID = 	@curentRunID	 -- INT       -- get from sp_StartOperation
-									,@OperationRunParameters = @curentParameters  -- NVARCHAR(MAX), NULL
+		EXEC Logs.sp_FailOperation   @OperationRunID = 	@CurrentRunID	 -- INT       -- get from sp_StartOperation
+									,@OperationRunParameters = @CurrentParameters  -- NVARCHAR(MAX), NULL
 
 		RETURN -1
 	END CATCH
@@ -219,9 +219,9 @@ GO
 SET IDENTITY_INSERT Logs.Operations ON;  
 
 INSERT INTO Logs.Operations(
-	OperationID,
-	OperationName,
-	Description)
+	 OperationID
+	,OperationName
+	,Description)
 VALUES
 	(7,'Shop.sp_CreateProduct','Create new Product, return new ProductID');
 SET IDENTITY_INSERT Logs.Operations OFF;
@@ -235,8 +235,8 @@ CREATE TABLE #testID
 (
 	id INT
 );
-declare @iddd int
-EXEC @iddd = shop.sp_CreateProduct  @CategoryID = NULL	-- INT, NULL
+declare @Iddd int
+EXEC @Iddd = Shop.sp_CreateProduct   @CategoryID = NULL	-- INT, NULL
 									,@CategoryName =   'TestCatNameForProduct'	 -- NVARCHAR(255), NULL
 									,@CategoryDescription =   'Test Category for Product discription'	 -- NVARCHAR(MAX), NULL
 									,@ProductName = 'testName1'   -- NVARCHAR(255)
@@ -247,7 +247,7 @@ EXEC @iddd = shop.sp_CreateProduct  @CategoryID = NULL	-- INT, NULL
 
 							
 INSERT INTO #testID (id)
-SELECT @iddd
+SELECT @Iddd
 SELECT Top 1 id FROM #testID
 
 DELETE Shop.Products
