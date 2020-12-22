@@ -25,7 +25,7 @@ GO
 :r $(path)\sp\sp_InitialLoad.sql
 
 EXEC Config.sp_InitialLoad   --@Path = 'D:\_Work\GitHub\T21VS\scripts\generatedData\mockaroo\20201203\1\' -- NVARCHAR(1000) 
-							 @Path = 'd:\work\21\1\' -- NVARCHAR(1000)
+							 @Path = 'd:\work\21\initialLoad\' -- NVARCHAR(1000)
 							,@FileExt = '.csv';		-- NVARCHAR(255)
 
 
@@ -38,9 +38,6 @@ EXEC Config.sp_InitialLoad   --@Path = 'D:\_Work\GitHub\T21VS\scripts\generatedD
  :r $(path)\sp\sp_CreateCategory.sql
  :r $(path)\sp\sp_CreateProduct.sql
 
- :r $(path)\sp\sp_CreateEmployee.sql
- :r $(path)\sp\sp_CreateCategory.sql
-
  :r $(path)\sp\sp_UpdatePrice.sql
  :r $(path)\sp\sp_UpdateQuantity.sql
  :r $(path)\sp\sp_UpdateProduct.sql 
@@ -51,13 +48,5 @@ EXEC Config.sp_InitialLoad   --@Path = 'D:\_Work\GitHub\T21VS\scripts\generatedD
 
  :r $(path)\Constraint.sql
  
- 
- 
- select * from logs.eventlogs
- 
- select * from logs.errorlogs
- 
- 
- 
- 
+
  
