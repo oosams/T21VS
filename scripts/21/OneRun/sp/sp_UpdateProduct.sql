@@ -202,23 +202,5 @@ BEGIN
 END
 GO
 
-----Add info in Logs.Operations------
-
-
-SET IDENTITY_INSERT Logs.Operations ON;  
-
-INSERT INTO Logs.Operations(
-	 OperationID
-	,OperationName 
-	,Description)		  
-VALUES
-	(10,'Shop.sp_UpdateProduct','Update Product, works for price and quanity for now');
-SET IDENTITY_INSERT Logs.Operations OFF;
-GO
---SELECT * FROM Logs.Operations
-
-
-
-
-
+ 
 

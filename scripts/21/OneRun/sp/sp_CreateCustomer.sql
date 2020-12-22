@@ -183,17 +183,4 @@ BEGIN
 END
 GO
 
-----Add info in Logs.Operations------
-
-
-SET IDENTITY_INSERT Logs.Operations ON;  
-
-INSERT INTO Logs.Operations(
-	 OperationID
-	,OperationName 
-	,Description)
-VALUES
-	(4,'Shop.sp_CreateCustomer','Create new Customer, return new CustomerID');
-SET IDENTITY_INSERT Logs.Operations OFF;
-GO
---SELECT * FROM Logs.Operations
+ 

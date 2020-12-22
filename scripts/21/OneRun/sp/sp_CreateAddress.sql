@@ -95,17 +95,4 @@ BEGIN
 END
 GO
 
-----Add info in Logs.Operations------
-
-
-SET IDENTITY_INSERT Logs.Operations ON;  
-
-INSERT INTO Logs.Operations(
-	 OperationID
-	,OperationName
-	,Description)
-VALUES
-	(2,'Shop.sp_CreateAddress','Create new Address, return new AddressID');
-SET IDENTITY_INSERT Logs.Operations OFF;
-GO
---SELECT * FROM Logs.Operations
+ 

@@ -120,18 +120,5 @@ BEGIN
 END
 GO
 
-----Add info in Logs.Operations------
 
-
-SET IDENTITY_INSERT Logs.Operations ON;  
-
-INSERT INTO Logs.Operations(
-	 OperationID
-	,OperationName
-	,Description)
-VALUES
-	(11,'Shop.sp_CheckQuantity','Check Product Quantity, return 1 if order matches quantity, return -1 if not');
-SET IDENTITY_INSERT Logs.Operations OFF;
-GO
---SELECT * FROM Logs.Operations
 

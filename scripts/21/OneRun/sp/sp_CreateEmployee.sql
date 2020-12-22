@@ -196,18 +196,4 @@ BEGIN
 END
 GO
 
-----Add info in Logs.Operations------
-
-
-SET IDENTITY_INSERT Logs.Operations ON;  
-
-INSERT INTO Logs.Operations(
-	 OperationID
-	,OperationName
-	,Description)
-VALUES
-	(5,'Shop.sp_CreateEmployee','Create new Employee, return new EmployeeID');
-SET IDENTITY_INSERT Logs.Operations OFF;
-GO
---SELECT * FROM Logs.Operations
-
+ 

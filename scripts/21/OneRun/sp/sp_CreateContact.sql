@@ -100,18 +100,4 @@ BEGIN
 	END CATCH
 END
 GO
-
-----Add info in Logs.Operations------
-
-
-SET IDENTITY_INSERT Logs.Operations ON;  
-
-INSERT INTO Logs.Operations(
-	 OperationID
-	,OperationName
-	,Description)
-VALUES
-	(3,'Shop.sp_CreateContact','Create new Contact, return new ContactID');
-SET IDENTITY_INSERT Logs.Operations OFF;
-GO
---SELECT * FROM Logs.Operations
+ 

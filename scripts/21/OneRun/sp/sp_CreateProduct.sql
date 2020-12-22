@@ -213,17 +213,4 @@ BEGIN
 END
 GO
 
-----Add info in Logs.Operations------
-
-
-SET IDENTITY_INSERT Logs.Operations ON;  
-
-INSERT INTO Logs.Operations(
-	 OperationID
-	,OperationName
-	,Description)
-VALUES
-	(7,'Shop.sp_CreateProduct','Create new Product, return new ProductID');
-SET IDENTITY_INSERT Logs.Operations OFF;
-GO
---SELECT * FROM Logs.Operations
+ 
