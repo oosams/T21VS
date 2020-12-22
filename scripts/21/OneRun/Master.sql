@@ -1,9 +1,9 @@
 USE MASTER
 GO
 
---:setvar path "D:\_Work\GitHub\T21VS\scripts\OneRun"
-:setvar path "c:\Users\osams\source\repos\T21\scripts\OneRun"
--- :r $(path)\test.sql
+--:setvar path "D:\_Work\GitHub\T21VS\scripts\21\OneRun"
+:setvar path "c:\Users\osams\source\repos\T21\scripts\21\OneRun"
+
 
 -- create database and tables
 :r $(path)\CreateAll.sql
