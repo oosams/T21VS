@@ -51,7 +51,8 @@ VALUES
 	,(10,'Shop.sp_UpdateProduct','Update Product, works for price and quanity for now')
 	,(11,'Shop.sp_CheckQuantity','Check Product Quantity, return 1 if order matches quantity, return -1 if not')
 	,(12,'Shop.sp_CreateOrder','Create new Order, return new OrderID')
-	,(13,'Shop.sp_UpdateOrder','Update Order, return 1 if succeed');
+	,(13,'Shop.sp_UpdateOrder','Update Order, return 1 if succeed')
+	,(14,'LoadVendorDelivery','SSIS Job to upload new product income');
 
 
 SET IDENTITY_INSERT Logs.Operations OFF;

@@ -3,7 +3,7 @@
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
       <Items>
-        <ConnectionNode Name="DESKTOP-R6UR3CV\SAMSSERVER:DESKTOP-R6UR3CV\alex">
+        <ConnectionNode Name="DESKTOP-R6UR3CV\SAMSSERVER:SOFTSERVE\osams">
           <Created>2020-12-13T17:36:45.5935353+02:00</Created>
           <Type>SQL</Type>
           <Server>DESKTOP-R6UR3CV\SAMSSERVER</Server>
@@ -15,7 +15,7 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName />
         </ConnectionNode>
-        <ConnectionNode Name="LV4788:DESKTOP-R6UR3CV\alex">
+        <ConnectionNode Name="LV4788:SOFTSERVE\osams">
           <Created>2020-12-10T21:04:10.6048453+02:00</Created>
           <Type>SQL</Type>
           <Server>LV4788</Server>
