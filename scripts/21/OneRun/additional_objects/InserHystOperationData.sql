@@ -44,8 +44,8 @@ VALUES
 	,(3,'Shop.sp_CreateContact','Create new Contact, return new ContactID')
 	,(4,'Shop.sp_CreateCustomer','Create new Customer, return new CustomerID')
 	,(5,'Shop.sp_CreateEmployee','Create new Employee, return new EmployeeID')
-	,(6,'Shop.sp_CreateCategory','Create new Category, return new CategoryID');
-	,(7,'Shop.sp_CreateProduct','Create new Product, return new ProductID');
+	,(6,'Shop.sp_CreateCategory','Create new Category, return new CategoryID')
+	,(7,'Shop.sp_CreateProduct','Create new Product, return new ProductID')
 	,(8,'Shop.sp_UpdateQuantity','Update Product Quantity, return 1 if succeed')
 	,(9,'Shop.sp_UpdatePrice','Update Product Price, return 1 if succeed')
 	,(10,'Shop.sp_UpdateProduct','Update Product, works for price and quanity for now')
