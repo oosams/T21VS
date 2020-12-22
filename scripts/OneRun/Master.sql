@@ -24,7 +24,8 @@ GO
 -- initialLoad
 :r $(path)\sp\sp_InitialLoad.sql
 
-EXEC Config.sp_InitialLoad   @Path = 'D:\_Work\GitHub\T21VS\scripts\generatedData\mockaroo\20201203\1\' -- NVARCHAR(1000) 
+EXEC Config.sp_InitialLoad   --@Path = 'D:\_Work\GitHub\T21VS\scripts\generatedData\mockaroo\20201203\1\' -- NVARCHAR(1000) 
+							 @Path = 'd:\work\21\1\' -- NVARCHAR(1000)
 							,@FileExt = '.csv';		-- NVARCHAR(255)
 
 
@@ -52,8 +53,9 @@ EXEC Config.sp_InitialLoad   @Path = 'D:\_Work\GitHub\T21VS\scripts\generatedDat
  
  
  
+ select * from logs.eventlogs
  
- 
+ select * from logs.errorlogs
  
  
  
