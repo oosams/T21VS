@@ -1,0 +1,4 @@
+StatusID,Status,StatusName,Description
+1,R,Running,Operation has started and is in progress.
+2,F,Failed,Operation failed. See the error logs for details.
+3,C,Completed,Operation completed successfully.

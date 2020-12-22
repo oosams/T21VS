@@ -1,0 +1,5 @@
+OrderStatusID,OrderStatusName,Description
+1,New,"New registered order, whait for payment"
+2,Paid,"Order paid, whait for shipping"
+3,Shipped,"Order shipped to Customer"
+4,?ancelled,"Order cancelled"
