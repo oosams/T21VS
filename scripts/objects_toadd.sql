@@ -23,7 +23,8 @@ GO
 
 DROP TABLE IF EXISTS Staging.VendorDelivery
 CREATE TABLE Staging.VendorDelivery(
-	 File_Name				NVARCHAR(MAX)
+	 rowID					INT IDENTITY(1,1)
+	,File_Name				NVARCHAR(MAX)
 	,Load_Date				NVARCHAR(MAX)
 	,Make_Name				NVARCHAR(MAX)
 	,Make_Desc				NVARCHAR(MAX)
@@ -68,7 +69,8 @@ SELECT * FROM Logs.OperationRuns
  
 DROP TABLE IF EXISTS Staging.VendorDeliveryMapped
 CREATE TABLE Staging.VendorDeliveryMapped(
-	 Make_id				INT
+	 rowID					INT IDENTITY(1,1)
+	,Make_id				INT
 	,Product_Model_id		INT
 	,File_Name				NVARCHAR(MAX)
 	,Load_Date				NVARCHAR(MAX)
