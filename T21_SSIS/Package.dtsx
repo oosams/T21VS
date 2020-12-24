@@ -12,8 +12,8 @@
   DTS:ObjectName="Package"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="96"
-  DTS:VersionGUID="{F8F2296F-8B41-4E97-B611-2C319407F541}">
+  DTS:VersionBuild="106"
+  DTS:VersionGUID="{EF20D6AA-80C8-4B6F-B19D-B54C884F2272}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -154,7 +154,7 @@
           DTS:RowDelimiter=""
           DTS:TextQualifier="_x003C_none_x003E_"
           DTS:CodePage="1252"
-          DTS:ConnectionString="d:\work\21\vendorDeliveryArchive\20201224_17385067_">
+          DTS:ConnectionString="d:\work\21\vendorDeliveryArchive\20201224_18309507_">
           <DTS:FlatFileColumns>
             <DTS:FlatFileColumn
               DTS:ColumnType="Delimited"
@@ -475,13 +475,12 @@
       DTS:refId="Package\CompleteOperation"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Execute SQL Task"
-      DTS:Disabled="True"
       DTS:DTSID="{DA9A46A0-5963-41F0-870A-8BF7103C08F7}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
       DTS:ObjectName="CompleteOperation"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="1">
+      DTS:ThreadHint="0">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -617,7 +616,10 @@
                   description="The SQL command to be executed."
                   expressionType="Notify"
                   name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">EXEC Shop.sp_UpdateProduct   
+	 @ProductID = ?	-- INT
+	,@UnitPrice =  ? -- MONEY, NULL
+	,@Quantity =   ?  -- INT, NULL</property>
                 <property
                   dataType="System.Int32"
                   description="Specifies the column code page to use when code page information is unavailable from the data source."
@@ -626,6 +628,8 @@
               <connections>
                 <connection
                   refId="Package\Data Flow Task\OLE DB Command.Connections[OleDbConnection]"
+                  connectionManagerID="{453392D5-91D9-49E1-9CCC-A619C7E2ADA9}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[LV4788.T21]"
                   description="The OLE DB runtime connection used to access the database."
                   name="OleDbConnection" />
               </connections>
@@ -636,8 +640,62 @@
                   errorRowDisposition="FailComponent"
                   hasSideEffects="true"
                   name="OLE DB Command Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input].Columns[Product_Model_id]"
+                      cachedDataType="i4"
+                      cachedName="Product_Model_id"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[@ProductID]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_id]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input].Columns[Unit_Price]"
+                      cachedDataType="i4"
+                      cachedName="Unit_Price"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[@UnitPrice]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Unit_Price]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input].Columns[Quantity]"
+                      cachedDataType="i4"
+                      cachedName="Quantity"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[@Quantity]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Quantity]" />
+                  </inputColumns>
                   <externalMetadataColumns
-                    isUsed="True" />
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[@ProductID]"
+                      dataType="i4"
+                      name="@ProductID">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">81</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[@UnitPrice]"
+                      dataType="cy"
+                      name="@UnitPrice">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">81</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[@Quantity]"
+                      dataType="i4"
+                      name="@Quantity">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">81</property>
+                      </properties>
+                    </externalMetadataColumn>
+                  </externalMetadataColumns>
                 </input>
               </inputs>
               <outputs>
@@ -690,7 +748,15 @@
                   description="The SQL command to be executed."
                   expressionType="Notify"
                   name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">EXEC  Shop.sp_CreateProduct   
+	 @CategoryID = ?	-- INT, NULL
+	,@CategoryName =  ?	 -- NVARCHAR(255), NULL
+	,@CategoryDescription =  ?	 -- NVARCHAR(MAX), NULL
+	,@ProductName = ?   -- NVARCHAR(255)
+	,@UnitPrice =  ?  -- MONEY
+	,@Quantity =   ?  -- INT
+	--,@IsActive = 1   -- INT, 1
+	,@Description = ?</property>
                 <property
                   dataType="System.Int32"
                   description="Specifies the column code page to use when code page information is unavailable from the data source."
@@ -699,6 +765,8 @@
               <connections>
                 <connection
                   refId="Package\Data Flow Task\OLE DB Command 1.Connections[OleDbConnection]"
+                  connectionManagerID="{453392D5-91D9-49E1-9CCC-A619C7E2ADA9}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[LV4788.T21]"
                   description="The OLE DB runtime connection used to access the database."
                   name="OleDbConnection" />
               </connections>
@@ -709,8 +777,132 @@
                   errorRowDisposition="FailComponent"
                   hasSideEffects="true"
                   name="OLE DB Command Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Make_id]"
+                      cachedDataType="i4"
+                      cachedName="Make_id"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@CategoryID]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_id]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Make_Name]"
+                      cachedDataType="nText"
+                      cachedName="Make_Name"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@CategoryName]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Name]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Product_Model_Name]"
+                      cachedDataType="nText"
+                      cachedName="Product_Model_Name"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@ProductName]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_Name]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Unit_Price]"
+                      cachedDataType="i4"
+                      cachedName="Unit_Price"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@UnitPrice]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Unit_Price]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Quantity]"
+                      cachedDataType="i4"
+                      cachedName="Quantity"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@Quantity]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Quantity]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Make_Desc]"
+                      cachedDataType="nText"
+                      cachedName="Make_Desc"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@CategoryDescription]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Desc]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Model_Desc]"
+                      cachedDataType="nText"
+                      cachedName="Model_Desc"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@Description]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Desc]" />
+                  </inputColumns>
                   <externalMetadataColumns
-                    isUsed="True" />
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@CategoryID]"
+                      dataType="i4"
+                      name="@CategoryID">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">81</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@CategoryName]"
+                      dataType="wstr"
+                      length="255"
+                      name="@CategoryName">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@CategoryDescription]"
+                      dataType="nText"
+                      name="@CategoryDescription">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">193</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@ProductName]"
+                      dataType="wstr"
+                      length="255"
+                      name="@ProductName">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@UnitPrice]"
+                      dataType="cy"
+                      name="@UnitPrice">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">81</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@Quantity]"
+                      dataType="i4"
+                      name="@Quantity">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">81</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@Description]"
+                      dataType="nText"
+                      name="@Description">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">193</property>
+                      </properties>
+                    </externalMetadataColumn>
+                  </externalMetadataColumns>
                 </input>
               </inputs>
               <outputs>
@@ -1165,33 +1357,9 @@
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
-      DTS:refId="Package\Existing Products"
-      DTS:CreationName="Microsoft.ExecuteSQLTask"
-      DTS:Description="Execute SQL Task"
-      DTS:Disabled="True"
-      DTS:DTSID="{5678350f-57da-40bc-9cd7-234ce2899671}"
-      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
-      DTS:LocaleID="-1"
-      DTS:ObjectName="Existing Products"
-      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="0">
-      <DTS:Variables />
-      <DTS:ObjectData>
-        <SQLTask:SqlTaskData
-          SQLTask:Connection="{453392D5-91D9-49E1-9CCC-A619C7E2ADA9}"
-          SQLTask:SqlStatementSource="SELECT &#xA;                      rowID &#xA;&#x9;,Make_id &#xA;&#x9;,Product_Model_id &#xA;&#x9;,File_Name &#xA;&#x9;,Load_Date &#xA;&#x9;,Make_Name &#xA;&#x9;,Make_Desc &#xA;&#x9;,Make_Guid &#xA;&#x9;,Product_Model_Name &#xA;&#x9;,Model_Desc &#xA;&#x9;,Model_Guid &#xA;&#x9;,Model_Specifications_1 &#xA;&#x9;,Model_Specifications_2 &#xA;&#x9;,Quantity &#xA;&#x9;,Unit_Price &#xA;FROM  Staging.VendorDeliveryMapped &#xA;WHERE Product_Model_id IS NOT NULL"
-          SQLTask:ResultType="ResultSetType_Rowset" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
-          <SQLTask:ResultBinding
-            SQLTask:ResultName="0"
-            SQLTask:DtsVariableName="User::Obj_VendorMappedData" />
-        </SQLTask:SqlTaskData>
-      </DTS:ObjectData>
-    </DTS:Executable>
-    <DTS:Executable
       DTS:refId="Package\Foreach Loop Container"
       DTS:CreationName="STOCK:FOREACHLOOP"
       DTS:Description="Foreach Loop Container"
-      DTS:Disabled="True"
       DTS:DTSID="{EBD1346C-15F8-44E6-9AB9-AD63B65CADA7}"
       DTS:ExecutableType="STOCK:FOREACHLOOP"
       DTS:LocaleID="-1"
@@ -2589,445 +2757,9 @@
       </DTS:ForEachVariableMappings>
     </DTS:Executable>
     <DTS:Executable
-      DTS:refId="Package\Foreach Loop Container 1"
-      DTS:CreationName="STOCK:FOREACHLOOP"
-      DTS:Description="Foreach Loop Container"
-      DTS:Disabled="True"
-      DTS:DTSID="{C18ABD26-39D1-4C4A-AF09-FB61B9BEC5C8}"
-      DTS:ExecutableType="STOCK:FOREACHLOOP"
-      DTS:LocaleID="-1"
-      DTS:ObjectName="Foreach Loop Container 1">
-      <DTS:ForEachEnumerator
-        DTS:CreationName="Microsoft.ForEachADOEnumerator"
-        DTS:DTSID="{F6E50DF2-E833-4335-9744-F64855950F15}"
-        DTS:ObjectName="{F6E50DF2-E833-4335-9744-F64855950F15}">
-        <DTS:ObjectData>
-          <FEEADO
-            EnumType="EnumerateRowsInFirstTable"
-            VarName="User::Obj_VendorMappedData" />
-        </DTS:ObjectData>
-      </DTS:ForEachEnumerator>
-      <DTS:Variables />
-      <DTS:Executables>
-        <DTS:Executable
-          DTS:refId="Package\Foreach Loop Container 1\Execute SQL Task"
-          DTS:CreationName="Microsoft.ExecuteSQLTask"
-          DTS:Description="Execute SQL Task"
-          DTS:DTSID="{88A189BB-E582-4937-8AB2-01C5F9D500D5}"
-          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
-          DTS:LocaleID="-1"
-          DTS:ObjectName="Execute SQL Task"
-          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-          DTS:ThreadHint="2">
-          <DTS:Variables />
-          <DTS:ObjectData>
-            <SQLTask:SqlTaskData
-              SQLTask:Connection="{453392D5-91D9-49E1-9CCC-A619C7E2ADA9}"
-              SQLTask:SqlStatementSource="INSERT INTO Staging.VendorDeliveryMapped111&#xA;VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="0"
-                SQLTask:DtsVariableName="User::DataSet_rowID"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="3"
-                SQLTask:ParameterSize="-1" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="1"
-                SQLTask:DtsVariableName="User::DataSet_Make_id"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="3"
-                SQLTask:ParameterSize="-1" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="2"
-                SQLTask:DtsVariableName="User::DataSet_Product_Model_id"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="3"
-                SQLTask:ParameterSize="-1" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="3"
-                SQLTask:DtsVariableName="User::DataSet_File_Name"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="129"
-                SQLTask:ParameterSize="-1" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="4"
-                SQLTask:DtsVariableName="User::DataSet_Load_Date"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="129"
-                SQLTask:ParameterSize="-1" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="5"
-                SQLTask:DtsVariableName="User::DataSet_Make_Name"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="129"
-                SQLTask:ParameterSize="-1" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="6"
-                SQLTask:DtsVariableName="User::DataSet_Make_Desc"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="129"
-                SQLTask:ParameterSize="-1" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="7"
-                SQLTask:DtsVariableName="User::DataSet_Make_Guid"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="129"
-                SQLTask:ParameterSize="-1" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="8"
-                SQLTask:DtsVariableName="User::DataSet_Product_Model_Name"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="129"
-                SQLTask:ParameterSize="-1" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="9"
-                SQLTask:DtsVariableName="User::DataSet_Model_Desc"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="129"
-                SQLTask:ParameterSize="-1" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="10"
-                SQLTask:DtsVariableName="User::DataSet_Model_Guid"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="129"
-                SQLTask:ParameterSize="-1" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="11"
-                SQLTask:DtsVariableName="User::DataSet_Model_Specifications_1"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="129"
-                SQLTask:ParameterSize="-1" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="12"
-                SQLTask:DtsVariableName="User::DataSet_Model_Specifications_2"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="129"
-                SQLTask:ParameterSize="-1" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="13"
-                SQLTask:DtsVariableName="User::DataSet_Quantity"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="3"
-                SQLTask:ParameterSize="-1" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="14"
-                SQLTask:DtsVariableName="User::DataSet_Unit_Price"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="3"
-                SQLTask:ParameterSize="-1" />
-            </SQLTask:SqlTaskData>
-          </DTS:ObjectData>
-        </DTS:Executable>
-        <DTS:Executable
-          DTS:refId="Package\Foreach Loop Container 1\sp_CreateProduct"
-          DTS:CreationName="Microsoft.ExecuteSQLTask"
-          DTS:Description="Create new product and Category if needed"
-          DTS:Disabled="True"
-          DTS:DTSID="{7EF0CC2F-1FB7-4FF5-B1EC-F5798090340A}"
-          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
-          DTS:LocaleID="-1"
-          DTS:ObjectName="sp_CreateProduct"
-          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-          DTS:ThreadHint="0">
-          <DTS:Variables />
-          <DTS:ObjectData>
-            <SQLTask:SqlTaskData
-              SQLTask:Connection="{453392D5-91D9-49E1-9CCC-A619C7E2ADA9}"
-              SQLTask:SqlStatementSource="EXEC  Shop.sp_CreateProduct   &#xA;&#x9; @CategoryID = ?&#x9;-- INT, NULL&#xA;&#x9;,@CategoryName =  ?&#x9; -- NVARCHAR(255), NULL&#xA;&#x9;,@CategoryDescription =  ?&#x9; -- NVARCHAR(MAX), NULL&#xA;&#x9;,@ProductName = ?   -- NVARCHAR(255)&#xA;&#x9;,@UnitPrice =  ?  -- MONEY&#xA;&#x9;,@Quantity =   ?  -- INT&#xA;&#x9;--,@IsActive = 1   -- INT, 1&#xA;&#x9;,@Description = ?" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="0"
-                SQLTask:DtsVariableName="User::DataSet_Make_id"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="3"
-                SQLTask:ParameterSize="-1" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="1"
-                SQLTask:DtsVariableName="User::DataSet_Make_Name"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="129"
-                SQLTask:ParameterSize="-1" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="2"
-                SQLTask:DtsVariableName="User::DataSet_Make_Desc"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="129"
-                SQLTask:ParameterSize="-1" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="3"
-                SQLTask:DtsVariableName="User::DataSet_Product_Model_Name"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="129"
-                SQLTask:ParameterSize="-1" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="4"
-                SQLTask:DtsVariableName="User::DataSet_Unit_Price"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="3"
-                SQLTask:ParameterSize="-1" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="5"
-                SQLTask:DtsVariableName="User::DataSet_Quantity"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="3"
-                SQLTask:ParameterSize="-1" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="6"
-                SQLTask:DtsVariableName="User::DataSet_Model_Desc"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="129"
-                SQLTask:ParameterSize="-1" />
-            </SQLTask:SqlTaskData>
-          </DTS:ObjectData>
-        </DTS:Executable>
-      </DTS:Executables>
-      <DTS:ForEachVariableMappings>
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{9AAB38FD-BA40-47E3-871E-BE9C3C0EF5AE}"
-          DTS:ObjectName="{9AAB38FD-BA40-47E3-871E-BE9C3C0EF5AE}"
-          DTS:ValueIndex="0"
-          DTS:VariableName="User::DataSet_rowID" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{5BF5506C-0DB3-4B5E-BE75-9A251B5BF2C2}"
-          DTS:ObjectName="{5BF5506C-0DB3-4B5E-BE75-9A251B5BF2C2}"
-          DTS:ValueIndex="1"
-          DTS:VariableName="User::DataSet_Make_id" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{EDA0C067-2098-4915-A284-F72A5987A4B0}"
-          DTS:ObjectName="{EDA0C067-2098-4915-A284-F72A5987A4B0}"
-          DTS:ValueIndex="2"
-          DTS:VariableName="User::DataSet_Product_Model_id" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{71C0F507-3A6B-481D-98EC-4FC881191798}"
-          DTS:ObjectName="{71C0F507-3A6B-481D-98EC-4FC881191798}"
-          DTS:ValueIndex="3"
-          DTS:VariableName="User::DataSet_File_Name" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{929A0023-1543-42D8-BDFC-9651CA222A8B}"
-          DTS:ObjectName="{929A0023-1543-42D8-BDFC-9651CA222A8B}"
-          DTS:ValueIndex="4"
-          DTS:VariableName="User::DataSet_Load_Date" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{F90E9678-46F2-4C75-B890-FC8F5B916D58}"
-          DTS:ObjectName="{F90E9678-46F2-4C75-B890-FC8F5B916D58}"
-          DTS:ValueIndex="5"
-          DTS:VariableName="User::DataSet_Make_Name" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{596711E6-F6E2-498B-8C6F-F5A927665888}"
-          DTS:ObjectName="{596711E6-F6E2-498B-8C6F-F5A927665888}"
-          DTS:ValueIndex="6"
-          DTS:VariableName="User::DataSet_Make_Desc" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{74725CA3-9DD9-4BC0-A59E-0FE95AC83B72}"
-          DTS:ObjectName="{74725CA3-9DD9-4BC0-A59E-0FE95AC83B72}"
-          DTS:ValueIndex="7"
-          DTS:VariableName="User::DataSet_Make_Guid" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{898D11D2-B907-4BBB-99CE-3AD0893D38DF}"
-          DTS:ObjectName="{898D11D2-B907-4BBB-99CE-3AD0893D38DF}"
-          DTS:ValueIndex="8"
-          DTS:VariableName="User::DataSet_Product_Model_Name" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{977FCB66-FD56-42A1-90DA-2D4F6DB9894A}"
-          DTS:ObjectName="{977FCB66-FD56-42A1-90DA-2D4F6DB9894A}"
-          DTS:ValueIndex="9"
-          DTS:VariableName="User::DataSet_Model_Desc" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{7CB88E07-3E97-49B1-BB28-56A6DC0FDDE5}"
-          DTS:ObjectName="{7CB88E07-3E97-49B1-BB28-56A6DC0FDDE5}"
-          DTS:ValueIndex="10"
-          DTS:VariableName="User::DataSet_Model_Guid" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{ECDC0468-5EC1-42C5-A6F1-858A880E3FCF}"
-          DTS:ObjectName="{ECDC0468-5EC1-42C5-A6F1-858A880E3FCF}"
-          DTS:ValueIndex="11"
-          DTS:VariableName="User::DataSet_Model_Specifications_1" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{0F9A61CF-D3B9-416B-AD6A-207A2456E93F}"
-          DTS:ObjectName="{0F9A61CF-D3B9-416B-AD6A-207A2456E93F}"
-          DTS:ValueIndex="12"
-          DTS:VariableName="User::DataSet_Model_Specifications_2" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{B9C2F3A1-A515-4F6E-82FB-F471DCCDDC4E}"
-          DTS:ObjectName="{B9C2F3A1-A515-4F6E-82FB-F471DCCDDC4E}"
-          DTS:ValueIndex="13"
-          DTS:VariableName="User::DataSet_Quantity" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{E07305AC-8D2E-46A9-BBCA-8CDDAFDE3325}"
-          DTS:ObjectName="{E07305AC-8D2E-46A9-BBCA-8CDDAFDE3325}"
-          DTS:ValueIndex="14"
-          DTS:VariableName="User::DataSet_Unit_Price" />
-      </DTS:ForEachVariableMappings>
-    </DTS:Executable>
-    <DTS:Executable
-      DTS:refId="Package\Foreach Loop Container 1 1"
-      DTS:CreationName="STOCK:FOREACHLOOP"
-      DTS:Description="Foreach Loop Container"
-      DTS:Disabled="True"
-      DTS:DTSID="{f6716e65-e51a-45b0-b55b-6fe750e58329}"
-      DTS:ExecutableType="STOCK:FOREACHLOOP"
-      DTS:LocaleID="-1"
-      DTS:ObjectName="Foreach Loop Container 1 1">
-      <DTS:ForEachEnumerator
-        DTS:CreationName="Microsoft.ForEachADOEnumerator"
-        DTS:DTSID="{7143acaf-a6d5-4615-a812-9d95b680a7e5}"
-        DTS:ObjectName="{F6E50DF2-E833-4335-9744-F64855950F15}">
-        <DTS:ObjectData>
-          <FEEADO
-            EnumType="EnumerateRowsInFirstTable"
-            VarName="User::Obj_VendorMappedData" />
-        </DTS:ObjectData>
-      </DTS:ForEachEnumerator>
-      <DTS:Variables />
-      <DTS:Executables>
-        <DTS:Executable
-          DTS:refId="Package\Foreach Loop Container 1 1\sp_UpdateProduct"
-          DTS:CreationName="Microsoft.ExecuteSQLTask"
-          DTS:Description="Execute SQL Task"
-          DTS:DTSID="{6e927d79-da63-46f0-b661-2726d4da277b}"
-          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
-          DTS:LocaleID="-1"
-          DTS:ObjectName="sp_UpdateProduct"
-          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-          DTS:ThreadHint="0">
-          <DTS:Variables />
-          <DTS:ObjectData>
-            <SQLTask:SqlTaskData
-              SQLTask:Connection="{453392D5-91D9-49E1-9CCC-A619C7E2ADA9}"
-              SQLTask:SqlStatementSource="EXEC Shop.sp_UpdateProduct   &#xA;&#x9; @ProductID = ?&#x9;-- INT&#xA;&#x9;,@UnitPrice =  ?  -- MONEY, NULL&#xA;&#x9;,@Quantity =   ?  -- INT, NULL" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="0"
-                SQLTask:DtsVariableName="User::DataSet_Product_Model_id"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="3"
-                SQLTask:ParameterSize="-1" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="1"
-                SQLTask:DtsVariableName="User::DataSet_Unit_Price"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="3"
-                SQLTask:ParameterSize="-1" />
-              <SQLTask:ParameterBinding
-                SQLTask:ParameterName="2"
-                SQLTask:DtsVariableName="User::DataSet_Quantity"
-                SQLTask:ParameterDirection="Input"
-                SQLTask:DataType="3"
-                SQLTask:ParameterSize="-1" />
-            </SQLTask:SqlTaskData>
-          </DTS:ObjectData>
-        </DTS:Executable>
-      </DTS:Executables>
-      <DTS:ForEachVariableMappings>
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{CBAF8888-7B3D-4B66-BB18-DBECD9B4E03A}"
-          DTS:ObjectName="{CBAF8888-7B3D-4B66-BB18-DBECD9B4E03A}"
-          DTS:ValueIndex="0"
-          DTS:VariableName="User::DataSet_rowID" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{F82C19CE-F757-44CB-B300-6CFE095BA073}"
-          DTS:ObjectName="{F82C19CE-F757-44CB-B300-6CFE095BA073}"
-          DTS:ValueIndex="1"
-          DTS:VariableName="User::DataSet_Make_id" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{AE4D20A9-D8ED-4BCF-B685-92793E86C517}"
-          DTS:ObjectName="{AE4D20A9-D8ED-4BCF-B685-92793E86C517}"
-          DTS:ValueIndex="2"
-          DTS:VariableName="User::DataSet_Product_Model_id" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{81C1962E-0001-4A93-B627-AC2FE67CA7C9}"
-          DTS:ObjectName="{81C1962E-0001-4A93-B627-AC2FE67CA7C9}"
-          DTS:ValueIndex="3"
-          DTS:VariableName="User::DataSet_File_Name" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{A11C9AE4-D285-4AD9-A2DF-5439120D80C6}"
-          DTS:ObjectName="{A11C9AE4-D285-4AD9-A2DF-5439120D80C6}"
-          DTS:ValueIndex="4"
-          DTS:VariableName="User::DataSet_Load_Date" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{074FABE4-0086-4EC5-9C85-A422B79F664F}"
-          DTS:ObjectName="{074FABE4-0086-4EC5-9C85-A422B79F664F}"
-          DTS:ValueIndex="5"
-          DTS:VariableName="User::DataSet_Make_Name" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{093FB8EA-198A-488D-88AB-B11E53988E51}"
-          DTS:ObjectName="{093FB8EA-198A-488D-88AB-B11E53988E51}"
-          DTS:ValueIndex="6"
-          DTS:VariableName="User::DataSet_Make_Desc" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{E6847F9E-BA21-46BF-9C67-AD6901192F8A}"
-          DTS:ObjectName="{E6847F9E-BA21-46BF-9C67-AD6901192F8A}"
-          DTS:ValueIndex="7"
-          DTS:VariableName="User::DataSet_Make_Guid" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{50F683C0-4FD3-41B4-A216-6BDA546D0160}"
-          DTS:ObjectName="{50F683C0-4FD3-41B4-A216-6BDA546D0160}"
-          DTS:ValueIndex="8"
-          DTS:VariableName="User::DataSet_Product_Model_Name" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{D599B13B-B2FC-453F-8D90-9D1A1229DAAB}"
-          DTS:ObjectName="{D599B13B-B2FC-453F-8D90-9D1A1229DAAB}"
-          DTS:ValueIndex="9"
-          DTS:VariableName="User::DataSet_Model_Desc" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{4E29897A-828A-44D0-8F16-0372890B21F8}"
-          DTS:ObjectName="{4E29897A-828A-44D0-8F16-0372890B21F8}"
-          DTS:ValueIndex="10"
-          DTS:VariableName="User::DataSet_Model_Guid" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{613289F0-4A8F-4259-AA86-9FFEA49033A9}"
-          DTS:ObjectName="{613289F0-4A8F-4259-AA86-9FFEA49033A9}"
-          DTS:ValueIndex="11"
-          DTS:VariableName="User::DataSet_Model_Specifications_1" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{1D8997F3-FC72-479F-B8D0-6BBCAB2573D6}"
-          DTS:ObjectName="{1D8997F3-FC72-479F-B8D0-6BBCAB2573D6}"
-          DTS:ValueIndex="12"
-          DTS:VariableName="User::DataSet_Model_Specifications_2" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{489CBFAE-9253-4313-8370-A95D56374851}"
-          DTS:ObjectName="{489CBFAE-9253-4313-8370-A95D56374851}"
-          DTS:ValueIndex="13"
-          DTS:VariableName="User::DataSet_Quantity" />
-        <DTS:ForEachVariableMapping
-          DTS:CreationName=""
-          DTS:DTSID="{F71B70D7-8B00-4053-B034-61BDC0DC6119}"
-          DTS:ObjectName="{F71B70D7-8B00-4053-B034-61BDC0DC6119}"
-          DTS:ValueIndex="14"
-          DTS:VariableName="User::DataSet_Unit_Price" />
-      </DTS:ForEachVariableMappings>
-    </DTS:Executable>
-    <DTS:Executable
       DTS:refId="Package\Mapping"
       DTS:CreationName="Microsoft.Pipeline"
       DTS:Description="Data Flow Task"
-      DTS:Disabled="True"
       DTS:DTSID="{A27B093C-C9E5-4C22-AAE7-8012581F059E}"
       DTS:ExecutableType="Microsoft.Pipeline"
       DTS:LocaleID="-1"
@@ -8008,39 +7740,15 @@
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
-      DTS:refId="Package\New Products"
-      DTS:CreationName="Microsoft.ExecuteSQLTask"
-      DTS:Description="Execute SQL Task"
-      DTS:Disabled="True"
-      DTS:DTSID="{EDB4FC16-841E-4756-A5A2-EE10C9306DDC}"
-      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
-      DTS:LocaleID="-1"
-      DTS:ObjectName="New Products"
-      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="0">
-      <DTS:Variables />
-      <DTS:ObjectData>
-        <SQLTask:SqlTaskData
-          SQLTask:Connection="{453392D5-91D9-49E1-9CCC-A619C7E2ADA9}"
-          SQLTask:SqlStatementSource="SELECT &#xA;                      rowID &#xA;&#x9;,Make_id &#xA;&#x9;,Product_Model_id &#xA;&#x9;,File_Name &#xA;&#x9;,Load_Date &#xA;&#x9;,Make_Name &#xA;&#x9;,Make_Desc &#xA;&#x9;,Make_Guid &#xA;&#x9;,Product_Model_Name &#xA;&#x9;,Model_Desc &#xA;&#x9;,Model_Guid &#xA;&#x9;,Model_Specifications_1 &#xA;&#x9;,Model_Specifications_2 &#xA;&#x9;,Quantity &#xA;&#x9;,Unit_Price &#xA;FROM  Staging.VendorDeliveryMapped &#xA;WHERE Product_Model_id IS  NULL"
-          SQLTask:ResultType="ResultSetType_Rowset" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
-          <SQLTask:ResultBinding
-            SQLTask:ResultName="0"
-            SQLTask:DtsVariableName="User::Obj_VendorMappedData" />
-        </SQLTask:SqlTaskData>
-      </DTS:ObjectData>
-    </DTS:Executable>
-    <DTS:Executable
       DTS:refId="Package\StartOperation"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Execute SQL Task"
-      DTS:Disabled="True"
       DTS:DTSID="{57B8AAD3-093D-4926-93C0-678191B3A17D}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
       DTS:ObjectName="StartOperation"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="1">
+      DTS:ThreadHint="0">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -8059,13 +7767,12 @@
       DTS:refId="Package\Truncate staging tables"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Execute SQL Task"
-      DTS:Disabled="True"
       DTS:DTSID="{C78280CD-DF56-44D5-87F9-A3AE8EF7B296}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
       DTS:ObjectName="Truncate staging tables"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="1">
+      DTS:ThreadHint="0">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -8086,8 +7793,8 @@
     <DTS:PrecedenceConstraint
       DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
       DTS:CreationName=""
-      DTS:DTSID="{90D8B5E9-964D-4557-9128-5422044E89F4}"
-      DTS:From="Package\Foreach Loop Container"
+      DTS:DTSID="{498CC252-5E20-4E5E-9982-F90680D7FE13}"
+      DTS:From="Package\Data Flow Task"
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint 1"
       DTS:To="Package\CompleteOperation" />
@@ -8108,14 +7815,6 @@
       DTS:ObjectName="Constraint 3"
       DTS:To="Package\Foreach Loop Container" />
     <DTS:PrecedenceConstraint
-      DTS:refId="Package.PrecedenceConstraints[Constraint 4]"
-      DTS:CreationName=""
-      DTS:DTSID="{4C8603BC-AC07-4154-8B3E-73FFCE0E9030}"
-      DTS:From="Package\New Products"
-      DTS:LogicalAnd="True"
-      DTS:ObjectName="Constraint 4"
-      DTS:To="Package\Foreach Loop Container 1" />
-    <DTS:PrecedenceConstraint
       DTS:refId="Package.PrecedenceConstraints[Constraint 5]"
       DTS:CreationName=""
       DTS:DTSID="{B1C2C642-ACDC-42B2-BED7-CC048D307030}"
@@ -8123,22 +7822,6 @@
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint 5"
       DTS:To="Package\Data Flow Task" />
-    <DTS:PrecedenceConstraint
-      DTS:refId="Package.PrecedenceConstraints[Constraint 6]"
-      DTS:CreationName=""
-      DTS:DTSID="{E3A42C13-3379-4880-9BAD-77F9F0BE7363}"
-      DTS:From="Package\Foreach Loop Container 1"
-      DTS:LogicalAnd="True"
-      DTS:ObjectName="Constraint 6"
-      DTS:To="Package\Existing Products" />
-    <DTS:PrecedenceConstraint
-      DTS:refId="Package.PrecedenceConstraints[Constraint 7]"
-      DTS:CreationName=""
-      DTS:DTSID="{7940C9C2-5E8A-4E28-B01E-859C811FB423}"
-      DTS:From="Package\Existing Products"
-      DTS:LogicalAnd="True"
-      DTS:ObjectName="Constraint 7"
-      DTS:To="Package\Foreach Loop Container 1 1" />
   </DTS:PrecedenceConstraints>
   <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
 <!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
@@ -8151,15 +7834,15 @@
     design-time-name="Package">
     <LayoutInfo>
       <GraphLayout
-        Capacity="32" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
           Size="168.8,41.6"
           Id="Package\CompleteOperation"
-          TopLeft="298.958321453797,295.9666690188" />
+          TopLeft="265.624989445011,297.700002365909" />
         <NodeLayout
-          Size="186.4,41.6"
-          Id="Package\Truncate staging tables"
-          TopLeft="552.499978045623,35.5333336157269" />
+          Size="150.4,41.6"
+          Id="Package\Data Flow Task"
+          TopLeft="594.351828234432,419.970371781573" />
         <NodeLayout
           Size="216.8,41.6"
           Id="Package\Foreach Loop Container\Load Vendor files into Staging"
@@ -8179,6 +7862,10 @@
           Size="146.4,41.6"
           Id="Package\StartOperation"
           TopLeft="311.458320957092,48.7500003874299" />
+        <NodeLayout
+          Size="186.4,41.6"
+          Id="Package\Truncate staging tables"
+          TopLeft="552.499978045623,35.5333336157269" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint]"
           TopLeft="676.424976928036,298.516667525901">
@@ -8193,40 +7880,6 @@
                   Capacity="5">
                   <mssgle:LineSegment
                     End="0,18.9833350569665" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 1]"
-          TopLeft="545.416644993756,214.516667525901">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-77.658323539959,102.250001492899"
-              Start="0,0"
-              End="-70.158323539959,102.250001492899">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="-34.8291617699795,0" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-34.8291617699795,0"
-                    Point2="-38.8291617699795,0"
-                    Point3="-38.8291617699795,4" />
-                  <mssgle:LineSegment
-                    End="-38.8291617699795,98.250001492899" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-38.8291617699795,98.250001492899"
-                    Point2="-38.8291617699795,102.250001492899"
-                    Point3="-42.8291617699795,102.250001492899" />
-                  <mssgle:LineSegment
-                    End="-70.158323539959,102.250001492899" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -8303,110 +7956,6 @@
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
-        <NodeLayout
-          Size="143.2,41.6"
-          Id="Package\New Products"
-          TopLeft="161.388882475871,378.177780454777" />
-        <NodeLayout
-          Size="164.8,41.6"
-          Id="Package\Foreach Loop Container 1\sp_CreateProduct"
-          TopLeft="36.4333185977414,16.3333352687624" />
-        <NodeLayout
-          Size="164.8,41.6"
-          Id="Package\Foreach Loop Container 1\Execute SQL Task"
-          TopLeft="37.9999900658929,87.3333359093135" />
-        <ContainerLayout
-          HeaderHeight="43"
-          IsExpanded="True"
-          PanelSize="252,181.6"
-          Size="252,224.8"
-          Id="Package\Foreach Loop Container 1"
-          TopLeft="103.888884760716,448.377781012677" />
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 4]"
-          TopLeft="231.438883618293,419.777780454777">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="0,28.6000005578996"
-              Start="0,0"
-              End="0,21.1000005578996">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,21.1000005578996" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <NodeLayout
-          Size="158.4,41.6"
-          Id="Package\Existing Products"
-          TopLeft="144.999994238218,697.577779235663" />
-        <NodeLayout
-          Size="164.8,41.6"
-          Id="Package\Foreach Loop Container 1 1\sp_UpdateProduct"
-          TopLeft="43.0999849994984,26.7333353514141" />
-        <ContainerLayout
-          HeaderHeight="43"
-          IsExpanded="True"
-          PanelSize="234.4,120"
-          Size="234.4,163.2"
-          Id="Package\Foreach Loop Container 1 1"
-          TopLeft="100.833329326577,766.911113120009" />
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 7]"
-          TopLeft="221.116661782398,739.177779235663">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="0,27.7333338843455"
-              Start="0,0"
-              End="0,20.2333338843455">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,20.2333338843455" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 6]"
-          TopLeft="227.044439499467,673.177781012677">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="0,24.3999982229865"
-              Start="0,0"
-              End="0,16.8999982229865">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,16.8999982229865" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <NodeLayout
-          Size="150.4,41.6"
-          Id="Package\Data Flow Task"
-          TopLeft="594.351828234432,419.970371781573" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 5]"
           TopLeft="672.292568548374,366.600002582867">
@@ -8429,14 +7978,179 @@
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="645.818494901099,419.970371781573">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-295.793505456087,-80.6703694156643"
+              Start="0,0"
+              End="-295.793505456087,-73.1703694156643">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,-28.7776448362594" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,-28.7776448362594"
+                    Point2="0,-32.7776448362594"
+                    Point3="-4,-32.7776448362594" />
+                  <mssgle:LineSegment
+                    End="-291.793505456087,-32.7776448362594" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-291.793505456087,-32.7776448362594"
+                    Point2="-295.793505456087,-32.7776448362594"
+                    Point3="-295.793505456087,-36.7776448362594" />
+                  <mssgle:LineSegment
+                    End="-295.793505456087,-73.1703694156643" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
       </GraphLayout>
     </LayoutInfo>
   </Package>
   <TaskHost
+    design-time-name="Package\Data Flow Task">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        <NodeLayout
+          Size="167.2,41.6"
+          Id="Package\Data Flow Task\OLE DB Command 1"
+          TopLeft="243,231.6" />
+        <NodeLayout
+          Size="153.6,41.6"
+          Id="Package\Data Flow Task\Conditional Split"
+          TopLeft="407,107" />
+        <NodeLayout
+          Size="152,41.6"
+          Id="Package\Data Flow Task\OLE DB Source"
+          TopLeft="405,24" />
+        <NodeLayout
+          Size="167.2,41.6"
+          Id="Package\Data Flow Task\OLE DB Command"
+          TopLeft="524,229" />
+        <EdgeLayout
+          Id="Package\Data Flow Task.Paths[OLE DB Source Output]"
+          TopLeft="482.4,65.6">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,41.4"
+              Start="0,0"
+              End="0,33.9">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,33.9" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Data Flow Task.Paths[New Products to create]"
+          TopLeft="459.533333333334,148.6">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-132.933333333334,83"
+              Start="0,0"
+              End="-132.933333333334,75.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,29.7134020618557" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,29.7134020618557"
+                    Point2="0,33.7134020618557"
+                    Point3="-4,33.7134020618557" />
+                  <mssgle:LineSegment
+                    End="-128.933333333334,33.7134020618557" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-128.933333333334,33.7134020618557"
+                    Point2="-132.933333333334,33.7134020618557"
+                    Point3="-132.933333333334,37.7134020618557" />
+                  <mssgle:LineSegment
+                    End="-132.933333333334,75.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-118.413014322917,38.7134020618557,103.8926953125,9.7490234375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Data Flow Task.Paths[Existing Products to update]"
+          TopLeft="508.066666666667,148.6">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="99.5333333333332,80.4"
+              Start="0,0"
+              End="99.5333333333332,72.9">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,28.6573195876289" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,28.6573195876289"
+                    Point2="0,32.6573195876289"
+                    Point3="4,32.6573195876289" />
+                  <mssgle:LineSegment
+                    End="95.5333333333332,32.6573195876289" />
+                  <mssgle:CubicBezierSegment
+                    Point1="95.5333333333332,32.6573195876289"
+                    Point2="99.5333333333332,32.6573195876289"
+                    Point3="99.5333333333332,36.6573195876289" />
+                  <mssgle:LineSegment
+                    End="99.5333333333332,72.9" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-11.1146809895834,37.6573195876289,121.7626953125,11.6630859375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Data Flow Task\OLE DB Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <TaskHost
     design-time-name="Package\Foreach Loop Container\Load Vendor files into Staging">
     <LayoutInfo>
       <GraphLayout
-        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
           Size="119.2,41.6"
           Id="Package\Foreach Loop Container\Load Vendor files into Staging\Multicast"
@@ -8446,13 +8160,13 @@
           Id="Package\Foreach Loop Container\Load Vendor files into Staging\Derived Column"
           TopLeft="558.333311147161,41.3333333884345" />
         <NodeLayout
-          Size="140,41.6"
-          Id="Package\Foreach Loop Container\Load Vendor files into Staging\StagingTable"
-          TopLeft="255.666675143772,215.533332995839" />
-        <NodeLayout
           Size="128.8,41.6"
           Id="Package\Foreach Loop Container\Load Vendor files into Staging\ToUnicode"
           TopLeft="365.833318796424,40.200000020663" />
+        <NodeLayout
+          Size="140,41.6"
+          Id="Package\Foreach Loop Container\Load Vendor files into Staging\StagingTable"
+          TopLeft="255.666675143772,215.533332995839" />
         <NodeLayout
           Size="112.8,41.6"
           Id="Package\Foreach Loop Container\Load Vendor files into Staging\Archive"
@@ -8461,28 +8175,6 @@
           Size="149.6,41.6"
           Id="Package\Foreach Loop Container\Load Vendor files into Staging\VendorDelivery"
           TopLeft="132.833332505491,38.4666667975319" />
-        <EdgeLayout
-          Id="Package\Foreach Loop Container\Load Vendor files into Staging.Paths[Flat File Source Output]"
-          TopLeft="282.433332505491,60.1333334090975">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="83.3999862909327,0"
-              Start="0,0"
-              End="75.8999862909327,0">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="75.8999862909327,0" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
         <EdgeLayout
           Id="Package\Foreach Loop Container\Load Vendor files into Staging.Paths[Derived Column Output]"
           TopLeft="634.733311147161,82.9333333884345">
@@ -8514,7 +8206,9 @@
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -8536,7 +8230,9 @@
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -8570,7 +8266,9 @@
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -8604,7 +8302,33 @@
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Foreach Loop Container\Load Vendor files into Staging.Paths[Flat File Source Output]"
+          TopLeft="282.433332505491,60.1333334090975">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="83.3999862909327,0"
+              Start="0,0"
+              End="75.8999862909327,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="75.8999862909327,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
       </GraphLayout>
@@ -8629,29 +8353,45 @@
       <GraphLayout
         Capacity="32" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
-          Size="167.2,41.6"
-          Id="Package\Mapping\Remove dublicates"
-          TopLeft="250.740730777199,228.703705521277" />
+          Size="228,41.6"
+          Id="Package\Mapping\Staging_VendorDeliveryMapped"
+          TopLeft="297.314803000587,480.229633446153" />
+        <NodeLayout
+          Size="106.4,41.6"
+          Id="Package\Mapping\Sort 1"
+          TopLeft="733.796267137853,100.5333341323" />
+        <NodeLayout
+          Size="119.2,41.6"
+          Id="Package\Mapping\Multicast"
+          TopLeft="494.074054441336,409.644447700007" />
+        <NodeLayout
+          Size="157.6,41.6"
+          Id="Package\Mapping\Vendor_Mapping"
+          TopLeft="651.851825949588,23.8814816712745" />
         <NodeLayout
           Size="190.4,41.6"
           Id="Package\Mapping\Staging_VendorDelivery"
           TopLeft="129.592610967012,23.0222217217198" />
         <NodeLayout
-          Size="130.4,41.6"
-          Id="Package\Mapping\Map Maker"
-          TopLeft="483.425906716307,143.385186324708" />
+          Size="129.6,41.6"
+          Id="Package\Mapping\Map Model"
+          TopLeft="481.203684582388,318.644446976803" />
         <NodeLayout
           Size="97.6,41.6"
           Id="Package\Mapping\Sort"
           TopLeft="177.499992946785,95.5259266850975" />
         <NodeLayout
+          Size="130.4,41.6"
+          Id="Package\Mapping\Map Maker"
+          TopLeft="483.425906716307,143.385186324708" />
+        <NodeLayout
           Size="106.4,41.6"
           Id="Package\Mapping\Sort 2"
           TopLeft="280.555544407281,315.096298673301" />
         <NodeLayout
-          Size="228,41.6"
-          Id="Package\Mapping\Staging_VendorDeliveryMapped"
-          TopLeft="297.314803000587,480.229633446153" />
+          Size="167.2,41.6"
+          Id="Package\Mapping\Remove dublicates"
+          TopLeft="250.740730777199,228.703705521277" />
         <NodeLayout
           Size="152.8,41.6"
           Id="Package\Mapping\Derived Column"
@@ -8660,126 +8400,20 @@
           Size="128,41.6"
           Id="Package\Mapping\Multicast 1"
           TopLeft="691.57404659339,237.288890647535" />
-        <NodeLayout
-          Size="119.2,41.6"
-          Id="Package\Mapping\Multicast"
-          TopLeft="494.074054441336,409.644447700007" />
-        <NodeLayout
-          Size="106.4,41.6"
-          Id="Package\Mapping\Sort 1"
-          TopLeft="733.796267137853,100.5333341323" />
-        <NodeLayout
-          Size="129.6,41.6"
-          Id="Package\Mapping\Map Model"
-          TopLeft="481.203684582388,318.644446976803" />
-        <NodeLayout
-          Size="157.6,41.6"
-          Id="Package\Mapping\Vendor_Mapping"
-          TopLeft="651.851825949588,23.8814816712745" />
         <EdgeLayout
-          Id="Package\Mapping.Paths[Sort Output3]"
-          TopLeft="386.955544407281,337.670372825052">
+          Id="Package\Mapping.Paths[OLE DB Source Output]"
+          TopLeft="225.546301956898,64.6222217217198">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="94.248140175107,0"
+              EndConnector="0,30.9037049633777"
               Start="0,0"
-              End="86.748140175107,0">
+              End="0,23.4037049633777">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="86.748140175107,0" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package\Mapping.Paths[Sort Output2]"
-          TopLeft="334.04813759224,270.303705521277">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="0,44.7925931520238"
-              Start="0,0"
-              End="0,37.2925931520238">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,37.2925931520238" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package\Mapping.Paths[Sort Output1]"
-          TopLeft="786.996267137853,142.1333341323">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-11.4222205444627,95.1555565152354"
-              Start="0,0"
-              End="-11.4222205444627,87.6555565152354">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,52.3884779349543" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,52.3884779349543"
-                    Point2="0,56.3884779349543"
-                    Point3="-4,56.3884779349543" />
-                  <mssgle:LineSegment
-                    End="-7.42222054446268,56.3884779349543" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-7.42222054446268,56.3884779349543"
-                    Point2="-11.4222205444627,56.3884779349543"
-                    Point3="-11.4222205444627,60.3884779349543" />
-                  <mssgle:LineSegment
-                    End="-11.4222205444627,87.6555565152354" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package\Mapping.Paths[Sort Output]"
-          TopLeft="275.099992946785,116.325926685098">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="208.325913769522,47.8592596396105"
-              Start="0,0"
-              End="200.825913769522,47.8592596396105">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="100.162956884761,0" />
-                  <mssgle:CubicBezierSegment
-                    Point1="100.162956884761,0"
-                    Point2="104.162956884761,0"
-                    Point3="104.162956884761,4" />
-                  <mssgle:LineSegment
-                    End="104.162956884761,43.8592596396105" />
-                  <mssgle:CubicBezierSegment
-                    Point1="104.162956884761,43.8592596396105"
-                    Point2="104.162956884761,47.8592596396105"
-                    Point3="108.162956884761,47.8592596396105" />
-                  <mssgle:LineSegment
-                    End="200.825913769522,47.8592596396105" />
+                    End="0,23.4037049633777" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -9003,19 +8637,109 @@
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
-          Id="Package\Mapping.Paths[OLE DB Source Output]"
-          TopLeft="225.546301956898,64.6222217217198">
+          Id="Package\Mapping.Paths[Sort Output3]"
+          TopLeft="386.955544407281,337.670372825052">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,30.9037049633777"
+              EndConnector="94.248140175107,0"
               Start="0,0"
-              End="0,23.4037049633777">
+              End="86.748140175107,0">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,23.4037049633777" />
+                    End="86.748140175107,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Mapping.Paths[Sort Output2]"
+          TopLeft="334.04813759224,270.303705521277">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,44.7925931520238"
+              Start="0,0"
+              End="0,37.2925931520238">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,37.2925931520238" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Mapping.Paths[Sort Output1]"
+          TopLeft="786.996267137853,142.1333341323">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-11.4222205444627,95.1555565152354"
+              Start="0,0"
+              End="-11.4222205444627,87.6555565152354">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,52.3884779349543" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,52.3884779349543"
+                    Point2="0,56.3884779349543"
+                    Point3="-4,56.3884779349543" />
+                  <mssgle:LineSegment
+                    End="-7.42222054446268,56.3884779349543" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-7.42222054446268,56.3884779349543"
+                    Point2="-11.4222205444627,56.3884779349543"
+                    Point3="-11.4222205444627,60.3884779349543" />
+                  <mssgle:LineSegment
+                    End="-11.4222205444627,87.6555565152354" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Mapping.Paths[Sort Output]"
+          TopLeft="275.099992946785,116.325926685098">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="208.325913769522,47.8592596396105"
+              Start="0,0"
+              End="200.825913769522,47.8592596396105">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="100.162956884761,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="100.162956884761,0"
+                    Point2="104.162956884761,0"
+                    Point3="104.162956884761,4" />
+                  <mssgle:LineSegment
+                    End="104.162956884761,43.8592596396105" />
+                  <mssgle:CubicBezierSegment
+                    Point1="104.162956884761,43.8592596396105"
+                    Point2="104.162956884761,47.8592596396105"
+                    Point3="108.162956884761,47.8592596396105" />
+                  <mssgle:LineSegment
+                    End="200.825913769522,47.8592596396105" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -9042,137 +8766,6 @@
   </PipelineComponentMetadata>
   <PipelineComponentMetadata
     design-time-name="Package\Mapping\Staging_VendorDeliveryMapped">
-    <Properties>
-      <Property>
-        <Name>DataSourceViewID</Name>
-      </Property>
-      <Property>
-        <Name>TableInfoObjectType</Name>
-        <Value
-          type="q2:string">Table</Value>
-      </Property>
-    </Properties>
-  </PipelineComponentMetadata>
-  <TaskHost
-    design-time-name="Package\Data Flow Task">
-    <LayoutInfo>
-      <GraphLayout
-        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
-        <NodeLayout
-          Size="167.2,41.6"
-          Id="Package\Data Flow Task\OLE DB Command"
-          TopLeft="602,241" />
-        <NodeLayout
-          Size="152,41.6"
-          Id="Package\Data Flow Task\OLE DB Source"
-          TopLeft="405,24" />
-        <NodeLayout
-          Size="167.2,41.6"
-          Id="Package\Data Flow Task\OLE DB Command 1"
-          TopLeft="243,231.6" />
-        <NodeLayout
-          Size="153.6,41.6"
-          Id="Package\Data Flow Task\Conditional Split"
-          TopLeft="407,107" />
-        <EdgeLayout
-          Id="Package\Data Flow Task.Paths[OLE DB Source Output]"
-          TopLeft="482.4,65.6">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="0,41.4"
-              Start="0,0"
-              End="0,33.9">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,33.9" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package\Data Flow Task.Paths[New Products to create]"
-          TopLeft="459.533333333334,148.6">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-132.933333333334,83"
-              Start="0,0"
-              End="-132.933333333334,75.5">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,29.7134020618557" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,29.7134020618557"
-                    Point2="0,33.7134020618557"
-                    Point3="-4,33.7134020618557" />
-                  <mssgle:LineSegment
-                    End="-128.933333333334,33.7134020618557" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-128.933333333334,33.7134020618557"
-                    Point2="-132.933333333334,33.7134020618557"
-                    Point3="-132.933333333334,37.7134020618557" />
-                  <mssgle:LineSegment
-                    End="-132.933333333334,75.5" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="-118.413014322917,38.7134020618557,103.8926953125,9.7490234375"
-              RelativePosition="Any" />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package\Data Flow Task.Paths[Existing Products to update]"
-          TopLeft="508.066666666667,148.6">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="177.533333333333,92.4"
-              Start="0,0"
-              End="177.533333333333,84.9">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,33.5315463917526" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,33.5315463917526"
-                    Point2="0,37.5315463917526"
-                    Point3="4,37.5315463917526" />
-                  <mssgle:LineSegment
-                    End="173.533333333333,37.5315463917526" />
-                  <mssgle:CubicBezierSegment
-                    Point1="173.533333333333,37.5315463917526"
-                    Point2="177.533333333333,37.5315463917526"
-                    Point3="177.533333333333,41.5315463917526" />
-                  <mssgle:LineSegment
-                    End="177.533333333333,84.9" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="27.8853190104165,42.5315463917526,121.7626953125,11.6630859375"
-              RelativePosition="Any" />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-      </GraphLayout>
-    </LayoutInfo>
-  </TaskHost>
-  <PipelineComponentMetadata
-    design-time-name="Package\Data Flow Task\OLE DB Source">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>

@@ -48,25 +48,7 @@ CREATE TABLE Staging.VendorDelivery(
 	,Add_Field_10			NVARCHAR(MAX)
 )
 GO
-
-
- 
-SELECT a2.make_id, a2.Product_Model_id, a1.* FROM  Staging.VendorDeliveryMapped a1
-LEFT JOIN Staging.VendorDeliveryMapped a2 ON a1.model_guid = a2.model_guid
-WHERE a1.Make_id IS NULL AND a2.File_Name IS NULL
-
-SELECT * FROM  Staging.VendorDeliveryMapped
-order by file_name, make_name
-
-SELECT * FROM  Staging.VendorDelivery 
-order by file_name, make_name
-
-SELECT * FROM Logs.EventLogs
-SELECT * FROM Logs.ErrorLogs
-SELECT * FROM Logs.OperationRuns
-
-
- 
+-----mapped
 DROP TABLE IF EXISTS Staging.VendorDeliveryMapped
 CREATE TABLE Staging.VendorDeliveryMapped(
 	 rowID					INT IDENTITY(1,1)
@@ -97,3 +79,73 @@ CREATE TABLE Staging.VendorDeliveryMapped(
 )
 GO
 
+
+SELECT * FROM  Staging.VendorDeliveryMapped 
+WHERE Product_Model_id IS NULL
+ 
+SELECT * FROM  Staging.VendorDelivery 
+order by file_name, make_name
+
+SELECT * FROM Logs.EventLogs
+SELECT * FROM Logs.ErrorLogs
+SELECT * FROM Logs.OperationRuns
+SELECT * FROM [Shop].[Products]
+
+
+TRUNCATE TABLE Staging.VendorDelivery;
+GO
+DBCC CHECKIDENT ('Staging.VendorDelivery', RESEED, 1);
+GO
+TRUNCATE TABLE Staging.VendorDeliveryMapped
+GO
+DBCC CHECKIDENT ('Staging.VendorDeliveryMapped', RESEED, 1);
+GO
+
+ 
+ 
+ ---------test
+select * FROM Staging.VendorDeliveryMapped111
+
+DROP TABLE IF EXISTS Staging.VendorDeliveryMapped111
+CREATE TABLE Staging.VendorDeliveryMapped111(
+	 rowID					INT 
+	,Make_id				INT
+	,Product_Model_id		INT
+	,File_Name				NVARCHAR(MAX)
+	,Load_Date				NVARCHAR(MAX)
+	,Make_Name				NVARCHAR(MAX)
+	,Make_Desc				NVARCHAR(MAX)
+	,Make_Guid				uniqueidentifier			
+	,Product_Model_Name		NVARCHAR(MAX)			
+	,Model_Desc				NVARCHAR(MAX)
+	,Model_Guid				uniqueidentifier
+	,Model_Specifications_1	NVARCHAR(MAX)
+	,Model_Specifications_2	NVARCHAR(MAX)
+	,Quantity				INT
+	,Unit_Price				INT
+ 
+)
+GO
+
+
+
+
+EXEC  Shop.sp_CreateProduct   
+	 @CategoryID = ?	-- INT, NULL
+	,@CategoryName =  ?	 -- NVARCHAR(255), NULL
+	,@CategoryDescription =  ?	 -- NVARCHAR(MAX), NULL
+	,@ProductName = ?   -- NVARCHAR(255)
+	,@UnitPrice =  ?  -- MONEY
+	,@Quantity =   ?  -- INT
+	--,@IsActive = 1   -- INT, 1
+	,@Description = ?
+
+
+EXEC Shop.sp_UpdateProduct   
+	 @ProductID = 102		-- INT
+	,@UnitPrice =  49000 -- MONEY, NULL
+	,@Quantity =   15 -- INT, NULL
+
+
+
+				 
