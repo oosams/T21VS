@@ -12,8 +12,8 @@
   DTS:ObjectName="Package"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="89"
-  DTS:VersionGUID="{86A221CE-1AEA-4338-A6ED-C8EA850C2C52}">
+  DTS:VersionBuild="96"
+  DTS:VersionGUID="{F8F2296F-8B41-4E97-B611-2C319407F541}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -154,7 +154,7 @@
           DTS:RowDelimiter=""
           DTS:TextQualifier="_x003C_none_x003E_"
           DTS:CodePage="1252"
-          DTS:ConnectionString="d:\work\21\vendorDeliveryArchive\20201224_165612753_">
+          DTS:ConnectionString="d:\work\21\vendorDeliveryArchive\20201224_17385067_">
           <DTS:FlatFileColumns>
             <DTS:FlatFileColumn
               DTS:ColumnType="Delimited"
@@ -481,7 +481,7 @@
       DTS:LocaleID="-1"
       DTS:ObjectName="CompleteOperation"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="0">
+      DTS:ThreadHint="1">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -500,8 +500,7 @@
       DTS:refId="Package\Data Flow Task"
       DTS:CreationName="Microsoft.Pipeline"
       DTS:Description="Data Flow Task"
-      DTS:Disabled="True"
-      DTS:DTSID="{E66A74A4-F0A1-450F-A49C-657D410643F2}"
+      DTS:DTSID="{A75B20AB-9042-4FAA-A4D3-E80D21CB436F}"
       DTS:ExecutableType="Microsoft.Pipeline"
       DTS:LocaleID="-1"
       DTS:ObjectName="Data Flow Task"
@@ -523,15 +522,50 @@
                   refId="Package\Data Flow Task\Conditional Split.Inputs[Conditional Split Input]"
                   description="Input to the Conditional Split Transformation"
                   name="Conditional Split Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Data Flow Task\Conditional Split.Inputs[Conditional Split Input].Columns[Product_Model_id]"
+                      cachedDataType="i4"
+                      cachedName="Product_Model_id"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_id]" />
+                  </inputColumns>
                   <externalMetadataColumns />
                 </input>
               </inputs>
               <outputs>
                 <output
-                  refId="Package\Data Flow Task\Conditional Split.Outputs[Conditional Split Default Output]"
+                  refId="Package\Data Flow Task\Conditional Split.Outputs[New Products to create]"
+                  description="Output 1 of the Conditional Split Transformation"
+                  errorOrTruncationOperation="Computation"
+                  errorRowDisposition="FailComponent"
+                  exclusionGroup="1"
+                  name="New Products to create"
+                  synchronousInputId="Package\Data Flow Task\Conditional Split.Inputs[Conditional Split Input]"
+                  truncationRowDisposition="FailComponent">
+                  <properties>
+                    <property
+                      containsID="true"
+                      dataType="System.String"
+                      description="Specifies the expression. This expression version uses lineage identifiers instead of column names."
+                      name="Expression">[ISNULL](#{Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_id]})</property>
+                    <property
+                      containsID="true"
+                      dataType="System.String"
+                      description="Specifies the friendly version of the expression. This expression version uses column names."
+                      expressionType="Notify"
+                      name="FriendlyExpression">ISNULL(Product_Model_id)</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the position of the condition in the list of conditions that the transformation evaluates. The evaluation order is from the lowest to the highest value."
+                      name="EvaluationOrder">0</property>
+                  </properties>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Data Flow Task\Conditional Split.Outputs[Existing Products to update]"
                   description="Default Output of the Conditional Split Transformation"
                   exclusionGroup="1"
-                  name="Conditional Split Default Output"
+                  name="Existing Products to update"
                   synchronousInputId="Package\Data Flow Task\Conditional Split.Inputs[Conditional Split Input]">
                   <properties>
                     <property
@@ -565,7 +599,568 @@
                 </output>
               </outputs>
             </component>
+            <component
+              refId="Package\Data Flow Task\OLE DB Command"
+              componentClassID="Microsoft.OLEDBCommand"
+              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
+              description="Runs an SQL statement for each row in a data flow. For example, call a 'new employee setup' stored procedure for each row in the 'new employees' table. Note: running an SQL statement for each row of a large data flow may take a long time."
+              name="OLE DB Command"
+              usesDispositions="true"
+              version="2">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Data Flow Task\OLE DB Command.Connections[OleDbConnection]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input]"
+                  errorOrTruncationOperation="Command Execution"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Command Input">
+                  <externalMetadataColumns
+                    isUsed="True" />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\OLE DB Command.Outputs[OLE DB Command Output]"
+                  exclusionGroup="1"
+                  name="OLE DB Command Output"
+                  synchronousInputId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Data Flow Task\OLE DB Command.Outputs[OLE DB Command Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Command Error Output"
+                  synchronousInputId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Data Flow Task\OLE DB Command 1"
+              componentClassID="Microsoft.OLEDBCommand"
+              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
+              description="Runs an SQL statement for each row in a data flow. For example, call a 'new employee setup' stored procedure for each row in the 'new employees' table. Note: running an SQL statement for each row of a large data flow may take a long time."
+              name="OLE DB Command 1"
+              usesDispositions="true"
+              version="2">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Data Flow Task\OLE DB Command 1.Connections[OleDbConnection]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input]"
+                  errorOrTruncationOperation="Command Execution"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Command Input">
+                  <externalMetadataColumns
+                    isUsed="True" />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\OLE DB Command 1.Outputs[OLE DB Command Output]"
+                  exclusionGroup="1"
+                  name="OLE DB Command Output"
+                  synchronousInputId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Data Flow Task\OLE DB Command 1.Outputs[OLE DB Command Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Command Error Output"
+                  synchronousInputId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\OLE DB Command 1.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\OLE DB Command 1.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Data Flow Task\OLE DB Source"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="OLE DB Source"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[Staging].[VendorDeliveryMapped]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT * FROM  Staging.VendorDeliveryMapped</property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">2</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Data Flow Task\OLE DB Source.Connections[OleDbConnection]"
+                  connectionManagerID="{453392D5-91D9-49E1-9CCC-A619C7E2ADA9}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[LV4788.T21]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[rowID]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[rowID]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[rowID]"
+                      name="rowID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_id]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_id]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_id]"
+                      name="Make_id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_id]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Product_Model_id]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_id]"
+                      name="Product_Model_id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[File_Name]"
+                      dataType="nText"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[File_Name]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[File_Name]"
+                      name="File_Name"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Load_Date]"
+                      dataType="nText"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Load_Date]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Load_Date]"
+                      name="Load_Date"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Name]"
+                      dataType="nText"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_Name]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Name]"
+                      name="Make_Name"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Desc]"
+                      dataType="nText"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_Desc]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Desc]"
+                      name="Make_Desc"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Guid]"
+                      dataType="guid"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_Guid]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Guid]"
+                      name="Make_Guid"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_Name]"
+                      dataType="nText"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Product_Model_Name]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_Name]"
+                      name="Product_Model_Name"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Desc]"
+                      dataType="nText"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Desc]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Desc]"
+                      name="Model_Desc"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Guid]"
+                      dataType="guid"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Guid]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Guid]"
+                      name="Model_Guid"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Specifications_1]"
+                      dataType="nText"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Specifications_1]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Specifications_1]"
+                      name="Model_Specifications_1"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Specifications_2]"
+                      dataType="nText"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Specifications_2]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Specifications_2]"
+                      name="Model_Specifications_2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Quantity]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Quantity]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Quantity]"
+                      name="Quantity"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Unit_Price]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Unit_Price]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Unit_Price]"
+                      name="Unit_Price"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[rowID]"
+                      dataType="i4"
+                      name="rowID" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_id]"
+                      dataType="i4"
+                      name="Make_id" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Product_Model_id]"
+                      dataType="i4"
+                      name="Product_Model_id" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[File_Name]"
+                      dataType="nText"
+                      name="File_Name" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Load_Date]"
+                      dataType="nText"
+                      name="Load_Date" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_Name]"
+                      dataType="nText"
+                      name="Make_Name" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_Desc]"
+                      dataType="nText"
+                      name="Make_Desc" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_Guid]"
+                      dataType="guid"
+                      name="Make_Guid" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Product_Model_Name]"
+                      dataType="nText"
+                      name="Product_Model_Name" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Desc]"
+                      dataType="nText"
+                      name="Model_Desc" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Guid]"
+                      dataType="guid"
+                      name="Model_Guid" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Specifications_1]"
+                      dataType="nText"
+                      name="Model_Specifications_1" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Specifications_2]"
+                      dataType="nText"
+                      name="Model_Specifications_2" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Quantity]"
+                      dataType="i4"
+                      name="Quantity" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Unit_Price]"
+                      dataType="i4"
+                      name="Unit_Price" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_1]"
+                      dataType="nText"
+                      name="Add_Field_1" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_2]"
+                      dataType="nText"
+                      name="Add_Field_2" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_3]"
+                      dataType="nText"
+                      name="Add_Field_3" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_4]"
+                      dataType="nText"
+                      name="Add_Field_4" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_5]"
+                      dataType="nText"
+                      name="Add_Field_5" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_6]"
+                      dataType="nText"
+                      name="Add_Field_6" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_7]"
+                      dataType="nText"
+                      name="Add_Field_7" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_8]"
+                      dataType="nText"
+                      name="Add_Field_8" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_9]"
+                      dataType="nText"
+                      name="Add_Field_9" />
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_10]"
+                      dataType="nText"
+                      name="Add_Field_10" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[rowID]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[rowID]"
+                      name="rowID" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_id]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_id]"
+                      name="Make_id" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Product_Model_id]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Product_Model_id]"
+                      name="Product_Model_id" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[File_Name]"
+                      dataType="nText"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[File_Name]"
+                      name="File_Name" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Load_Date]"
+                      dataType="nText"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Load_Date]"
+                      name="Load_Date" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_Name]"
+                      dataType="nText"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_Name]"
+                      name="Make_Name" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_Desc]"
+                      dataType="nText"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_Desc]"
+                      name="Make_Desc" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_Guid]"
+                      dataType="guid"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_Guid]"
+                      name="Make_Guid" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Product_Model_Name]"
+                      dataType="nText"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Product_Model_Name]"
+                      name="Product_Model_Name" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Desc]"
+                      dataType="nText"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Desc]"
+                      name="Model_Desc" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Guid]"
+                      dataType="guid"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Guid]"
+                      name="Model_Guid" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Specifications_1]"
+                      dataType="nText"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Specifications_1]"
+                      name="Model_Specifications_1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Specifications_2]"
+                      dataType="nText"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Specifications_2]"
+                      name="Model_Specifications_2" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Quantity]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Quantity]"
+                      name="Quantity" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Unit_Price]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Unit_Price]"
+                      name="Unit_Price" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
           </components>
+          <paths>
+            <path
+              refId="Package\Data Flow Task.Paths[Existing Products to update]"
+              endId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input]"
+              name="Existing Products to update"
+              startId="Package\Data Flow Task\Conditional Split.Outputs[Existing Products to update]" />
+            <path
+              refId="Package\Data Flow Task.Paths[New Products to create]"
+              endId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input]"
+              name="New Products to create"
+              startId="Package\Data Flow Task\Conditional Split.Outputs[New Products to create]" />
+            <path
+              refId="Package\Data Flow Task.Paths[OLE DB Source Output]"
+              endId="Package\Data Flow Task\Conditional Split.Inputs[Conditional Split Input]"
+              name="OLE DB Source Output"
+              startId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output]" />
+          </paths>
         </pipeline>
       </DTS:ObjectData>
     </DTS:Executable>
@@ -1997,6 +2592,7 @@
       DTS:refId="Package\Foreach Loop Container 1"
       DTS:CreationName="STOCK:FOREACHLOOP"
       DTS:Description="Foreach Loop Container"
+      DTS:Disabled="True"
       DTS:DTSID="{C18ABD26-39D1-4C4A-AF09-FB61B9BEC5C8}"
       DTS:ExecutableType="STOCK:FOREACHLOOP"
       DTS:LocaleID="-1"
@@ -2014,9 +2610,118 @@
       <DTS:Variables />
       <DTS:Executables>
         <DTS:Executable
+          DTS:refId="Package\Foreach Loop Container 1\Execute SQL Task"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{88A189BB-E582-4937-8AB2-01C5F9D500D5}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Execute SQL Task"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="2">
+          <DTS:Variables />
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{453392D5-91D9-49E1-9CCC-A619C7E2ADA9}"
+              SQLTask:SqlStatementSource="INSERT INTO Staging.VendorDeliveryMapped111&#xA;VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask">
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="0"
+                SQLTask:DtsVariableName="User::DataSet_rowID"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="3"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="1"
+                SQLTask:DtsVariableName="User::DataSet_Make_id"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="3"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="2"
+                SQLTask:DtsVariableName="User::DataSet_Product_Model_id"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="3"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="3"
+                SQLTask:DtsVariableName="User::DataSet_File_Name"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="129"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="4"
+                SQLTask:DtsVariableName="User::DataSet_Load_Date"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="129"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="5"
+                SQLTask:DtsVariableName="User::DataSet_Make_Name"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="129"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="6"
+                SQLTask:DtsVariableName="User::DataSet_Make_Desc"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="129"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="7"
+                SQLTask:DtsVariableName="User::DataSet_Make_Guid"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="129"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="8"
+                SQLTask:DtsVariableName="User::DataSet_Product_Model_Name"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="129"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="9"
+                SQLTask:DtsVariableName="User::DataSet_Model_Desc"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="129"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="10"
+                SQLTask:DtsVariableName="User::DataSet_Model_Guid"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="129"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="11"
+                SQLTask:DtsVariableName="User::DataSet_Model_Specifications_1"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="129"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="12"
+                SQLTask:DtsVariableName="User::DataSet_Model_Specifications_2"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="129"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="13"
+                SQLTask:DtsVariableName="User::DataSet_Quantity"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="3"
+                SQLTask:ParameterSize="-1" />
+              <SQLTask:ParameterBinding
+                SQLTask:ParameterName="14"
+                SQLTask:DtsVariableName="User::DataSet_Unit_Price"
+                SQLTask:ParameterDirection="Input"
+                SQLTask:DataType="3"
+                SQLTask:ParameterSize="-1" />
+            </SQLTask:SqlTaskData>
+          </DTS:ObjectData>
+        </DTS:Executable>
+        <DTS:Executable
           DTS:refId="Package\Foreach Loop Container 1\sp_CreateProduct"
           DTS:CreationName="Microsoft.ExecuteSQLTask"
           DTS:Description="Create new product and Category if needed"
+          DTS:Disabled="True"
           DTS:DTSID="{7EF0CC2F-1FB7-4FF5-B1EC-F5798090340A}"
           DTS:ExecutableType="Microsoft.ExecuteSQLTask"
           DTS:LocaleID="-1"
@@ -2077,92 +2782,92 @@
       <DTS:ForEachVariableMappings>
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{D72268F3-729C-42DD-84B9-6C26A24DEC4A}"
-          DTS:ObjectName="{D72268F3-729C-42DD-84B9-6C26A24DEC4A}"
+          DTS:DTSID="{9AAB38FD-BA40-47E3-871E-BE9C3C0EF5AE}"
+          DTS:ObjectName="{9AAB38FD-BA40-47E3-871E-BE9C3C0EF5AE}"
           DTS:ValueIndex="0"
           DTS:VariableName="User::DataSet_rowID" />
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{4FD135D2-64B1-4498-8444-20F0604E6E6A}"
-          DTS:ObjectName="{4FD135D2-64B1-4498-8444-20F0604E6E6A}"
+          DTS:DTSID="{5BF5506C-0DB3-4B5E-BE75-9A251B5BF2C2}"
+          DTS:ObjectName="{5BF5506C-0DB3-4B5E-BE75-9A251B5BF2C2}"
           DTS:ValueIndex="1"
           DTS:VariableName="User::DataSet_Make_id" />
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{9AAF0599-F119-4967-9F42-51B02D74199C}"
-          DTS:ObjectName="{9AAF0599-F119-4967-9F42-51B02D74199C}"
+          DTS:DTSID="{EDA0C067-2098-4915-A284-F72A5987A4B0}"
+          DTS:ObjectName="{EDA0C067-2098-4915-A284-F72A5987A4B0}"
           DTS:ValueIndex="2"
           DTS:VariableName="User::DataSet_Product_Model_id" />
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{B1A99005-9B3E-4C1E-AFD6-DB7FA1DC8F30}"
-          DTS:ObjectName="{B1A99005-9B3E-4C1E-AFD6-DB7FA1DC8F30}"
+          DTS:DTSID="{71C0F507-3A6B-481D-98EC-4FC881191798}"
+          DTS:ObjectName="{71C0F507-3A6B-481D-98EC-4FC881191798}"
           DTS:ValueIndex="3"
           DTS:VariableName="User::DataSet_File_Name" />
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{B70F12B6-95ED-4FBB-BAEB-D2ED2FEB1847}"
-          DTS:ObjectName="{B70F12B6-95ED-4FBB-BAEB-D2ED2FEB1847}"
+          DTS:DTSID="{929A0023-1543-42D8-BDFC-9651CA222A8B}"
+          DTS:ObjectName="{929A0023-1543-42D8-BDFC-9651CA222A8B}"
           DTS:ValueIndex="4"
           DTS:VariableName="User::DataSet_Load_Date" />
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{486FC22B-981D-4414-95B2-0799AC775ED5}"
-          DTS:ObjectName="{486FC22B-981D-4414-95B2-0799AC775ED5}"
+          DTS:DTSID="{F90E9678-46F2-4C75-B890-FC8F5B916D58}"
+          DTS:ObjectName="{F90E9678-46F2-4C75-B890-FC8F5B916D58}"
           DTS:ValueIndex="5"
           DTS:VariableName="User::DataSet_Make_Name" />
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{1AEC370E-C413-4926-9C86-D695E3758939}"
-          DTS:ObjectName="{1AEC370E-C413-4926-9C86-D695E3758939}"
+          DTS:DTSID="{596711E6-F6E2-498B-8C6F-F5A927665888}"
+          DTS:ObjectName="{596711E6-F6E2-498B-8C6F-F5A927665888}"
           DTS:ValueIndex="6"
           DTS:VariableName="User::DataSet_Make_Desc" />
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{3FCD62F4-C648-4FF0-A8A1-1163D822CC29}"
-          DTS:ObjectName="{3FCD62F4-C648-4FF0-A8A1-1163D822CC29}"
+          DTS:DTSID="{74725CA3-9DD9-4BC0-A59E-0FE95AC83B72}"
+          DTS:ObjectName="{74725CA3-9DD9-4BC0-A59E-0FE95AC83B72}"
           DTS:ValueIndex="7"
           DTS:VariableName="User::DataSet_Make_Guid" />
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{F2FE444A-6D30-40BD-A8DC-77977053A59A}"
-          DTS:ObjectName="{F2FE444A-6D30-40BD-A8DC-77977053A59A}"
+          DTS:DTSID="{898D11D2-B907-4BBB-99CE-3AD0893D38DF}"
+          DTS:ObjectName="{898D11D2-B907-4BBB-99CE-3AD0893D38DF}"
           DTS:ValueIndex="8"
           DTS:VariableName="User::DataSet_Product_Model_Name" />
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{4ADCF543-E0E3-49F2-9BA6-EFB61D693ABF}"
-          DTS:ObjectName="{4ADCF543-E0E3-49F2-9BA6-EFB61D693ABF}"
+          DTS:DTSID="{977FCB66-FD56-42A1-90DA-2D4F6DB9894A}"
+          DTS:ObjectName="{977FCB66-FD56-42A1-90DA-2D4F6DB9894A}"
           DTS:ValueIndex="9"
           DTS:VariableName="User::DataSet_Model_Desc" />
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{7BFF3790-39EB-4E40-8CCA-BD83231ACF90}"
-          DTS:ObjectName="{7BFF3790-39EB-4E40-8CCA-BD83231ACF90}"
+          DTS:DTSID="{7CB88E07-3E97-49B1-BB28-56A6DC0FDDE5}"
+          DTS:ObjectName="{7CB88E07-3E97-49B1-BB28-56A6DC0FDDE5}"
           DTS:ValueIndex="10"
           DTS:VariableName="User::DataSet_Model_Guid" />
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{7983E5A5-D659-4154-AD29-47DABD96ED4B}"
-          DTS:ObjectName="{7983E5A5-D659-4154-AD29-47DABD96ED4B}"
+          DTS:DTSID="{ECDC0468-5EC1-42C5-A6F1-858A880E3FCF}"
+          DTS:ObjectName="{ECDC0468-5EC1-42C5-A6F1-858A880E3FCF}"
           DTS:ValueIndex="11"
           DTS:VariableName="User::DataSet_Model_Specifications_1" />
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{3CA1222B-F0BC-427D-9BC5-E7DBA292CE2B}"
-          DTS:ObjectName="{3CA1222B-F0BC-427D-9BC5-E7DBA292CE2B}"
+          DTS:DTSID="{0F9A61CF-D3B9-416B-AD6A-207A2456E93F}"
+          DTS:ObjectName="{0F9A61CF-D3B9-416B-AD6A-207A2456E93F}"
           DTS:ValueIndex="12"
           DTS:VariableName="User::DataSet_Model_Specifications_2" />
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{E0465CF8-5F88-48B4-BB37-2CC166DA0B9E}"
-          DTS:ObjectName="{E0465CF8-5F88-48B4-BB37-2CC166DA0B9E}"
+          DTS:DTSID="{B9C2F3A1-A515-4F6E-82FB-F471DCCDDC4E}"
+          DTS:ObjectName="{B9C2F3A1-A515-4F6E-82FB-F471DCCDDC4E}"
           DTS:ValueIndex="13"
           DTS:VariableName="User::DataSet_Quantity" />
         <DTS:ForEachVariableMapping
           DTS:CreationName=""
-          DTS:DTSID="{E0E5976B-C6C1-436C-BDF9-917BEB36F35C}"
-          DTS:ObjectName="{E0E5976B-C6C1-436C-BDF9-917BEB36F35C}"
+          DTS:DTSID="{E07305AC-8D2E-46A9-BBCA-8CDDAFDE3325}"
+          DTS:ObjectName="{E07305AC-8D2E-46A9-BBCA-8CDDAFDE3325}"
           DTS:ValueIndex="14"
           DTS:VariableName="User::DataSet_Unit_Price" />
       </DTS:ForEachVariableMappings>
@@ -7306,6 +8011,7 @@
       DTS:refId="Package\New Products"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Execute SQL Task"
+      DTS:Disabled="True"
       DTS:DTSID="{EDB4FC16-841E-4756-A5A2-EE10C9306DDC}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
@@ -7334,7 +8040,7 @@
       DTS:LocaleID="-1"
       DTS:ObjectName="StartOperation"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="0">
+      DTS:ThreadHint="1">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -7359,7 +8065,7 @@
       DTS:LocaleID="-1"
       DTS:ObjectName="Truncate staging tables"
       DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
-      DTS:ThreadHint="0">
+      DTS:ThreadHint="1">
       <DTS:Variables />
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
@@ -7412,11 +8118,11 @@
     <DTS:PrecedenceConstraint
       DTS:refId="Package.PrecedenceConstraints[Constraint 5]"
       DTS:CreationName=""
-      DTS:DTSID="{CBDA137D-5323-49A9-9CC1-FB55C4D0DBC2}"
+      DTS:DTSID="{B1C2C642-ACDC-42B2-BED7-CC048D307030}"
       DTS:From="Package\Mapping"
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint 5"
-      DTS:To="Package\New Products" />
+      DTS:To="Package\Data Flow Task" />
     <DTS:PrecedenceConstraint
       DTS:refId="Package.PrecedenceConstraints[Constraint 6]"
       DTS:CreationName=""
@@ -7449,11 +8155,11 @@
         <NodeLayout
           Size="168.8,41.6"
           Id="Package\CompleteOperation"
-          TopLeft="91.458329699106,295.9666690188" />
+          TopLeft="298.958321453797,295.9666690188" />
         <NodeLayout
           Size="186.4,41.6"
           Id="Package\Truncate staging tables"
-          TopLeft="344.999986290932,35.5333336157269" />
+          TopLeft="552.499978045623,35.5333336157269" />
         <NodeLayout
           Size="216.8,41.6"
           Id="Package\Foreach Loop Container\Load Vendor files into Staging"
@@ -7464,18 +8170,18 @@
           PanelSize="264.8,124.8"
           Size="264.8,168"
           Id="Package\Foreach Loop Container"
-          TopLeft="337.916653239065,130.516667525901" />
+          TopLeft="545.416644993756,130.516667525901" />
         <NodeLayout
           Size="118.4,41.6"
           Id="Package\Mapping"
-          TopLeft="408.333317107625,325.000002582867" />
+          TopLeft="615.833308862317,325.000002582867" />
         <NodeLayout
           Size="146.4,41.6"
           Id="Package\StartOperation"
-          TopLeft="103.958329202401,48.7500003874299" />
+          TopLeft="311.458320957092,48.7500003874299" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint]"
-          TopLeft="468.924985173345,298.516667525901">
+          TopLeft="676.424976928036,298.516667525901">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
@@ -7497,7 +8203,7 @@
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 1]"
-          TopLeft="337.916653239065,214.516667525901">
+          TopLeft="545.416644993756,214.516667525901">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
@@ -7531,7 +8237,7 @@
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 2]"
-          TopLeft="250.358329202401,69.5500003874299">
+          TopLeft="457.858320957092,69.5500003874299">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
@@ -7565,7 +8271,7 @@
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 3]"
-          TopLeft="438.199986290932,77.1333336157269">
+          TopLeft="645.699978045623,77.1333336157269">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
@@ -7600,44 +8306,73 @@
         <NodeLayout
           Size="143.2,41.6"
           Id="Package\New Products"
-          TopLeft="287.222210809037,400.711113967189" />
+          TopLeft="161.388882475871,378.177780454777" />
         <NodeLayout
           Size="164.8,41.6"
           Id="Package\Foreach Loop Container 1\sp_CreateProduct"
+          TopLeft="36.4333185977414,16.3333352687624" />
+        <NodeLayout
+          Size="164.8,41.6"
+          Id="Package\Foreach Loop Container 1\Execute SQL Task"
+          TopLeft="37.9999900658929,87.3333359093135" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="252,181.6"
+          Size="252,224.8"
+          Id="Package\Foreach Loop Container 1"
+          TopLeft="103.888884760716,448.377781012677" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 4]"
+          TopLeft="231.438883618293,419.777780454777">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,28.6000005578996"
+              Start="0,0"
+              End="0,21.1000005578996">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,21.1000005578996" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="158.4,41.6"
+          Id="Package\Existing Products"
+          TopLeft="144.999994238218,697.577779235663" />
+        <NodeLayout
+          Size="164.8,41.6"
+          Id="Package\Foreach Loop Container 1 1\sp_UpdateProduct"
           TopLeft="43.0999849994984,26.7333353514141" />
         <ContainerLayout
           HeaderHeight="43"
           IsExpanded="True"
           PanelSize="234.4,120"
           Size="234.4,163.2"
-          Id="Package\Foreach Loop Container 1"
-          TopLeft="212.222213789269,486.511114649066" />
+          Id="Package\Foreach Loop Container 1 1"
+          TopLeft="100.833329326577,766.911113120009" />
         <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 4]"
-          TopLeft="358.822210809037,442.311113967189">
+          Id="Package.PrecedenceConstraints[Constraint 7]"
+          TopLeft="221.116661782398,739.177779235663">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="-67.1333303531013,44.2000006818772"
+              EndConnector="0,27.7333338843455"
               Start="0,0"
-              End="-67.1333303531013,36.7000006818772">
+              End="0,20.2333338843455">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,22.3402037961831" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,22.3402037961831"
-                    Point2="0,26.3402037961831"
-                    Point3="-4,26.3402037961831" />
-                  <mssgle:LineSegment
-                    End="-63.1333303531013,26.3402037961831" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-63.1333303531013,26.3402037961831"
-                    Point2="-67.1333303531013,26.3402037961831"
-                    Point3="-67.1333303531013,30.3402037961831" />
-                  <mssgle:LineSegment
-                    End="-67.1333303531013,36.7000006818772" />
+                    End="0,20.2333338843455" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -7647,31 +8382,19 @@
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 5]"
-          TopLeft="449.133317107625,366.600002582867">
+          Id="Package.PrecedenceConstraints[Constraint 6]"
+          TopLeft="227.044439499467,673.177781012677">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="-90.3111062985882,34.1111113843216"
+              EndConnector="0,24.3999982229865"
               Start="0,0"
-              End="-90.3111062985882,26.6111113843216">
+              End="0,16.8999982229865">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,9.91733344480321" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,9.91733344480321"
-                    Point2="0,13.9173334448032"
-                    Point3="-4,13.9173334448032" />
-                  <mssgle:LineSegment
-                    End="-86.3111062985882,13.9173334448032" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-86.3111062985882,13.9173334448032"
-                    Point2="-90.3111062985882,13.9173334448032"
-                    Point3="-90.3111062985882,17.9173334448032" />
-                  <mssgle:LineSegment
-                    End="-90.3111062985882,26.6111113843216" />
+                    End="0,16.8999982229865" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -7683,82 +8406,21 @@
         <NodeLayout
           Size="150.4,41.6"
           Id="Package\Data Flow Task"
-          TopLeft="29.9999988079072,401.266667872005" />
-        <NodeLayout
-          Size="158.4,41.6"
-          Id="Package\Existing Products"
-          TopLeft="573.333310551115,407.24444557861" />
-        <NodeLayout
-          Size="164.8,41.6"
-          Id="Package\Foreach Loop Container 1 1\sp_UpdateProduct"
-          TopLeft="43.0999849994984,26.7333353514141" />
-        <ContainerLayout
-          HeaderHeight="43"
-          IsExpanded="True"
-          PanelSize="234.4,120"
-          Size="234.4,163.2"
-          Id="Package\Foreach Loop Container 1 1"
-          TopLeft="547.499978244306,486.111112872053" />
+          TopLeft="594.351828234432,419.970371781573" />
         <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 7]"
-          TopLeft="652.533310551115,448.84444557861">
+          Id="Package.PrecedenceConstraints[Constraint 5]"
+          TopLeft="672.292568548374,366.600002582867">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="12.166667693191,37.2666672934429"
+              EndConnector="0,53.3703691987056"
               Start="0,0"
-              End="12.166667693191,29.7666672934429">
+              End="0,45.8703691987056">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,14.6333336467215" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,14.6333336467215"
-                    Point2="0,18.6333336467215"
-                    Point3="4,18.6333336467215" />
-                  <mssgle:LineSegment
-                    End="8.16666769319102,18.6333336467215" />
-                  <mssgle:CubicBezierSegment
-                    Point1="8.16666769319102,18.6333336467215"
-                    Point2="12.166667693191,18.6333336467215"
-                    Point3="12.166667693191,22.6333336467215" />
-                  <mssgle:LineSegment
-                    End="12.166667693191,29.7666672934429" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 6]"
-          TopLeft="367.155547122603,486.511114649066">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="260.311096761845,-37.6666690704561"
-              Start="0,0"
-              End="260.311096761845,-30.1666690704561">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,-14.7578314343255" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,-14.7578314343255"
-                    Point2="0,-18.7578314343255"
-                    Point3="4,-18.7578314343255" />
-                  <mssgle:LineSegment
-                    End="256.311096761845,-18.7578314343255" />
-                  <mssgle:CubicBezierSegment
-                    Point1="256.311096761845,-18.7578314343255"
-                    Point2="260.311096761845,-18.7578314343255"
-                    Point3="260.311096761845,-22.7578314343255" />
-                  <mssgle:LineSegment
-                    End="260.311096761845,-30.1666690704561" />
+                    End="0,45.8703691987056" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -7989,7 +8651,7 @@
         <NodeLayout
           Size="228,41.6"
           Id="Package\Mapping\Staging_VendorDeliveryMapped"
-          TopLeft="460.648129843637,489.76296685525" />
+          TopLeft="297.314803000587,480.229633446153" />
         <NodeLayout
           Size="152.8,41.6"
           Id="Package\Mapping\Derived Column"
@@ -8200,26 +8862,26 @@
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="20.974075402301,38.518519155243"
+              EndConnector="-142.359251440749,28.9851857461455"
               Start="0,0"
-              End="20.974075402301,31.018519155243">
+              End="-142.359251440749,21.4851857461455">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,15.2592595776215" />
+                    End="0,10.4925928730728" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,15.2592595776215"
-                    Point2="0,19.2592595776215"
-                    Point3="4,19.2592595776215" />
+                    Point1="0,10.4925928730728"
+                    Point2="0,14.4925928730728"
+                    Point3="-4,14.4925928730728" />
                   <mssgle:LineSegment
-                    End="16.974075402301,19.2592595776215" />
+                    End="-138.359251440749,14.4925928730728" />
                   <mssgle:CubicBezierSegment
-                    Point1="16.974075402301,19.2592595776215"
-                    Point2="20.974075402301,19.2592595776215"
-                    Point3="20.974075402301,23.2592595776215" />
+                    Point1="-138.359251440749,14.4925928730728"
+                    Point2="-142.359251440749,14.4925928730728"
+                    Point3="-142.359251440749,18.4925928730728" />
                   <mssgle:LineSegment
-                    End="20.974075402301,31.018519155243" />
+                    End="-142.359251440749,21.4851857461455" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -8395,13 +9057,132 @@
     design-time-name="Package\Data Flow Task">
     <LayoutInfo>
       <GraphLayout
-        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph">
+        Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        <NodeLayout
+          Size="167.2,41.6"
+          Id="Package\Data Flow Task\OLE DB Command"
+          TopLeft="602,241" />
+        <NodeLayout
+          Size="152,41.6"
+          Id="Package\Data Flow Task\OLE DB Source"
+          TopLeft="405,24" />
+        <NodeLayout
+          Size="167.2,41.6"
+          Id="Package\Data Flow Task\OLE DB Command 1"
+          TopLeft="243,231.6" />
         <NodeLayout
           Size="153.6,41.6"
           Id="Package\Data Flow Task\Conditional Split"
-          TopLeft="367,124" />
+          TopLeft="407,107" />
+        <EdgeLayout
+          Id="Package\Data Flow Task.Paths[OLE DB Source Output]"
+          TopLeft="482.4,65.6">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,41.4"
+              Start="0,0"
+              End="0,33.9">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,33.9" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Data Flow Task.Paths[New Products to create]"
+          TopLeft="459.533333333334,148.6">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-132.933333333334,83"
+              Start="0,0"
+              End="-132.933333333334,75.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,29.7134020618557" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,29.7134020618557"
+                    Point2="0,33.7134020618557"
+                    Point3="-4,33.7134020618557" />
+                  <mssgle:LineSegment
+                    End="-128.933333333334,33.7134020618557" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-128.933333333334,33.7134020618557"
+                    Point2="-132.933333333334,33.7134020618557"
+                    Point3="-132.933333333334,37.7134020618557" />
+                  <mssgle:LineSegment
+                    End="-132.933333333334,75.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-118.413014322917,38.7134020618557,103.8926953125,9.7490234375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Data Flow Task.Paths[Existing Products to update]"
+          TopLeft="508.066666666667,148.6">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="177.533333333333,92.4"
+              Start="0,0"
+              End="177.533333333333,84.9">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,33.5315463917526" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,33.5315463917526"
+                    Point2="0,37.5315463917526"
+                    Point3="4,37.5315463917526" />
+                  <mssgle:LineSegment
+                    End="173.533333333333,37.5315463917526" />
+                  <mssgle:CubicBezierSegment
+                    Point1="173.533333333333,37.5315463917526"
+                    Point2="177.533333333333,37.5315463917526"
+                    Point3="177.533333333333,41.5315463917526" />
+                  <mssgle:LineSegment
+                    End="177.533333333333,84.9" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="27.8853190104165,42.5315463917526,121.7626953125,11.6630859375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
       </GraphLayout>
     </LayoutInfo>
   </TaskHost>
+  <PipelineComponentMetadata
+    design-time-name="Package\Data Flow Task\OLE DB Source">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
 </Objects>]]></DTS:DesignTimeProperties>
 </DTS:Executable>
