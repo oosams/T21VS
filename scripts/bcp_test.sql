@@ -46,6 +46,7 @@ GO
 --SELECT * FROM  Staging.VendorDeliveryNewMapping 
 
 --VendorToShopProductMapping.csv
+GO
 sp_configure 'show advanced options', '1';
 RECONFIGURE;
 GO
@@ -57,15 +58,11 @@ GO
 DECLARE @Table  NVARCHAR(255) = '"[T21].[Staging].[VendorDeliveryNewMapping]"' 
 DECLARE @File NVARCHAR(255) = ' d:\work\21\mapping\VendorToShopProductMapping.csv '
  
--- in
-	DECLARE @bcp_cmd NVARCHAR(2000) = 'BCP ' + @Table + ' in ' + @File   + ' -c -t "," -r "\n" -T -S LV4788 -U SOFTSERVE\osams'
-	EXEC master..xp_cmdSHELL @bcp_cmd
-
 -- out
 	DECLARE @bcp_cmd NVARCHAR(2000) = 'BCP ' + @Table  + ' out ' + @File + ' -c -t "," -r "\n" -T -S LV4788 -U SOFTSERVE\osams'
 	EXEC master..xp_cmdSHELL @bcp_cmd
 	   
-	   
+GO	   
 sp_configure 'xp_cmdshell', '0';
 RECONFIGURE;
 GO		
