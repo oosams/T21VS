@@ -5,11 +5,11 @@ USE T21;
 GO
 
 -- Create new Product, return new ProductID
--- Create new Category if CategoryID is NULL. In that case @CategoryName and @CategoryDescription should be provided.
+-- If CategoryID is NULL -> Create new Category and return ID in output. In that case @CategoryName and @CategoryDescription should be provided.
 
 -------------
 CREATE OR ALTER PROCEDURE Shop.sp_CreateProduct
-	 @CategoryID INT = NULL
+	 @CategoryID INT = NULL OUTPUT
 	,@CategoryName NVARCHAR(255) = NULL
 	,@CategoryDescription NVARCHAR(MAX) = NULL
 	,@ProductName NVARCHAR(255)
@@ -202,7 +202,7 @@ BEGIN
 		EXEC Logs.sp_SetError	 @RunID = @CurrentRunID 		-- INT       -- get from sp_StartOperation
 								,@ProcedureID = @@PROCID	-- INT, NULL
 								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
-								,@ErrorMessage = 'Can not create Product'	-- NVARCHAR(MAX), NULL
+								,@ErrorMessage = 'Cannot create Product'	-- NVARCHAR(MAX), NULL
 
 		-- Fail Operation
 		EXEC Logs.sp_FailOperation   @OperationRunID = 	@CurrentRunID	 -- INT       -- get from sp_StartOperation
@@ -235,8 +235,9 @@ CREATE TABLE #testID
 (
 	id INT
 );
-declare @Iddd int
-EXEC @Iddd = Shop.sp_CreateProduct   @CategoryID = NULL	-- INT, NULL
+DECLARE @Iddd int
+DECLARE @CategoryID1 int = NULL 
+EXEC @Iddd = Shop.sp_CreateProduct   @CategoryID = @CategoryID1 OUTPUT	-- INT, NULL 
 									,@CategoryName =   'TestCatNameForProduct'	 -- NVARCHAR(255), NULL
 									,@CategoryDescription =   'Test Category for Product discription'	 -- NVARCHAR(MAX), NULL
 									,@ProductName = 'testName1'   -- NVARCHAR(255)
@@ -245,7 +246,10 @@ EXEC @Iddd = Shop.sp_CreateProduct   @CategoryID = NULL	-- INT, NULL
 									--,@IsActive = 1   -- INT, 1
 									,@Description =  'Test product Description' -- NVARCHAR(255)
 
-							
+SELECT @Iddd, @CategoryID1		
+
+
+		
 INSERT INTO #testID (id)
 SELECT @Iddd
 SELECT Top 1 id FROM #testID

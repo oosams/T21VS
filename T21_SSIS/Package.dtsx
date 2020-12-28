@@ -12,8 +12,8 @@
   DTS:ObjectName="Package"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="106"
-  DTS:VersionGUID="{EF20D6AA-80C8-4B6F-B19D-B54C884F2272}">
+  DTS:VersionBuild="110"
+  DTS:VersionGUID="{4FC7E419-65F4-468A-9850-18B21BDB6270}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -154,7 +154,7 @@
           DTS:RowDelimiter=""
           DTS:TextQualifier="_x003C_none_x003E_"
           DTS:CodePage="1252"
-          DTS:ConnectionString="d:\work\21\vendorDeliveryArchive\20201224_18309507_">
+          DTS:ConnectionString="d:\work\21\vendorDeliveryArchive\20201228_161252623_">
           <DTS:FlatFileColumns>
             <DTS:FlatFileColumn
               DTS:ColumnType="Delimited"
@@ -748,15 +748,47 @@
                   description="The SQL command to be executed."
                   expressionType="Notify"
                   name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">EXEC  Shop.sp_CreateProduct   
-	 @CategoryID = ?	-- INT, NULL
-	,@CategoryName =  ?	 -- NVARCHAR(255), NULL
-	,@CategoryDescription =  ?	 -- NVARCHAR(MAX), NULL
-	,@ProductName = ?   -- NVARCHAR(255)
-	,@UnitPrice =  ?  -- MONEY
-	,@Quantity =   ?  -- INT
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">DECLARE @ProductID int = ?
+DECLARE @CategoryID int = ? 
+DECLARE @CategoryName NVARCHAR(255) =  ?	 
+DECLARE @CategoryDescription NVARCHAR(255) =  ?	 
+DECLARE @ProductName NVARCHAR(255) = ?    
+DECLARE @UnitPrice MONEY =  ?   
+DECLARE @Quantity INT =   ?   
+DECLARE @ProductDescription NVARCHAR(MAX) = ?
+DECLARE @CategoryGUID uniqueidentifier = ?
+DECLARE @ProductGUID uniqueidentifier = ?
+
+
+
+EXEC @ProductID = Shop.sp_CreateProduct   
+	 @CategoryID = @CategoryID  OUTPUT	-- INT, NULL
+	,@CategoryName =  @CategoryName	 -- NVARCHAR(255), NULL
+	,@CategoryDescription =  @CategoryDescription	 -- NVARCHAR(MAX), NULL
+	,@ProductName = @ProductName   -- NVARCHAR(255)
+	,@UnitPrice =  @UnitPrice  -- MONEY
+	,@Quantity =   @Quantity  -- INT
 	--,@IsActive = 1   -- INT, 1
-	,@Description = ?</property>
+	,@Description = @ProductDescription
+
+INSERT INTO Staging.VendorDeliveryNewMapping(
+	 Make_id
+	,Make_Name
+	,Make_Desc
+	,Make_Guid
+	,Product_Model_id
+	,Product_Model_Name
+	,Model_Desc
+	,Model_Guid)
+VALUES(
+	  @CategoryID
+	 ,@CategoryName
+	 ,@CategoryDescription
+	 ,@CategoryGUID
+	 ,@ProductID
+	 ,@ProductName
+	 ,@ProductDescription
+	 ,@ProductGUID)</property>
                 <property
                   dataType="System.Int32"
                   description="Specifies the column code page to use when code page information is unavailable from the data source."
@@ -779,54 +811,72 @@
                   name="OLE DB Command Input">
                   <inputColumns>
                     <inputColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Product_Model_id]"
+                      cachedDataType="i4"
+                      cachedName="Product_Model_id"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_id]" />
+                    <inputColumn
                       refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Make_id]"
                       cachedDataType="i4"
                       cachedName="Make_id"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@CategoryID]"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_1]"
                       lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_id]" />
                     <inputColumn
                       refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Make_Name]"
                       cachedDataType="nText"
                       cachedName="Make_Name"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@CategoryName]"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_2]"
                       lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Name]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Make_Desc]"
+                      cachedDataType="nText"
+                      cachedName="Make_Desc"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_3]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Desc]" />
                     <inputColumn
                       refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Product_Model_Name]"
                       cachedDataType="nText"
                       cachedName="Product_Model_Name"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@ProductName]"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_4]"
                       lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_Name]" />
                     <inputColumn
                       refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Unit_Price]"
                       cachedDataType="i4"
                       cachedName="Unit_Price"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@UnitPrice]"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_5]"
                       lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Unit_Price]" />
                     <inputColumn
                       refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Quantity]"
                       cachedDataType="i4"
                       cachedName="Quantity"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@Quantity]"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_6]"
                       lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Quantity]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Make_Desc]"
-                      cachedDataType="nText"
-                      cachedName="Make_Desc"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@CategoryDescription]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Desc]" />
                     <inputColumn
                       refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Model_Desc]"
                       cachedDataType="nText"
                       cachedName="Model_Desc"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@Description]"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_7]"
                       lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Desc]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Make_Guid]"
+                      cachedDataType="guid"
+                      cachedName="Make_Guid"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_8]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Guid]" />
+                    <inputColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Model_Guid]"
+                      cachedDataType="guid"
+                      cachedName="Model_Guid"
+                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_9]"
+                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Guid]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
                     <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@CategoryID]"
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
                       dataType="i4"
-                      name="@CategoryID">
+                      name="Param_0">
                       <properties>
                         <property
                           dataType="System.Int32"
@@ -835,10 +885,21 @@
                       </properties>
                     </externalMetadataColumn>
                     <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@CategoryName]"
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_1]"
+                      dataType="i4"
+                      name="Param_1">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">81</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_2]"
                       dataType="wstr"
                       length="255"
-                      name="@CategoryName">
+                      name="Param_2">
                       <properties>
                         <property
                           dataType="System.Int32"
@@ -847,21 +908,10 @@
                       </properties>
                     </externalMetadataColumn>
                     <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@CategoryDescription]"
-                      dataType="nText"
-                      name="@CategoryDescription">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">193</property>
-                      </properties>
-                    </externalMetadataColumn>
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@ProductName]"
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_3]"
                       dataType="wstr"
                       length="255"
-                      name="@ProductName">
+                      name="Param_3">
                       <properties>
                         <property
                           dataType="System.Int32"
@@ -870,9 +920,21 @@
                       </properties>
                     </externalMetadataColumn>
                     <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@UnitPrice]"
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_4]"
+                      dataType="wstr"
+                      length="255"
+                      name="Param_4">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_5]"
                       dataType="cy"
-                      name="@UnitPrice">
+                      name="Param_5">
                       <properties>
                         <property
                           dataType="System.Int32"
@@ -881,9 +943,9 @@
                       </properties>
                     </externalMetadataColumn>
                     <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@Quantity]"
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_6]"
                       dataType="i4"
-                      name="@Quantity">
+                      name="Param_6">
                       <properties>
                         <property
                           dataType="System.Int32"
@@ -892,14 +954,36 @@
                       </properties>
                     </externalMetadataColumn>
                     <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[@Description]"
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_7]"
                       dataType="nText"
-                      name="@Description">
+                      name="Param_7">
                       <properties>
                         <property
                           dataType="System.Int32"
                           description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
                           name="DBParamInfoFlags">193</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_8]"
+                      dataType="guid"
+                      name="Param_8">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_9]"
+                      dataType="guid"
+                      name="Param_9">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
                       </properties>
                     </externalMetadataColumn>
                   </externalMetadataColumns>
@@ -7861,7 +7945,7 @@
         <NodeLayout
           Size="146.4,41.6"
           Id="Package\StartOperation"
-          TopLeft="311.458320957092,48.7500003874299" />
+          TopLeft="154.791660515799,32.2833335898979" />
         <NodeLayout
           Size="186.4,41.6"
           Id="Package\Truncate staging tables"
@@ -7889,31 +7973,53 @@
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 2]"
-          TopLeft="457.858320957092,69.5500003874299">
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="645.818494901099,419.970371781573">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="94.641657088531,-13.216666771703"
+              EndConnector="-295.793505456087,-80.6703694156643"
               Start="0,0"
-              End="87.141657088531,-13.216666771703">
+              End="-295.793505456087,-73.1703694156643">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="43.3208285442655,0" />
+                    End="0,-28.7776448362594" />
                   <mssgle:CubicBezierSegment
-                    Point1="43.3208285442655,0"
-                    Point2="47.3208285442655,0"
-                    Point3="47.3208285442655,-4" />
+                    Point1="0,-28.7776448362594"
+                    Point2="0,-32.7776448362594"
+                    Point3="-4,-32.7776448362594" />
                   <mssgle:LineSegment
-                    End="47.3208285442655,-9.216666771703" />
+                    End="-291.793505456087,-32.7776448362594" />
                   <mssgle:CubicBezierSegment
-                    Point1="47.3208285442655,-9.216666771703"
-                    Point2="47.3208285442655,-13.216666771703"
-                    Point3="51.3208285442655,-13.216666771703" />
+                    Point1="-291.793505456087,-32.7776448362594"
+                    Point2="-295.793505456087,-32.7776448362594"
+                    Point3="-295.793505456087,-36.7776448362594" />
                   <mssgle:LineSegment
-                    End="87.141657088531,-13.216666771703" />
+                    End="-295.793505456087,-73.1703694156643" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 2]"
+          TopLeft="301.191660515799,54.7083336028124">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="251.308317529824,0"
+              Start="0,0"
+              End="243.808317529824,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="243.808317529824,0" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -7978,40 +8084,6 @@
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 1]"
-          TopLeft="645.818494901099,419.970371781573">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-295.793505456087,-80.6703694156643"
-              Start="0,0"
-              End="-295.793505456087,-73.1703694156643">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,-28.7776448362594" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,-28.7776448362594"
-                    Point2="0,-32.7776448362594"
-                    Point3="-4,-32.7776448362594" />
-                  <mssgle:LineSegment
-                    End="-291.793505456087,-32.7776448362594" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-291.793505456087,-32.7776448362594"
-                    Point2="-295.793505456087,-32.7776448362594"
-                    Point3="-295.793505456087,-36.7776448362594" />
-                  <mssgle:LineSegment
-                    End="-295.793505456087,-73.1703694156643" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
       </GraphLayout>
     </LayoutInfo>
   </Package>
@@ -8021,7 +8093,7 @@
       <GraphLayout
         Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
-          Size="167.2,41.6"
+          Size="176,41.6"
           Id="Package\Data Flow Task\OLE DB Command 1"
           TopLeft="243,231.6" />
         <NodeLayout
@@ -8060,13 +8132,13 @@
         </EdgeLayout>
         <EdgeLayout
           Id="Package\Data Flow Task.Paths[New Products to create]"
-          TopLeft="459.533333333334,148.6">
+          TopLeft="459.533333333333,148.6">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="-132.933333333334,83"
+              EndConnector="-128.533333333333,83"
               Start="0,0"
-              End="-132.933333333334,75.5">
+              End="-128.533333333333,75.5">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
@@ -8077,20 +8149,20 @@
                     Point2="0,33.7134020618557"
                     Point3="-4,33.7134020618557" />
                   <mssgle:LineSegment
-                    End="-128.933333333334,33.7134020618557" />
+                    End="-124.533333333333,33.7134020618557" />
                   <mssgle:CubicBezierSegment
-                    Point1="-128.933333333334,33.7134020618557"
-                    Point2="-132.933333333334,33.7134020618557"
-                    Point3="-132.933333333334,37.7134020618557" />
+                    Point1="-124.533333333333,33.7134020618557"
+                    Point2="-128.533333333333,33.7134020618557"
+                    Point3="-128.533333333333,37.7134020618557" />
                   <mssgle:LineSegment
-                    End="-132.933333333334,75.5" />
+                    End="-128.533333333333,75.5" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="-118.413014322917,38.7134020618557,103.8926953125,9.7490234375"
+              BoundingBox="-116.213014322917,38.7134020618557,103.8926953125,9.7490234375"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
@@ -8150,7 +8222,7 @@
     design-time-name="Package\Foreach Loop Container\Load Vendor files into Staging">
     <LayoutInfo>
       <GraphLayout
-        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
         <NodeLayout
           Size="119.2,41.6"
           Id="Package\Foreach Loop Container\Load Vendor files into Staging\Multicast"
@@ -8206,9 +8278,7 @@
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -8230,9 +8300,7 @@
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -8266,9 +8334,7 @@
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -8302,9 +8368,7 @@
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -8326,9 +8390,7 @@
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
       </GraphLayout>
@@ -8428,26 +8490,26 @@
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="-209.570362011002,39.7555563292676"
+              EndConnector="-209.570362011002,39.755556329268"
               Start="0,0"
-              End="-209.570362011002,32.2555563292676">
+              End="-209.570362011002,32.255556329268">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,15.8777781646338" />
+                    End="0,15.877778164634" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,15.8777781646338"
-                    Point2="0,19.8777781646338"
-                    Point3="-4,19.8777781646338" />
+                    Point1="0,15.877778164634"
+                    Point2="0,19.877778164634"
+                    Point3="-4,19.877778164634" />
                   <mssgle:LineSegment
-                    End="-205.570362011002,19.8777781646338" />
+                    End="-205.570362011002,19.877778164634" />
                   <mssgle:CubicBezierSegment
-                    Point1="-205.570362011002,19.8777781646338"
-                    Point2="-209.570362011002,19.8777781646338"
-                    Point3="-209.570362011002,23.8777781646338" />
+                    Point1="-205.570362011002,19.877778164634"
+                    Point2="-209.570362011002,19.877778164634"
+                    Point3="-209.570362011002,23.877778164634" />
                   <mssgle:LineSegment
-                    End="-209.570362011002,32.2555563292676" />
+                    End="-209.570362011002,32.255556329268" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
