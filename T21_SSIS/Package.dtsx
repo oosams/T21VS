@@ -12,8 +12,8 @@
   DTS:ObjectName="Package"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="110"
-  DTS:VersionGUID="{4FC7E419-65F4-468A-9850-18B21BDB6270}">
+  DTS:VersionBuild="123"
+  DTS:VersionGUID="{643E7556-E56D-4E75-B653-D30BEC3CFFAC}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -154,7 +154,7 @@
           DTS:RowDelimiter=""
           DTS:TextQualifier="_x003C_none_x003E_"
           DTS:CodePage="1252"
-          DTS:ConnectionString="d:\work\21\vendorDeliveryArchive\20201228_161252623_">
+          DTS:ConnectionString="d:\work\21\vendorDeliveryArchive\20201228_191756997_">
           <DTS:FlatFileColumns>
             <DTS:FlatFileColumn
               DTS:ColumnType="Delimited"
@@ -475,6 +475,7 @@
       DTS:refId="Package\CompleteOperation"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Execute SQL Task"
+      DTS:Disabled="True"
       DTS:DTSID="{DA9A46A0-5963-41F0-870A-8BF7103C08F7}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
@@ -499,6 +500,7 @@
       DTS:refId="Package\Data Flow Task"
       DTS:CreationName="Microsoft.Pipeline"
       DTS:Description="Data Flow Task"
+      DTS:Disabled="True"
       DTS:DTSID="{A75B20AB-9042-4FAA-A4D3-E80D21CB436F}"
       DTS:ExecutableType="Microsoft.Pipeline"
       DTS:LocaleID="-1"
@@ -750,9 +752,9 @@
                   name="SqlCommand"
                   UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">DECLARE @ProductID int = ?
 DECLARE @CategoryID int = ? 
-DECLARE @CategoryName NVARCHAR(255) =  ?	 
-DECLARE @CategoryDescription NVARCHAR(255) =  ?	 
-DECLARE @ProductName NVARCHAR(255) = ?    
+DECLARE @CategoryName NVARCHAR(MAX) =  ?	 
+DECLARE @CategoryDescription NVARCHAR(MAX) =  ?	 
+DECLARE @ProductName NVARCHAR(MAX) = ?    
 DECLARE @UnitPrice MONEY =  ?   
 DECLARE @Quantity INT =   ?   
 DECLARE @ProductDescription NVARCHAR(MAX) = ?
@@ -897,8 +899,7 @@ VALUES(
                     </externalMetadataColumn>
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_2]"
-                      dataType="wstr"
-                      length="255"
+                      dataType="nText"
                       name="Param_2">
                       <properties>
                         <property
@@ -909,8 +910,7 @@ VALUES(
                     </externalMetadataColumn>
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_3]"
-                      dataType="wstr"
-                      length="255"
+                      dataType="nText"
                       name="Param_3">
                       <properties>
                         <property
@@ -921,8 +921,7 @@ VALUES(
                     </externalMetadataColumn>
                     <externalMetadataColumn
                       refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_4]"
-                      dataType="wstr"
-                      length="255"
+                      dataType="nText"
                       name="Param_4">
                       <properties>
                         <property
@@ -1444,6 +1443,7 @@ VALUES(
       DTS:refId="Package\Foreach Loop Container"
       DTS:CreationName="STOCK:FOREACHLOOP"
       DTS:Description="Foreach Loop Container"
+      DTS:Disabled="True"
       DTS:DTSID="{EBD1346C-15F8-44E6-9AB9-AD63B65CADA7}"
       DTS:ExecutableType="STOCK:FOREACHLOOP"
       DTS:LocaleID="-1"
@@ -1522,7 +1522,6 @@ VALUES(
                         <inputColumn
                           refId="Package\Foreach Loop Container\Load Vendor files into Staging\Archive.Inputs[Flat File Destination Input].Columns[File_Name]"
                           cachedDataType="wstr"
-                          cachedLength="300"
                           cachedName="File_Name"
                           externalMetadataColumnId="Package\Foreach Loop Container\Load Vendor files into Staging\Archive.Inputs[Flat File Destination Input].ExternalColumns[File_Name]"
                           lineageId="Package\Foreach Loop Container\Load Vendor files into Staging\Derived Column.Outputs[Derived Column Output].Columns[File_Name]" />
@@ -1997,7 +1996,6 @@ VALUES(
                         <inputColumn
                           refId="Package\Foreach Loop Container\Load Vendor files into Staging\StagingTable.Inputs[OLE DB Destination Input].Columns[File_Name]"
                           cachedDataType="wstr"
-                          cachedLength="300"
                           cachedName="File_Name"
                           externalMetadataColumnId="Package\Foreach Loop Container\Load Vendor files into Staging\StagingTable.Inputs[OLE DB Destination Input].ExternalColumns[File_Name]"
                           lineageId="Package\Foreach Loop Container\Load Vendor files into Staging\Derived Column.Outputs[Derived Column Output].Columns[File_Name]" />
@@ -2854,6 +2852,168 @@ VALUES(
         <pipeline
           version="1">
           <components>
+            <component
+              refId="Package\Mapping\Data Conversion"
+              componentClassID="Microsoft.DataConvert"
+              contactInfo="Data Conversion;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Data Conversion"
+              name="Data Conversion"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Mapping\Data Conversion.Inputs[Data Conversion Input]"
+                  name="Data Conversion Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Mapping\Data Conversion.Inputs[Data Conversion Input].Columns[Make_name]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="100"
+                      cachedName="Make_name"
+                      lineageId="Package\Mapping\Sort 1.Outputs[Sort Output].Columns[Make_name]" />
+                    <inputColumn
+                      refId="Package\Mapping\Data Conversion.Inputs[Data Conversion Input].Columns[Make_Desc]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="4000"
+                      cachedName="Make_Desc"
+                      lineageId="Package\Mapping\Sort 1.Outputs[Sort Output].Columns[Make_Desc]" />
+                    <inputColumn
+                      refId="Package\Mapping\Data Conversion.Inputs[Data Conversion Input].Columns[Product_Model_Name]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="100"
+                      cachedName="Product_Model_Name"
+                      lineageId="Package\Mapping\Sort 1.Outputs[Sort Output].Columns[Product_Model_Name]" />
+                    <inputColumn
+                      refId="Package\Mapping\Data Conversion.Inputs[Data Conversion Input].Columns[Model_Desc]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="4000"
+                      cachedName="Model_Desc"
+                      lineageId="Package\Mapping\Sort 1.Outputs[Sort Output].Columns[Model_Desc]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Mapping\Data Conversion.Outputs[Data Conversion Output]"
+                  exclusionGroup="1"
+                  name="Data Conversion Output"
+                  synchronousInputId="Package\Mapping\Data Conversion.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Mapping\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Make_name]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      length="100"
+                      lineageId="Package\Mapping\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Make_name]"
+                      name="Copy of Make_name"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Mapping\Sort 1.Outputs[Sort Output].Columns[Make_name]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Mapping\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Make_Desc]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      length="4000"
+                      lineageId="Package\Mapping\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Make_Desc]"
+                      name="Copy of Make_Desc"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Mapping\Sort 1.Outputs[Sort Output].Columns[Make_Desc]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Mapping\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Product_Model_Name]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      length="100"
+                      lineageId="Package\Mapping\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Product_Model_Name]"
+                      name="Copy of Product_Model_Name"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Mapping\Sort 1.Outputs[Sort Output].Columns[Product_Model_Name]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Mapping\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Model_Desc]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      length="4000"
+                      lineageId="Package\Mapping\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Model_Desc]"
+                      name="Copy of Model_Desc"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Specifies the input column used as the source of data for the conversion."
+                          name="SourceInputColumnLineageID">#{Package\Mapping\Sort 1.Outputs[Sort Output].Columns[Model_Desc]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Mapping\Data Conversion.Outputs[Data Conversion Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Data Conversion Error Output"
+                  synchronousInputId="Package\Mapping\Data Conversion.Inputs[Data Conversion Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Mapping\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Mapping\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Mapping\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Mapping\Data Conversion.Outputs[Data Conversion Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
             <component
               refId="Package\Mapping\Derived Column"
               componentClassID="Microsoft.DerivedColumn"
@@ -4038,13 +4198,6 @@ VALUES(
               </inputs>
               <outputs>
                 <output
-                  refId="Package\Mapping\Multicast 1.Outputs[Multicast Output 1]"
-                  deleteOutputOnPathDetached="true"
-                  name="Multicast Output 1"
-                  synchronousInputId="Package\Mapping\Multicast 1.Inputs[Multicast Input 1]">
-                  <externalMetadataColumns />
-                </output>
-                <output
                   refId="Package\Mapping\Multicast 1.Outputs[Multicast Output 2]"
                   deleteOutputOnPathDetached="true"
                   name="Multicast Output 2"
@@ -4052,10 +4205,24 @@ VALUES(
                   <externalMetadataColumns />
                 </output>
                 <output
-                  refId="Package\Mapping\Multicast 1.Outputs[Multicast Output 3]"
+                  refId="Package\Mapping\Multicast 1.Outputs[Multicast Output 4]"
+                  deleteOutputOnPathDetached="true"
+                  name="Multicast Output 4"
+                  synchronousInputId="Package\Mapping\Multicast 1.Inputs[Multicast Input 1]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Mapping\Multicast 1.Outputs[Multicast Output 5]"
                   dangling="true"
                   deleteOutputOnPathDetached="true"
-                  name="Multicast Output 3"
+                  name="Multicast Output 5"
+                  synchronousInputId="Package\Mapping\Multicast 1.Inputs[Multicast Input 1]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Mapping\Multicast 1.Outputs[Multicast Output 1]"
+                  deleteOutputOnPathDetached="true"
+                  name="Multicast Output 1"
                   synchronousInputId="Package\Mapping\Multicast 1.Inputs[Multicast Input 1]">
                   <externalMetadataColumns />
                 </output>
@@ -7473,6 +7640,197 @@ VALUES(
               </outputs>
             </component>
             <component
+              refId="Package\Mapping\Staging_VendorDeliveryNewMapping"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
+              description="OLE DB Destination"
+              name="Staging_VendorDeliveryNewMapping"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[Staging].[VendorDeliveryNewMapping]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the columns containing null will have null inserted in the destination. If false, columns containing null will have their default values inserted at the destination. Applies only if fast load is turned on."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Connections[OleDbConnection]"
+                  connectionManagerID="{453392D5-91D9-49E1-9CCC-A619C7E2ADA9}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[LV4788.T21]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input]"
+                  errorOrTruncationOperation="Insert"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].Columns[Make_id]"
+                      cachedDataType="numeric"
+                      cachedName="Make_id"
+                      cachedPrecision="18"
+                      externalMetadataColumnId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Make_id]"
+                      lineageId="Package\Mapping\Sort 1.Outputs[Sort Output].Columns[Make_id]" />
+                    <inputColumn
+                      refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].Columns[Product_Model_id]"
+                      cachedDataType="numeric"
+                      cachedName="Product_Model_id"
+                      cachedPrecision="18"
+                      externalMetadataColumnId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Product_Model_id]"
+                      lineageId="Package\Mapping\Sort 1.Outputs[Sort Output].Columns[Product_Model_id]" />
+                    <inputColumn
+                      refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].Columns[Copy of Make_name]"
+                      cachedDataType="wstr"
+                      cachedLength="100"
+                      cachedName="Copy of Make_name"
+                      externalMetadataColumnId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Make_Name]"
+                      lineageId="Package\Mapping\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Make_name]" />
+                    <inputColumn
+                      refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].Columns[Copy of Make_Desc]"
+                      cachedDataType="wstr"
+                      cachedLength="4000"
+                      cachedName="Copy of Make_Desc"
+                      externalMetadataColumnId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Make_Desc]"
+                      lineageId="Package\Mapping\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Make_Desc]" />
+                    <inputColumn
+                      refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].Columns[Copy of Product_Model_Name]"
+                      cachedDataType="wstr"
+                      cachedLength="100"
+                      cachedName="Copy of Product_Model_Name"
+                      externalMetadataColumnId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Product_Model_Name]"
+                      lineageId="Package\Mapping\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Product_Model_Name]" />
+                    <inputColumn
+                      refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].Columns[Copy of Model_Desc]"
+                      cachedDataType="wstr"
+                      cachedLength="4000"
+                      cachedName="Copy of Model_Desc"
+                      externalMetadataColumnId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Model_Desc]"
+                      lineageId="Package\Mapping\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Model_Desc]" />
+                    <inputColumn
+                      refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].Columns[gModelGuid]"
+                      cachedDataType="guid"
+                      cachedName="gModelGuid"
+                      cachedSortKeyPosition="2"
+                      externalMetadataColumnId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Model_Guid]"
+                      lineageId="Package\Mapping\Sort 1.Outputs[Sort Output].Columns[gModelGuid]" />
+                    <inputColumn
+                      refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].Columns[gMakeGuid]"
+                      cachedDataType="guid"
+                      cachedName="gMakeGuid"
+                      cachedSortKeyPosition="1"
+                      externalMetadataColumnId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Make_Guid]"
+                      lineageId="Package\Mapping\Sort 1.Outputs[Sort Output].Columns[gMakeGuid]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Make_id]"
+                      dataType="i4"
+                      name="Make_id" />
+                    <externalMetadataColumn
+                      refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Product_Model_id]"
+                      dataType="i4"
+                      name="Product_Model_id" />
+                    <externalMetadataColumn
+                      refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Make_Name]"
+                      dataType="nText"
+                      name="Make_Name" />
+                    <externalMetadataColumn
+                      refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Make_Desc]"
+                      dataType="nText"
+                      name="Make_Desc" />
+                    <externalMetadataColumn
+                      refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Make_Guid]"
+                      dataType="guid"
+                      name="Make_Guid" />
+                    <externalMetadataColumn
+                      refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Product_Model_Name]"
+                      dataType="nText"
+                      name="Product_Model_Name" />
+                    <externalMetadataColumn
+                      refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Model_Desc]"
+                      dataType="nText"
+                      name="Model_Desc" />
+                    <externalMetadataColumn
+                      refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Model_Guid]"
+                      dataType="guid"
+                      name="Model_Guid" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Outputs[OLE DB Destination Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Destination Error Output"
+                  synchronousInputId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Mapping\Staging_VendorDeliveryNewMapping.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Mapping\Staging_VendorDeliveryNewMapping.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
               refId="Package\Mapping\Vendor_Mapping"
               componentClassID="Microsoft.FlatFileSource"
               contactInfo="Flat File Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;1"
@@ -7699,9 +8057,7 @@ VALUES(
                       name="Make_Desc" />
                     <externalMetadataColumn
                       refId="Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].ExternalColumns[Make_guid]"
-                      codePage="1252"
-                      dataType="str"
-                      length="50"
+                      dataType="guid"
                       name="Make_guid" />
                     <externalMetadataColumn
                       refId="Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].ExternalColumns[Product_Model_id]"
@@ -7722,9 +8078,7 @@ VALUES(
                       name="Model_Desc" />
                     <externalMetadataColumn
                       refId="Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].ExternalColumns[Model_guid]"
-                      codePage="1252"
-                      dataType="str"
-                      length="50"
+                      dataType="guid"
                       name="Model_guid" />
                   </externalMetadataColumns>
                 </output>
@@ -7759,6 +8113,11 @@ VALUES(
             </component>
           </components>
           <paths>
+            <path
+              refId="Package\Mapping.Paths[Data Conversion Output]"
+              endId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input]"
+              name="Data Conversion Output"
+              startId="Package\Mapping\Data Conversion.Outputs[Data Conversion Output]" />
             <path
               refId="Package\Mapping.Paths[Derived Column Output]"
               endId="Package\Mapping\Sort 1.Inputs[Sort Input]"
@@ -7795,6 +8154,11 @@ VALUES(
               name="Multicast Output 2"
               startId="Package\Mapping\Multicast 1.Outputs[Multicast Output 2]" />
             <path
+              refId="Package\Mapping.Paths[Multicast Output 4]"
+              endId="Package\Mapping\Data Conversion.Inputs[Data Conversion Input]"
+              name="Multicast Output 4"
+              startId="Package\Mapping\Multicast 1.Outputs[Multicast Output 4]" />
+            <path
               refId="Package\Mapping.Paths[OLE DB Source Output]"
               endId="Package\Mapping\Sort.Inputs[Sort Input]"
               name="OLE DB Source Output"
@@ -7827,6 +8191,7 @@ VALUES(
       DTS:refId="Package\StartOperation"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Execute SQL Task"
+      DTS:Disabled="True"
       DTS:DTSID="{57B8AAD3-093D-4926-93C0-678191B3A17D}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
@@ -7851,6 +8216,7 @@ VALUES(
       DTS:refId="Package\Truncate staging tables"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Execute SQL Task"
+      DTS:Disabled="True"
       DTS:DTSID="{C78280CD-DF56-44D5-87F9-A3AE8EF7B296}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
@@ -7861,7 +8227,7 @@ VALUES(
       <DTS:ObjectData>
         <SQLTask:SqlTaskData
           SQLTask:Connection="{453392D5-91D9-49E1-9CCC-A619C7E2ADA9}"
-          SQLTask:SqlStatementSource="TRUNCATE TABLE Staging.VendorDelivery;&#xA;GO&#xA;DBCC CHECKIDENT ('Staging.VendorDelivery', RESEED, 1);&#xA;GO&#xA;TRUNCATE TABLE Staging.VendorDeliveryMapped&#xA;GO&#xA;DBCC CHECKIDENT ('Staging.VendorDeliveryMapped', RESEED, 1);&#xA;GO" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          SQLTask:SqlStatementSource="TRUNCATE TABLE Staging.VendorDelivery;&#xA;GO&#xA;DBCC CHECKIDENT ('Staging.VendorDelivery', RESEED, 1);&#xA;GO&#xA;TRUNCATE TABLE Staging.VendorDeliveryMapped&#xA;GO&#xA;DBCC CHECKIDENT ('Staging.VendorDeliveryMapped', RESEED, 1);&#xA;GO&#xA;TRUNCATE TABLE Staging.VendorDeliveryNewMapping&#xA;GO" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
       </DTS:ObjectData>
     </DTS:Executable>
   </DTS:Executables>
@@ -8097,13 +8463,13 @@ VALUES(
           Id="Package\Data Flow Task\OLE DB Command 1"
           TopLeft="243,231.6" />
         <NodeLayout
-          Size="153.6,41.6"
-          Id="Package\Data Flow Task\Conditional Split"
-          TopLeft="407,107" />
-        <NodeLayout
           Size="152,41.6"
           Id="Package\Data Flow Task\OLE DB Source"
           TopLeft="405,24" />
+        <NodeLayout
+          Size="153.6,41.6"
+          Id="Package\Data Flow Task\Conditional Split"
+          TopLeft="407,107" />
         <NodeLayout
           Size="167.2,41.6"
           Id="Package\Data Flow Task\OLE DB Command"
@@ -8222,7 +8588,7 @@ VALUES(
     design-time-name="Package\Foreach Loop Container\Load Vendor files into Staging">
     <LayoutInfo>
       <GraphLayout
-        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
           Size="119.2,41.6"
           Id="Package\Foreach Loop Container\Load Vendor files into Staging\Multicast"
@@ -8278,7 +8644,9 @@ VALUES(
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -8300,7 +8668,9 @@ VALUES(
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -8334,7 +8704,9 @@ VALUES(
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -8368,7 +8740,9 @@ VALUES(
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -8390,7 +8764,9 @@ VALUES(
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
       </GraphLayout>
@@ -8455,13 +8831,9 @@ VALUES(
           Id="Package\Mapping\Remove dublicates"
           TopLeft="250.740730777199,228.703705521277" />
         <NodeLayout
-          Size="152.8,41.6"
-          Id="Package\Mapping\Derived Column"
-          TopLeft="860.185151004499,21.9555557300427" />
-        <NodeLayout
           Size="128,41.6"
           Id="Package\Mapping\Multicast 1"
-          TopLeft="691.57404659339,237.288890647535" />
+          TopLeft="692.57404659339,242.288890647535" />
         <EdgeLayout
           Id="Package\Mapping.Paths[OLE DB Source Output]"
           TopLeft="225.546301956898,64.6222217217198">
@@ -8476,74 +8848,6 @@ VALUES(
                   Capacity="5">
                   <mssgle:LineSegment
                     End="0,23.4037049633777" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package\Mapping.Paths[Multicast Output 2]"
-          TopLeft="755.57404659339,278.888890647535">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-209.570362011002,39.755556329268"
-              Start="0,0"
-              End="-209.570362011002,32.255556329268">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,15.877778164634" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,15.877778164634"
-                    Point2="0,19.877778164634"
-                    Point3="-4,19.877778164634" />
-                  <mssgle:LineSegment
-                    End="-205.570362011002,19.877778164634" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-205.570362011002,19.877778164634"
-                    Point2="-209.570362011002,19.877778164634"
-                    Point3="-209.570362011002,23.877778164634" />
-                  <mssgle:LineSegment
-                    End="-209.570362011002,32.255556329268" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package\Mapping.Paths[Multicast Output 11]"
-          TopLeft="735.57404659339,237.288890647535">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-166.548139877083,-52.3037043228274"
-              Start="0,0"
-              End="-166.548139877083,-44.8037043228274">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,-22.1591469597851" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,-22.1591469597851"
-                    Point2="0,-26.1591469597851"
-                    Point3="-4,-26.1591469597851" />
-                  <mssgle:LineSegment
-                    End="-162.548139877083,-26.1591469597851" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-162.548139877083,-26.1591469597851"
-                    Point2="-166.548139877083,-26.1591469597851"
-                    Point3="-166.548139877083,-30.1591469597851" />
-                  <mssgle:LineSegment
-                    End="-166.548139877083,-44.8037043228274" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -8643,62 +8947,6 @@ VALUES(
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
-          Id="Package\Mapping.Paths[Flat File Source Output]"
-          TopLeft="809.451825949588,43.7185187006586">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="50.7333250549104,0"
-              Start="0,0"
-              End="43.2333250549104,0">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="43.2333250549104,0" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package\Mapping.Paths[Derived Column Output]"
-          TopLeft="936.585151004499,63.5555557300427">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-149.588883866646,36.9777784022578"
-              Start="0,0"
-              End="-149.588883866646,29.4777784022578">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,14.4888892011289" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,14.4888892011289"
-                    Point2="0,18.4888892011289"
-                    Point3="-4,18.4888892011289" />
-                  <mssgle:LineSegment
-                    End="-145.588883866646,18.4888892011289" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-145.588883866646,18.4888892011289"
-                    Point2="-149.588883866646,18.4888892011289"
-                    Point3="-149.588883866646,22.4888892011289" />
-                  <mssgle:LineSegment
-                    End="-149.588883866646,29.4777784022578" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
           Id="Package\Mapping.Paths[Sort Output3]"
           TopLeft="386.955544407281,337.670372825052">
           <EdgeLayout.Curve>
@@ -8748,26 +8996,26 @@ VALUES(
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="-11.4222205444627,95.1555565152354"
+              EndConnector="-10.4222205444629,100.155556515235"
               Start="0,0"
-              End="-11.4222205444627,87.6555565152354">
+              End="-10.4222205444629,92.655556515235">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,52.3884779349543" />
+                    End="0,55.351440897917" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,52.3884779349543"
-                    Point2="0,56.3884779349543"
-                    Point3="-4,56.3884779349543" />
+                    Point1="0,55.351440897917"
+                    Point2="0,59.351440897917"
+                    Point3="-4,59.351440897917" />
                   <mssgle:LineSegment
-                    End="-7.42222054446268,56.3884779349543" />
+                    End="-6.4222205444629,59.351440897917" />
                   <mssgle:CubicBezierSegment
-                    Point1="-7.42222054446268,56.3884779349543"
-                    Point2="-11.4222205444627,56.3884779349543"
-                    Point3="-11.4222205444627,60.3884779349543" />
+                    Point1="-6.4222205444629,59.351440897917"
+                    Point2="-10.4222205444629,59.351440897917"
+                    Point3="-10.4222205444629,63.351440897917" />
                   <mssgle:LineSegment
-                    End="-11.4222205444627,87.6555565152354" />
+                    End="-10.4222205444629,92.655556515235" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -8810,6 +9058,210 @@ VALUES(
             <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Mapping.Paths[Multicast Output 2]"
+          TopLeft="756.57404659339,283.888890647535">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-210.570362011002,34.755556329268"
+              Start="0,0"
+              End="-210.570362011002,27.255556329268">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,13.377778164634" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,13.377778164634"
+                    Point2="0,17.377778164634"
+                    Point3="-4,17.377778164634" />
+                  <mssgle:LineSegment
+                    End="-206.570362011002,17.377778164634" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-206.570362011002,17.377778164634"
+                    Point2="-210.570362011002,17.377778164634"
+                    Point3="-210.570362011002,21.377778164634" />
+                  <mssgle:LineSegment
+                    End="-210.570362011002,27.255556329268" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Mapping.Paths[Multicast Output 11]"
+          TopLeft="736.57404659339,242.288890647535">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-167.548139877083,-57.303704322827"
+              Start="0,0"
+              End="-167.548139877083,-49.803704322827">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,-24.6598443098546" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,-24.6598443098546"
+                    Point2="0,-28.6598443098546"
+                    Point3="-4,-28.6598443098546" />
+                  <mssgle:LineSegment
+                    End="-163.548139877083,-28.6598443098546" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-163.548139877083,-28.6598443098546"
+                    Point2="-167.548139877083,-28.6598443098546"
+                    Point3="-167.548139877083,-32.6598443098546" />
+                  <mssgle:LineSegment
+                    End="-167.548139877083,-49.803704322827" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="152.8,41.6"
+          Id="Package\Mapping\Derived Column"
+          TopLeft="860.185151004499,21.9555557300427" />
+        <EdgeLayout
+          Id="Package\Mapping.Paths[Derived Column Output]"
+          TopLeft="936.585151004499,63.5555557300427">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-149.588883866646,36.9777784022578"
+              Start="0,0"
+              End="-149.588883866646,29.4777784022578">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,14.4888892011289" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,14.4888892011289"
+                    Point2="0,18.4888892011289"
+                    Point3="-4,18.4888892011289" />
+                  <mssgle:LineSegment
+                    End="-145.588883866646,18.4888892011289" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-145.588883866646,18.4888892011289"
+                    Point2="-149.588883866646,18.4888892011289"
+                    Point3="-149.588883866646,22.4888892011289" />
+                  <mssgle:LineSegment
+                    End="-149.588883866646,29.4777784022578" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Mapping.Paths[Flat File Source Output]"
+          TopLeft="809.451825949588,43.7185187006586">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="50.7333250549104,0"
+              Start="0,0"
+              End="43.2333250549104,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="43.2333250549104,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="251.2,41.6"
+          Id="Package\Mapping\Staging_VendorDeliveryNewMapping"
+          TopLeft="707,480" />
+        <NodeLayout
+          Size="156,41.6"
+          Id="Package\Mapping\Data Conversion"
+          TopLeft="833,350.6" />
+        <EdgeLayout
+          Id="Package\Mapping.Paths[Multicast Output 4]"
+          TopLeft="786.57404659339,283.888890647535">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="124.42595340661,66.711109352465"
+              Start="0,0"
+              End="124.42595340661,59.211109352465">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,19.1446705916715" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,19.1446705916715"
+                    Point2="0,23.1446705916715"
+                    Point3="4,23.1446705916715" />
+                  <mssgle:LineSegment
+                    End="120.42595340661,23.1446705916715" />
+                  <mssgle:CubicBezierSegment
+                    Point1="120.42595340661,23.1446705916715"
+                    Point2="124.42595340661,23.1446705916715"
+                    Point3="124.42595340661,27.1446705916715" />
+                  <mssgle:LineSegment
+                    End="124.42595340661,59.211109352465" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\Mapping.Paths[Data Conversion Output]"
+          TopLeft="911,392.2">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-78.3999999999999,87.8"
+              Start="0,0"
+              End="-78.3999999999999,80.3">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,39.9" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,39.9"
+                    Point2="0,43.9"
+                    Point3="-4,43.9" />
+                  <mssgle:LineSegment
+                    End="-74.3999999999999,43.9" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-74.3999999999999,43.9"
+                    Point2="-78.3999999999999,43.9"
+                    Point3="-78.3999999999999,47.9" />
+                  <mssgle:LineSegment
+                    End="-78.3999999999999,80.3" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
       </GraphLayout>
     </LayoutInfo>
   </TaskHost>
@@ -8828,6 +9280,19 @@ VALUES(
   </PipelineComponentMetadata>
   <PipelineComponentMetadata
     design-time-name="Package\Mapping\Staging_VendorDeliveryMapped">
+    <Properties>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\Mapping\Staging_VendorDeliveryNewMapping">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>

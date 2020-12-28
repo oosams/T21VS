@@ -1,3 +1,5 @@
+USE MASTER
+GO
 USE T21
 GO
 
@@ -115,6 +117,8 @@ GO
 TRUNCATE TABLE Staging.VendorDeliveryMapped
 GO
 DBCC CHECKIDENT ('Staging.VendorDeliveryMapped', RESEED, 1);
+GO
+TRUNCATE TABLE Staging.VendorDeliveryNewMapping
 GO
 
  

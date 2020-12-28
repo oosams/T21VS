@@ -5,11 +5,11 @@ USE T21;
 GO
 
 -- Create new Product, return new ProductID
--- Create new Category if CategoryID is NULL. In that case @CategoryName and @CategoryDescription should be provided.
+-- If CategoryID is NULL -> Create new Category and return ID in output. In that case @CategoryName and @CategoryDescription should be provided.
 
 -------------
 CREATE OR ALTER PROCEDURE Shop.sp_CreateProduct
-	 @CategoryID INT = NULL
+	 @CategoryID INT = NULL OUTPUT
 	,@CategoryName NVARCHAR(255) = NULL
 	,@CategoryDescription NVARCHAR(MAX) = NULL
 	,@ProductName NVARCHAR(255)
@@ -202,7 +202,7 @@ BEGIN
 		EXEC Logs.sp_SetError	 @RunID = @CurrentRunID 		-- INT       -- get from sp_StartOperation
 								,@ProcedureID = @@PROCID	-- INT, NULL
 								,@Parameters = @CurrentParameters	-- NVARCHAR(MAX), NULL
-								,@ErrorMessage = 'Can not create Product'	-- NVARCHAR(MAX), NULL
+								,@ErrorMessage = 'Cannot create Product'	-- NVARCHAR(MAX), NULL
 
 		-- Fail Operation
 		EXEC Logs.sp_FailOperation   @OperationRunID = 	@CurrentRunID	 -- INT       -- get from sp_StartOperation
@@ -212,5 +212,3 @@ BEGIN
 	END CATCH
 END
 GO
-
- 
