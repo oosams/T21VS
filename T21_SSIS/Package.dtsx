@@ -12,8 +12,8 @@
   DTS:ObjectName="Package"
   DTS:PackageType="5"
   DTS:ProtectionLevel="0"
-  DTS:VersionBuild="137"
-  DTS:VersionGUID="{3997EFB7-EF9B-4C41-BF5C-7505B51CA3E1}">
+  DTS:VersionBuild="147"
+  DTS:VersionGUID="{EAD9B653-7D9B-4F8F-B09E-5D9DB902F494}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -154,7 +154,7 @@
           DTS:RowDelimiter=""
           DTS:TextQualifier="_x003C_none_x003E_"
           DTS:CodePage="1252"
-          DTS:ConnectionString="d:\work\21\vendorDeliveryArchive\20201228_201958973_">
+          DTS:ConnectionString="d:\work\21\vendorDeliveryArchive\20201229_214051393_">
           <DTS:FlatFileColumns>
             <DTS:FlatFileColumn
               DTS:ColumnType="Delimited"
@@ -472,10 +472,26 @@
   </DTS:Variables>
   <DTS:Executables>
     <DTS:Executable
+      DTS:refId="Package\BCP Update MappingFile"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{386F2723-A5AE-4C62-8CEA-A81C3C175C1C}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="BCP Update MappingFile"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2019; © 2019 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{453392D5-91D9-49E1-9CCC-A619C7E2ADA9}"
+          SQLTask:SqlStatementSource="-----VENDOR MAPPING FILE------&#xA;&#xA; &#xA;sp_configure 'show advanced options', '1';&#xA;RECONFIGURE;&#xA;GO&#xA;sp_configure 'xp_cmdshell', '1';&#xA;RECONFIGURE;&#xA;GO&#xA;&#xA;DECLARE @TableCOL NVARCHAR(1000) = ' &quot;SELECT ''Make_id'' ,''Make_name'' ,''Make_guid'' ,''Product_Model_id'' ,''Product_Model_Name'' ,''Model_guid'' UNION ALL SELECT CAST(Make_id as NVARCHAR(100)) ,Make_name ,CAST(Make_guid as NVARCHAR(100)) ,CAST(Product_Model_id as NVARCHAR(100)) ,Product_Model_Name&#x9;,CAST(Model_guid as NVARCHAR(100)) FROM [T21].[Staging].[VendorDeliveryNewMapping]&quot; '&#xA; &#xA;DECLARE @Table  NVARCHAR(255) = '&quot; SELECT * FROM [T21].[Staging].[VendorDeliveryNewMapping]&quot;' &#xA;DECLARE @File NVARCHAR(255) = ' d:\work\21\mapping\VendorToShopProductMapping.csv '&#xA;&#xA;-- out&#xA;&#x9;DECLARE @bcp_cmd NVARCHAR(2000) = 'BCP ' + @TableCOL  + ' queryout  ' + @File + ' -c -t &quot;,&quot; -r &quot;\n&quot; -T -S LV4788 -U SOFTSERVE\osams'&#xA;&#x9;EXEC master..xp_cmdSHELL @bcp_cmd&#xA;&#x9;   &#xA;GO&#x9;   &#xA;sp_configure 'xp_cmdshell', '0';&#xA;RECONFIGURE;&#xA;GO&#x9;&#x9;&#xA;sp_configure 'show advanced options', '0';&#xA;RECONFIGURE;&#xA;GO" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
       DTS:refId="Package\CompleteOperation"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Execute SQL Task"
-      DTS:Disabled="True"
       DTS:DTSID="{DA9A46A0-5963-41F0-870A-8BF7103C08F7}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
@@ -494,948 +510,6 @@
             SQLTask:DataType="3"
             SQLTask:ParameterSize="-1" />
         </SQLTask:SqlTaskData>
-      </DTS:ObjectData>
-    </DTS:Executable>
-    <DTS:Executable
-      DTS:refId="Package\Data Flow Task"
-      DTS:CreationName="Microsoft.Pipeline"
-      DTS:Description="Data Flow Task"
-      DTS:DTSID="{A75B20AB-9042-4FAA-A4D3-E80D21CB436F}"
-      DTS:ExecutableType="Microsoft.Pipeline"
-      DTS:LocaleID="-1"
-      DTS:ObjectName="Data Flow Task"
-      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
-      <DTS:Variables />
-      <DTS:ObjectData>
-        <pipeline
-          version="1">
-          <components>
-            <component
-              refId="Package\Data Flow Task\Conditional Split"
-              componentClassID="Microsoft.ConditionalSplit"
-              contactInfo="Conditional Split;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
-              description="Routes data rows to different outputs depending on the content of the data. Use conditions (SSIS expressions) to specify which rows are routed. For example, separate records that need to be cleaned from those that are ready to be loaded or route only a subset of records."
-              name="Conditional Split"
-              usesDispositions="true">
-              <inputs>
-                <input
-                  refId="Package\Data Flow Task\Conditional Split.Inputs[Conditional Split Input]"
-                  description="Input to the Conditional Split Transformation"
-                  name="Conditional Split Input">
-                  <inputColumns>
-                    <inputColumn
-                      refId="Package\Data Flow Task\Conditional Split.Inputs[Conditional Split Input].Columns[Product_Model_id]"
-                      cachedDataType="i4"
-                      cachedName="Product_Model_id"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_id]" />
-                  </inputColumns>
-                  <externalMetadataColumns />
-                </input>
-              </inputs>
-              <outputs>
-                <output
-                  refId="Package\Data Flow Task\Conditional Split.Outputs[New Products to create]"
-                  description="Output 1 of the Conditional Split Transformation"
-                  errorOrTruncationOperation="Computation"
-                  errorRowDisposition="FailComponent"
-                  exclusionGroup="1"
-                  name="New Products to create"
-                  synchronousInputId="Package\Data Flow Task\Conditional Split.Inputs[Conditional Split Input]"
-                  truncationRowDisposition="FailComponent">
-                  <properties>
-                    <property
-                      containsID="true"
-                      dataType="System.String"
-                      description="Specifies the expression. This expression version uses lineage identifiers instead of column names."
-                      name="Expression">[ISNULL](#{Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_id]})</property>
-                    <property
-                      containsID="true"
-                      dataType="System.String"
-                      description="Specifies the friendly version of the expression. This expression version uses column names."
-                      expressionType="Notify"
-                      name="FriendlyExpression">ISNULL(Product_Model_id)</property>
-                    <property
-                      dataType="System.Int32"
-                      description="Specifies the position of the condition in the list of conditions that the transformation evaluates. The evaluation order is from the lowest to the highest value."
-                      name="EvaluationOrder">0</property>
-                  </properties>
-                  <externalMetadataColumns />
-                </output>
-                <output
-                  refId="Package\Data Flow Task\Conditional Split.Outputs[Existing Products to update]"
-                  description="Default Output of the Conditional Split Transformation"
-                  exclusionGroup="1"
-                  name="Existing Products to update"
-                  synchronousInputId="Package\Data Flow Task\Conditional Split.Inputs[Conditional Split Input]">
-                  <properties>
-                    <property
-                      dataType="System.Boolean"
-                      name="IsDefaultOut">true</property>
-                  </properties>
-                  <externalMetadataColumns />
-                </output>
-                <output
-                  refId="Package\Data Flow Task\Conditional Split.Outputs[Conditional Split Error Output]"
-                  description="Error Output of the Conditional Split Transformation"
-                  exclusionGroup="1"
-                  isErrorOut="true"
-                  name="Conditional Split Error Output"
-                  synchronousInputId="Package\Data Flow Task\Conditional Split.Inputs[Conditional Split Input]">
-                  <outputColumns>
-                    <outputColumn
-                      refId="Package\Data Flow Task\Conditional Split.Outputs[Conditional Split Error Output].Columns[ErrorCode]"
-                      dataType="i4"
-                      lineageId="Package\Data Flow Task\Conditional Split.Outputs[Conditional Split Error Output].Columns[ErrorCode]"
-                      name="ErrorCode"
-                      specialFlags="1" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\Conditional Split.Outputs[Conditional Split Error Output].Columns[ErrorColumn]"
-                      dataType="i4"
-                      lineageId="Package\Data Flow Task\Conditional Split.Outputs[Conditional Split Error Output].Columns[ErrorColumn]"
-                      name="ErrorColumn"
-                      specialFlags="2" />
-                  </outputColumns>
-                  <externalMetadataColumns />
-                </output>
-              </outputs>
-            </component>
-            <component
-              refId="Package\Data Flow Task\OLE DB Command"
-              componentClassID="Microsoft.OLEDBCommand"
-              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
-              description="Runs an SQL statement for each row in a data flow. For example, call a 'new employee setup' stored procedure for each row in the 'new employees' table. Note: running an SQL statement for each row of a large data flow may take a long time."
-              name="OLE DB Command"
-              usesDispositions="true"
-              version="2">
-              <properties>
-                <property
-                  dataType="System.Int32"
-                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
-                  name="CommandTimeout">0</property>
-                <property
-                  dataType="System.String"
-                  description="The SQL command to be executed."
-                  expressionType="Notify"
-                  name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">EXEC Shop.sp_UpdateProduct   
-	 @ProductID = ?	-- INT
-	,@UnitPrice =  ? -- MONEY, NULL
-	,@Quantity =   ?  -- INT, NULL</property>
-                <property
-                  dataType="System.Int32"
-                  description="Specifies the column code page to use when code page information is unavailable from the data source."
-                  name="DefaultCodePage">1252</property>
-              </properties>
-              <connections>
-                <connection
-                  refId="Package\Data Flow Task\OLE DB Command.Connections[OleDbConnection]"
-                  connectionManagerID="{453392D5-91D9-49E1-9CCC-A619C7E2ADA9}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[LV4788.T21]"
-                  description="The OLE DB runtime connection used to access the database."
-                  name="OleDbConnection" />
-              </connections>
-              <inputs>
-                <input
-                  refId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input]"
-                  errorOrTruncationOperation="Command Execution"
-                  errorRowDisposition="FailComponent"
-                  hasSideEffects="true"
-                  name="OLE DB Command Input">
-                  <inputColumns>
-                    <inputColumn
-                      refId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input].Columns[Product_Model_id]"
-                      cachedDataType="i4"
-                      cachedName="Product_Model_id"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[@ProductID]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_id]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input].Columns[Unit_Price]"
-                      cachedDataType="i4"
-                      cachedName="Unit_Price"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[@UnitPrice]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Unit_Price]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input].Columns[Quantity]"
-                      cachedDataType="i4"
-                      cachedName="Quantity"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[@Quantity]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Quantity]" />
-                  </inputColumns>
-                  <externalMetadataColumns
-                    isUsed="True">
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[@ProductID]"
-                      dataType="i4"
-                      name="@ProductID">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">81</property>
-                      </properties>
-                    </externalMetadataColumn>
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[@UnitPrice]"
-                      dataType="cy"
-                      name="@UnitPrice">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">81</property>
-                      </properties>
-                    </externalMetadataColumn>
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[@Quantity]"
-                      dataType="i4"
-                      name="@Quantity">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">81</property>
-                      </properties>
-                    </externalMetadataColumn>
-                  </externalMetadataColumns>
-                </input>
-              </inputs>
-              <outputs>
-                <output
-                  refId="Package\Data Flow Task\OLE DB Command.Outputs[OLE DB Command Output]"
-                  exclusionGroup="1"
-                  name="OLE DB Command Output"
-                  synchronousInputId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input]">
-                  <externalMetadataColumns />
-                </output>
-                <output
-                  refId="Package\Data Flow Task\OLE DB Command.Outputs[OLE DB Command Error Output]"
-                  exclusionGroup="1"
-                  isErrorOut="true"
-                  name="OLE DB Command Error Output"
-                  synchronousInputId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input]">
-                  <outputColumns>
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
-                      dataType="i4"
-                      lineageId="Package\Data Flow Task\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
-                      name="ErrorCode"
-                      specialFlags="1" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
-                      dataType="i4"
-                      lineageId="Package\Data Flow Task\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
-                      name="ErrorColumn"
-                      specialFlags="2" />
-                  </outputColumns>
-                  <externalMetadataColumns />
-                </output>
-              </outputs>
-            </component>
-            <component
-              refId="Package\Data Flow Task\OLE DB Command 1"
-              componentClassID="Microsoft.OLEDBCommand"
-              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
-              description="Runs an SQL statement for each row in a data flow. For example, call a 'new employee setup' stored procedure for each row in the 'new employees' table. Note: running an SQL statement for each row of a large data flow may take a long time."
-              name="OLE DB Command 1"
-              usesDispositions="true"
-              version="2">
-              <properties>
-                <property
-                  dataType="System.Int32"
-                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
-                  name="CommandTimeout">0</property>
-                <property
-                  dataType="System.String"
-                  description="The SQL command to be executed."
-                  expressionType="Notify"
-                  name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">DECLARE @ProductID int = ?
-DECLARE @CategoryID int = ? 
-DECLARE @CategoryName NVARCHAR(MAX) =  ?	 
-DECLARE @CategoryDescription NVARCHAR(MAX) =  ?	 
-DECLARE @ProductName NVARCHAR(MAX) = ?    
-DECLARE @UnitPrice MONEY =  ?   
-DECLARE @Quantity INT =   ?   
-DECLARE @ProductDescription NVARCHAR(MAX) = ?
-DECLARE @CategoryGUID uniqueidentifier = ?
-DECLARE @ProductGUID uniqueidentifier = ?
-
-
-
-EXEC @ProductID = Shop.sp_CreateProduct   
-	 @CategoryID = @CategoryID  OUTPUT	-- INT, NULL
-	,@CategoryName =  @CategoryName	 -- NVARCHAR(255), NULL
-	,@CategoryDescription =  @CategoryDescription	 -- NVARCHAR(MAX), NULL
-	,@ProductName = @ProductName   -- NVARCHAR(255)
-	,@UnitPrice =  @UnitPrice  -- MONEY
-	,@Quantity =   @Quantity  -- INT
-	--,@IsActive = 1   -- INT, 1
-	,@Description = @ProductDescription
-
-INSERT INTO Staging.VendorDeliveryNewMapping(
-	 Make_id
-	,Make_Name
-	,Make_Desc
-	,Make_Guid
-	,Product_Model_id
-	,Product_Model_Name
-	,Model_Desc
-	,Model_Guid)
-VALUES(
-	  @CategoryID
-	 ,@CategoryName
-	 ,@CategoryDescription
-	 ,@CategoryGUID
-	 ,@ProductID
-	 ,@ProductName
-	 ,@ProductDescription
-	 ,@ProductGUID)</property>
-                <property
-                  dataType="System.Int32"
-                  description="Specifies the column code page to use when code page information is unavailable from the data source."
-                  name="DefaultCodePage">1252</property>
-              </properties>
-              <connections>
-                <connection
-                  refId="Package\Data Flow Task\OLE DB Command 1.Connections[OleDbConnection]"
-                  connectionManagerID="{453392D5-91D9-49E1-9CCC-A619C7E2ADA9}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[LV4788.T21]"
-                  description="The OLE DB runtime connection used to access the database."
-                  name="OleDbConnection" />
-              </connections>
-              <inputs>
-                <input
-                  refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input]"
-                  errorOrTruncationOperation="Command Execution"
-                  errorRowDisposition="FailComponent"
-                  hasSideEffects="true"
-                  name="OLE DB Command Input">
-                  <inputColumns>
-                    <inputColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Product_Model_id]"
-                      cachedDataType="i4"
-                      cachedName="Product_Model_id"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_id]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Make_id]"
-                      cachedDataType="i4"
-                      cachedName="Make_id"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_1]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_id]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Make_Name]"
-                      cachedDataType="nText"
-                      cachedName="Make_Name"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_2]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Name]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Make_Desc]"
-                      cachedDataType="nText"
-                      cachedName="Make_Desc"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_3]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Desc]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Product_Model_Name]"
-                      cachedDataType="nText"
-                      cachedName="Product_Model_Name"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_4]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_Name]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Unit_Price]"
-                      cachedDataType="i4"
-                      cachedName="Unit_Price"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_5]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Unit_Price]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Quantity]"
-                      cachedDataType="i4"
-                      cachedName="Quantity"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_6]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Quantity]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Model_Desc]"
-                      cachedDataType="nText"
-                      cachedName="Model_Desc"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_7]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Desc]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Make_Guid]"
-                      cachedDataType="guid"
-                      cachedName="Make_Guid"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_8]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Guid]" />
-                    <inputColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Model_Guid]"
-                      cachedDataType="guid"
-                      cachedName="Model_Guid"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_9]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Guid]" />
-                  </inputColumns>
-                  <externalMetadataColumns
-                    isUsed="True">
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
-                      dataType="i4"
-                      name="Param_0">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">81</property>
-                      </properties>
-                    </externalMetadataColumn>
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_1]"
-                      dataType="i4"
-                      name="Param_1">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">81</property>
-                      </properties>
-                    </externalMetadataColumn>
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_2]"
-                      dataType="nText"
-                      name="Param_2">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">65</property>
-                      </properties>
-                    </externalMetadataColumn>
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_3]"
-                      dataType="nText"
-                      name="Param_3">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">65</property>
-                      </properties>
-                    </externalMetadataColumn>
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_4]"
-                      dataType="nText"
-                      name="Param_4">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">65</property>
-                      </properties>
-                    </externalMetadataColumn>
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_5]"
-                      dataType="cy"
-                      name="Param_5">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">81</property>
-                      </properties>
-                    </externalMetadataColumn>
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_6]"
-                      dataType="i4"
-                      name="Param_6">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">81</property>
-                      </properties>
-                    </externalMetadataColumn>
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_7]"
-                      dataType="nText"
-                      name="Param_7">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">193</property>
-                      </properties>
-                    </externalMetadataColumn>
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_8]"
-                      dataType="guid"
-                      name="Param_8">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">65</property>
-                      </properties>
-                    </externalMetadataColumn>
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_9]"
-                      dataType="guid"
-                      name="Param_9">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
-                          name="DBParamInfoFlags">65</property>
-                      </properties>
-                    </externalMetadataColumn>
-                  </externalMetadataColumns>
-                </input>
-              </inputs>
-              <outputs>
-                <output
-                  refId="Package\Data Flow Task\OLE DB Command 1.Outputs[OLE DB Command Output]"
-                  exclusionGroup="1"
-                  name="OLE DB Command Output"
-                  synchronousInputId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input]">
-                  <externalMetadataColumns />
-                </output>
-                <output
-                  refId="Package\Data Flow Task\OLE DB Command 1.Outputs[OLE DB Command Error Output]"
-                  exclusionGroup="1"
-                  isErrorOut="true"
-                  name="OLE DB Command Error Output"
-                  synchronousInputId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input]">
-                  <outputColumns>
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
-                      dataType="i4"
-                      lineageId="Package\Data Flow Task\OLE DB Command 1.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
-                      name="ErrorCode"
-                      specialFlags="1" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Command 1.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
-                      dataType="i4"
-                      lineageId="Package\Data Flow Task\OLE DB Command 1.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
-                      name="ErrorColumn"
-                      specialFlags="2" />
-                  </outputColumns>
-                  <externalMetadataColumns />
-                </output>
-              </outputs>
-            </component>
-            <component
-              refId="Package\Data Flow Task\OLE DB Source"
-              componentClassID="Microsoft.OLEDBSource"
-              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
-              description="OLE DB Source"
-              name="OLE DB Source"
-              usesDispositions="true"
-              version="7">
-              <properties>
-                <property
-                  dataType="System.Int32"
-                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
-                  name="CommandTimeout">0</property>
-                <property
-                  dataType="System.String"
-                  description="Specifies the name of the database object used to open a rowset."
-                  name="OpenRowset">[Staging].[VendorDeliveryMapped]</property>
-                <property
-                  dataType="System.String"
-                  description="Specifies the variable that contains the name of the database object used to open a rowset."
-                  name="OpenRowsetVariable"></property>
-                <property
-                  dataType="System.String"
-                  description="The SQL command to be executed."
-                  name="SqlCommand"
-                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT * FROM  Staging.VendorDeliveryMapped</property>
-                <property
-                  dataType="System.String"
-                  description="The variable that contains the SQL command to be executed."
-                  name="SqlCommandVariable"></property>
-                <property
-                  dataType="System.Int32"
-                  description="Specifies the column code page to use when code page information is unavailable from the data source."
-                  name="DefaultCodePage">1252</property>
-                <property
-                  dataType="System.Boolean"
-                  description="Forces the use of the DefaultCodePage property value when describing character data."
-                  name="AlwaysUseDefaultCodePage">false</property>
-                <property
-                  dataType="System.Int32"
-                  description="Specifies the mode used to access the database."
-                  name="AccessMode"
-                  typeConverter="AccessMode">2</property>
-                <property
-                  dataType="System.String"
-                  description="The mappings between the parameters in the SQL command and variables."
-                  name="ParameterMapping"></property>
-              </properties>
-              <connections>
-                <connection
-                  refId="Package\Data Flow Task\OLE DB Source.Connections[OleDbConnection]"
-                  connectionManagerID="{453392D5-91D9-49E1-9CCC-A619C7E2ADA9}:external"
-                  connectionManagerRefId="Project.ConnectionManagers[LV4788.T21]"
-                  description="The OLE DB runtime connection used to access the database."
-                  name="OleDbConnection" />
-              </connections>
-              <outputs>
-                <output
-                  refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output]"
-                  name="OLE DB Source Output">
-                  <outputColumns>
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[rowID]"
-                      dataType="i4"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[rowID]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[rowID]"
-                      name="rowID"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_id]"
-                      dataType="i4"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_id]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_id]"
-                      name="Make_id"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_id]"
-                      dataType="i4"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Product_Model_id]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_id]"
-                      name="Product_Model_id"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[File_Name]"
-                      dataType="nText"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[File_Name]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[File_Name]"
-                      name="File_Name"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Load_Date]"
-                      dataType="nText"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Load_Date]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Load_Date]"
-                      name="Load_Date"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Name]"
-                      dataType="nText"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_Name]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Name]"
-                      name="Make_Name"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Desc]"
-                      dataType="nText"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_Desc]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Desc]"
-                      name="Make_Desc"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Guid]"
-                      dataType="guid"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_Guid]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Guid]"
-                      name="Make_Guid"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_Name]"
-                      dataType="nText"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Product_Model_Name]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_Name]"
-                      name="Product_Model_Name"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Desc]"
-                      dataType="nText"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Desc]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Desc]"
-                      name="Model_Desc"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Guid]"
-                      dataType="guid"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Guid]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Guid]"
-                      name="Model_Guid"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Specifications_1]"
-                      dataType="nText"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Specifications_1]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Specifications_1]"
-                      name="Model_Specifications_1"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Specifications_2]"
-                      dataType="nText"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Specifications_2]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Specifications_2]"
-                      name="Model_Specifications_2"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Quantity]"
-                      dataType="i4"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Quantity]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Quantity]"
-                      name="Quantity"
-                      truncationRowDisposition="FailComponent" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Unit_Price]"
-                      dataType="i4"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Unit_Price]"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].Columns[Unit_Price]"
-                      name="Unit_Price"
-                      truncationRowDisposition="FailComponent" />
-                  </outputColumns>
-                  <externalMetadataColumns
-                    isUsed="True">
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[rowID]"
-                      dataType="i4"
-                      name="rowID" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_id]"
-                      dataType="i4"
-                      name="Make_id" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Product_Model_id]"
-                      dataType="i4"
-                      name="Product_Model_id" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[File_Name]"
-                      dataType="nText"
-                      name="File_Name" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Load_Date]"
-                      dataType="nText"
-                      name="Load_Date" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_Name]"
-                      dataType="nText"
-                      name="Make_Name" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_Desc]"
-                      dataType="nText"
-                      name="Make_Desc" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_Guid]"
-                      dataType="guid"
-                      name="Make_Guid" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Product_Model_Name]"
-                      dataType="nText"
-                      name="Product_Model_Name" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Desc]"
-                      dataType="nText"
-                      name="Model_Desc" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Guid]"
-                      dataType="guid"
-                      name="Model_Guid" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Specifications_1]"
-                      dataType="nText"
-                      name="Model_Specifications_1" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Specifications_2]"
-                      dataType="nText"
-                      name="Model_Specifications_2" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Quantity]"
-                      dataType="i4"
-                      name="Quantity" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Unit_Price]"
-                      dataType="i4"
-                      name="Unit_Price" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_1]"
-                      dataType="nText"
-                      name="Add_Field_1" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_2]"
-                      dataType="nText"
-                      name="Add_Field_2" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_3]"
-                      dataType="nText"
-                      name="Add_Field_3" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_4]"
-                      dataType="nText"
-                      name="Add_Field_4" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_5]"
-                      dataType="nText"
-                      name="Add_Field_5" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_6]"
-                      dataType="nText"
-                      name="Add_Field_6" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_7]"
-                      dataType="nText"
-                      name="Add_Field_7" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_8]"
-                      dataType="nText"
-                      name="Add_Field_8" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_9]"
-                      dataType="nText"
-                      name="Add_Field_9" />
-                    <externalMetadataColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_10]"
-                      dataType="nText"
-                      name="Add_Field_10" />
-                  </externalMetadataColumns>
-                </output>
-                <output
-                  refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output]"
-                  isErrorOut="true"
-                  name="OLE DB Source Error Output">
-                  <outputColumns>
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[rowID]"
-                      dataType="i4"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[rowID]"
-                      name="rowID" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_id]"
-                      dataType="i4"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_id]"
-                      name="Make_id" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Product_Model_id]"
-                      dataType="i4"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Product_Model_id]"
-                      name="Product_Model_id" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[File_Name]"
-                      dataType="nText"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[File_Name]"
-                      name="File_Name" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Load_Date]"
-                      dataType="nText"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Load_Date]"
-                      name="Load_Date" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_Name]"
-                      dataType="nText"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_Name]"
-                      name="Make_Name" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_Desc]"
-                      dataType="nText"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_Desc]"
-                      name="Make_Desc" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_Guid]"
-                      dataType="guid"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_Guid]"
-                      name="Make_Guid" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Product_Model_Name]"
-                      dataType="nText"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Product_Model_Name]"
-                      name="Product_Model_Name" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Desc]"
-                      dataType="nText"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Desc]"
-                      name="Model_Desc" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Guid]"
-                      dataType="guid"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Guid]"
-                      name="Model_Guid" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Specifications_1]"
-                      dataType="nText"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Specifications_1]"
-                      name="Model_Specifications_1" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Specifications_2]"
-                      dataType="nText"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Specifications_2]"
-                      name="Model_Specifications_2" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Quantity]"
-                      dataType="i4"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Quantity]"
-                      name="Quantity" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Unit_Price]"
-                      dataType="i4"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Unit_Price]"
-                      name="Unit_Price" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
-                      dataType="i4"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
-                      name="ErrorCode"
-                      specialFlags="1" />
-                    <outputColumn
-                      refId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
-                      dataType="i4"
-                      lineageId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
-                      name="ErrorColumn"
-                      specialFlags="2" />
-                  </outputColumns>
-                  <externalMetadataColumns />
-                </output>
-              </outputs>
-            </component>
-          </components>
-          <paths>
-            <path
-              refId="Package\Data Flow Task.Paths[Existing Products to update]"
-              endId="Package\Data Flow Task\OLE DB Command.Inputs[OLE DB Command Input]"
-              name="Existing Products to update"
-              startId="Package\Data Flow Task\Conditional Split.Outputs[Existing Products to update]" />
-            <path
-              refId="Package\Data Flow Task.Paths[New Products to create]"
-              endId="Package\Data Flow Task\OLE DB Command 1.Inputs[OLE DB Command Input]"
-              name="New Products to create"
-              startId="Package\Data Flow Task\Conditional Split.Outputs[New Products to create]" />
-            <path
-              refId="Package\Data Flow Task.Paths[OLE DB Source Output]"
-              endId="Package\Data Flow Task\Conditional Split.Inputs[Conditional Split Input]"
-              name="OLE DB Source Output"
-              startId="Package\Data Flow Task\OLE DB Source.Outputs[OLE DB Source Output]" />
-          </paths>
-        </pipeline>
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
@@ -2869,23 +1943,11 @@ VALUES(
                       cachedName="Make_name"
                       lineageId="Package\Mapping\Sort 1.Outputs[Sort Output].Columns[Make_name]" />
                     <inputColumn
-                      refId="Package\Mapping\Data Conversion.Inputs[Data Conversion Input].Columns[Make_Desc]"
-                      cachedDataType="wstr"
-                      cachedLength="4000"
-                      cachedName="Make_Desc"
-                      lineageId="Package\Mapping\Sort 1.Outputs[Sort Output].Columns[Make_Desc]" />
-                    <inputColumn
                       refId="Package\Mapping\Data Conversion.Inputs[Data Conversion Input].Columns[Product_Model_Name]"
                       cachedDataType="wstr"
                       cachedLength="100"
                       cachedName="Product_Model_Name"
                       lineageId="Package\Mapping\Sort 1.Outputs[Sort Output].Columns[Product_Model_Name]" />
-                    <inputColumn
-                      refId="Package\Mapping\Data Conversion.Inputs[Data Conversion Input].Columns[Model_Desc]"
-                      cachedDataType="wstr"
-                      cachedLength="4000"
-                      cachedName="Model_Desc"
-                      lineageId="Package\Mapping\Sort 1.Outputs[Sort Output].Columns[Model_Desc]" />
                   </inputColumns>
                   <externalMetadataColumns />
                 </input>
@@ -2919,27 +1981,6 @@ VALUES(
                       </properties>
                     </outputColumn>
                     <outputColumn
-                      refId="Package\Mapping\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Make_Desc]"
-                      dataType="wstr"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      length="4000"
-                      lineageId="Package\Mapping\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Make_Desc]"
-                      name="Copy of Make_Desc"
-                      truncationRowDisposition="FailComponent">
-                      <properties>
-                        <property
-                          containsID="true"
-                          dataType="System.Int32"
-                          description="Specifies the input column used as the source of data for the conversion."
-                          name="SourceInputColumnLineageID">#{Package\Mapping\Sort 1.Outputs[Sort Output].Columns[Make_Desc]}</property>
-                        <property
-                          dataType="System.Boolean"
-                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
-                          name="FastParse">false</property>
-                      </properties>
-                    </outputColumn>
-                    <outputColumn
                       refId="Package\Mapping\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Product_Model_Name]"
                       dataType="wstr"
                       errorOrTruncationOperation="Conversion"
@@ -2954,27 +1995,6 @@ VALUES(
                           dataType="System.Int32"
                           description="Specifies the input column used as the source of data for the conversion."
                           name="SourceInputColumnLineageID">#{Package\Mapping\Sort 1.Outputs[Sort Output].Columns[Product_Model_Name]}</property>
-                        <property
-                          dataType="System.Boolean"
-                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
-                          name="FastParse">false</property>
-                      </properties>
-                    </outputColumn>
-                    <outputColumn
-                      refId="Package\Mapping\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Model_Desc]"
-                      dataType="wstr"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      length="4000"
-                      lineageId="Package\Mapping\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Model_Desc]"
-                      name="Copy of Model_Desc"
-                      truncationRowDisposition="FailComponent">
-                      <properties>
-                        <property
-                          containsID="true"
-                          dataType="System.Int32"
-                          description="Specifies the input column used as the source of data for the conversion."
-                          name="SourceInputColumnLineageID">#{Package\Mapping\Sort 1.Outputs[Sort Output].Columns[Model_Desc]}</property>
                         <property
                           dataType="System.Boolean"
                           description="Indicates whether the column uses the faster, locale-neutral parsing routines."
@@ -5731,23 +4751,6 @@ VALUES(
                       </properties>
                     </inputColumn>
                     <inputColumn
-                      refId="Package\Mapping\Sort 1.Inputs[Sort Input].Columns[Make_Desc]"
-                      cachedDataType="wstr"
-                      cachedLength="4000"
-                      cachedName="Make_Desc"
-                      lineageId="Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].Columns[Make_Desc]">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Specifies the comparison options for character data."
-                          name="NewComparisonFlags">0</property>
-                        <property
-                          dataType="System.Int32"
-                          description="Specifies the sort order of the column."
-                          name="NewSortKeyPosition">0</property>
-                      </properties>
-                    </inputColumn>
-                    <inputColumn
                       refId="Package\Mapping\Sort 1.Inputs[Sort Input].Columns[Make_guid]"
                       cachedDataType="wstr"
                       cachedLength="50"
@@ -5787,23 +4790,6 @@ VALUES(
                       cachedLength="100"
                       cachedName="Product_Model_Name"
                       lineageId="Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].Columns[Product_Model_Name]">
-                      <properties>
-                        <property
-                          dataType="System.Int32"
-                          description="Specifies the comparison options for character data."
-                          name="NewComparisonFlags">0</property>
-                        <property
-                          dataType="System.Int32"
-                          description="Specifies the sort order of the column."
-                          name="NewSortKeyPosition">0</property>
-                      </properties>
-                    </inputColumn>
-                    <inputColumn
-                      refId="Package\Mapping\Sort 1.Inputs[Sort Input].Columns[Model_Desc]"
-                      cachedDataType="wstr"
-                      cachedLength="4000"
-                      cachedName="Model_Desc"
-                      lineageId="Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].Columns[Model_Desc]">
                       <properties>
                         <property
                           dataType="System.Int32"
@@ -5903,20 +4889,6 @@ VALUES(
                       </properties>
                     </outputColumn>
                     <outputColumn
-                      refId="Package\Mapping\Sort 1.Outputs[Sort Output].Columns[Make_Desc]"
-                      dataType="wstr"
-                      length="4000"
-                      lineageId="Package\Mapping\Sort 1.Outputs[Sort Output].Columns[Make_Desc]"
-                      name="Make_Desc">
-                      <properties>
-                        <property
-                          containsID="true"
-                          dataType="System.Int32"
-                          description="Specifies the lineage identifier of the input column that is associated with this output column."
-                          name="SortColumnId">#{Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].Columns[Make_Desc]}</property>
-                      </properties>
-                    </outputColumn>
-                    <outputColumn
                       refId="Package\Mapping\Sort 1.Outputs[Sort Output].Columns[Make_guid]"
                       dataType="wstr"
                       length="50"
@@ -5956,20 +4928,6 @@ VALUES(
                           dataType="System.Int32"
                           description="Specifies the lineage identifier of the input column that is associated with this output column."
                           name="SortColumnId">#{Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].Columns[Product_Model_Name]}</property>
-                      </properties>
-                    </outputColumn>
-                    <outputColumn
-                      refId="Package\Mapping\Sort 1.Outputs[Sort Output].Columns[Model_Desc]"
-                      dataType="wstr"
-                      length="4000"
-                      lineageId="Package\Mapping\Sort 1.Outputs[Sort Output].Columns[Model_Desc]"
-                      name="Model_Desc">
-                      <properties>
-                        <property
-                          containsID="true"
-                          dataType="System.Int32"
-                          description="Specifies the lineage identifier of the input column that is associated with this output column."
-                          name="SortColumnId">#{Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].Columns[Model_Desc]}</property>
                       </properties>
                     </outputColumn>
                     <outputColumn
@@ -7713,26 +6671,12 @@ VALUES(
                       externalMetadataColumnId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Make_Name]"
                       lineageId="Package\Mapping\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Make_name]" />
                     <inputColumn
-                      refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].Columns[Copy of Make_Desc]"
-                      cachedDataType="wstr"
-                      cachedLength="4000"
-                      cachedName="Copy of Make_Desc"
-                      externalMetadataColumnId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Make_Desc]"
-                      lineageId="Package\Mapping\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Make_Desc]" />
-                    <inputColumn
                       refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].Columns[Copy of Product_Model_Name]"
                       cachedDataType="wstr"
                       cachedLength="100"
                       cachedName="Copy of Product_Model_Name"
                       externalMetadataColumnId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Product_Model_Name]"
                       lineageId="Package\Mapping\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Product_Model_Name]" />
-                    <inputColumn
-                      refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].Columns[Copy of Model_Desc]"
-                      cachedDataType="wstr"
-                      cachedLength="4000"
-                      cachedName="Copy of Model_Desc"
-                      externalMetadataColumnId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Model_Desc]"
-                      lineageId="Package\Mapping\Data Conversion.Outputs[Data Conversion Output].Columns[Copy of Model_Desc]" />
                     <inputColumn
                       refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].Columns[gModelGuid]"
                       cachedDataType="guid"
@@ -7763,10 +6707,6 @@ VALUES(
                       dataType="nText"
                       name="Make_Name" />
                     <externalMetadataColumn
-                      refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Make_Desc]"
-                      dataType="nText"
-                      name="Make_Desc" />
-                    <externalMetadataColumn
                       refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Make_Guid]"
                       dataType="guid"
                       name="Make_Guid" />
@@ -7774,10 +6714,6 @@ VALUES(
                       refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Product_Model_Name]"
                       dataType="nText"
                       name="Product_Model_Name" />
-                    <externalMetadataColumn
-                      refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Model_Desc]"
-                      dataType="nText"
-                      name="Model_Desc" />
                     <externalMetadataColumn
                       refId="Package\Mapping\Staging_VendorDeliveryNewMapping.Inputs[OLE DB Destination Input].ExternalColumns[Model_Guid]"
                       dataType="guid"
@@ -7884,27 +6820,6 @@ VALUES(
                       </properties>
                     </outputColumn>
                     <outputColumn
-                      refId="Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].Columns[Make_Desc]"
-                      dataType="wstr"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].ExternalColumns[Make_Desc]"
-                      length="4000"
-                      lineageId="Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].Columns[Make_Desc]"
-                      name="Make_Desc"
-                      truncationRowDisposition="FailComponent">
-                      <properties>
-                        <property
-                          dataType="System.Boolean"
-                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
-                          name="FastParse">false</property>
-                        <property
-                          dataType="System.Boolean"
-                          description="Indicates whether the data is in binary format."
-                          name="UseBinaryFormat">false</property>
-                      </properties>
-                    </outputColumn>
-                    <outputColumn
                       refId="Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].Columns[Make_guid]"
                       dataType="wstr"
                       errorOrTruncationOperation="Conversion"
@@ -7968,27 +6883,6 @@ VALUES(
                       </properties>
                     </outputColumn>
                     <outputColumn
-                      refId="Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].Columns[Model_Desc]"
-                      dataType="wstr"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].ExternalColumns[Model_Desc]"
-                      length="4000"
-                      lineageId="Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].Columns[Model_Desc]"
-                      name="Model_Desc"
-                      truncationRowDisposition="FailComponent">
-                      <properties>
-                        <property
-                          dataType="System.Boolean"
-                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
-                          name="FastParse">false</property>
-                        <property
-                          dataType="System.Boolean"
-                          description="Indicates whether the data is in binary format."
-                          name="UseBinaryFormat">false</property>
-                      </properties>
-                    </outputColumn>
-                    <outputColumn
                       refId="Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].Columns[Model_guid]"
                       dataType="wstr"
                       errorOrTruncationOperation="Conversion"
@@ -8020,17 +6914,11 @@ VALUES(
                     <externalMetadataColumn
                       refId="Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].ExternalColumns[Make_name]"
                       dataType="wstr"
-                      length="100"
+                      length="50"
                       name="Make_name" />
                     <externalMetadataColumn
-                      refId="Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].ExternalColumns[Make_Desc]"
-                      dataType="wstr"
-                      length="4000"
-                      name="Make_Desc" />
-                    <externalMetadataColumn
                       refId="Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].ExternalColumns[Make_guid]"
-                      dataType="wstr"
-                      length="50"
+                      dataType="guid"
                       name="Make_guid" />
                     <externalMetadataColumn
                       refId="Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].ExternalColumns[Product_Model_id]"
@@ -8040,17 +6928,11 @@ VALUES(
                     <externalMetadataColumn
                       refId="Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].ExternalColumns[Product_Model_Name]"
                       dataType="wstr"
-                      length="100"
+                      length="50"
                       name="Product_Model_Name" />
                     <externalMetadataColumn
-                      refId="Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].ExternalColumns[Model_Desc]"
-                      dataType="wstr"
-                      length="4000"
-                      name="Model_Desc" />
-                    <externalMetadataColumn
                       refId="Package\Mapping\Vendor_Mapping.Outputs[Flat File Source Output].ExternalColumns[Model_guid]"
-                      dataType="wstr"
-                      length="50"
+                      dataType="guid"
                       name="Model_guid" />
                   </externalMetadataColumns>
                 </output>
@@ -13175,7 +12057,7 @@ VALUES(
                       cachedDataType="wstr"
                       cachedLength="4000"
                       cachedName="Make_Desc"
-                      lineageId="Package\Mapping _ backup\Vendor_Mapping.Outputs[Flat File Source Output].Columns[Make_Desc]">
+                      lineageId="Package\Mapping _ backup\832:invalid">
                       <properties>
                         <property
                           dataType="System.Int32"
@@ -13242,7 +12124,7 @@ VALUES(
                       cachedDataType="wstr"
                       cachedLength="4000"
                       cachedName="Model_Desc"
-                      lineageId="Package\Mapping _ backup\Vendor_Mapping.Outputs[Flat File Source Output].Columns[Model_Desc]">
+                      lineageId="Package\Mapping _ backup\844:invalid">
                       <properties>
                         <property
                           dataType="System.Int32"
@@ -13351,7 +12233,7 @@ VALUES(
                           containsID="true"
                           dataType="System.Int32"
                           description="Specifies the lineage identifier of the input column that is associated with this output column."
-                          name="SortColumnId">#{Package\Mapping _ backup\Vendor_Mapping.Outputs[Flat File Source Output].Columns[Make_Desc]}</property>
+                          name="SortColumnId">#{Package\Mapping _ backup\832:invalid}</property>
                       </properties>
                     </outputColumn>
                     <outputColumn
@@ -13406,7 +12288,7 @@ VALUES(
                           containsID="true"
                           dataType="System.Int32"
                           description="Specifies the lineage identifier of the input column that is associated with this output column."
-                          name="SortColumnId">#{Package\Mapping _ backup\Vendor_Mapping.Outputs[Flat File Source Output].Columns[Model_Desc]}</property>
+                          name="SortColumnId">#{Package\Mapping _ backup\844:invalid}</property>
                       </properties>
                     </outputColumn>
                     <outputColumn
@@ -13519,7 +12401,7 @@ VALUES(
                       cachedDataType="str"
                       cachedLength="4000"
                       cachedName="Make_Desc"
-                      lineageId="Package\Mapping _ backup\Vendor_Mapping 1.Outputs[Flat File Source Output].Columns[Make_Desc]">
+                      lineageId="Package\Mapping _ backup\1157:invalid">
                       <properties>
                         <property
                           dataType="System.Int32"
@@ -13590,7 +12472,7 @@ VALUES(
                       cachedDataType="str"
                       cachedLength="4000"
                       cachedName="Model_Desc"
-                      lineageId="Package\Mapping _ backup\Vendor_Mapping 1.Outputs[Flat File Source Output].Columns[Model_Desc]">
+                      lineageId="Package\Mapping _ backup\1169:invalid">
                       <properties>
                         <property
                           dataType="System.Int32"
@@ -13703,7 +12585,7 @@ VALUES(
                           containsID="true"
                           dataType="System.Int32"
                           description="Specifies the lineage identifier of the input column that is associated with this output column."
-                          name="SortColumnId">#{Package\Mapping _ backup\Vendor_Mapping 1.Outputs[Flat File Source Output].Columns[Make_Desc]}</property>
+                          name="SortColumnId">#{Package\Mapping _ backup\1157:invalid}</property>
                       </properties>
                     </outputColumn>
                     <outputColumn
@@ -13762,7 +12644,7 @@ VALUES(
                           containsID="true"
                           dataType="System.Int32"
                           description="Specifies the lineage identifier of the input column that is associated with this output column."
-                          name="SortColumnId">#{Package\Mapping _ backup\Vendor_Mapping 1.Outputs[Flat File Source Output].Columns[Model_Desc]}</property>
+                          name="SortColumnId">#{Package\Mapping _ backup\1169:invalid}</property>
                       </properties>
                     </outputColumn>
                     <outputColumn
@@ -18180,27 +17062,6 @@ VALUES(
                       </properties>
                     </outputColumn>
                     <outputColumn
-                      refId="Package\Mapping _ backup\Vendor_Mapping.Outputs[Flat File Source Output].Columns[Make_Desc]"
-                      dataType="wstr"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Mapping _ backup\Vendor_Mapping.Outputs[Flat File Source Output].ExternalColumns[Make_Desc]"
-                      length="4000"
-                      lineageId="Package\Mapping _ backup\Vendor_Mapping.Outputs[Flat File Source Output].Columns[Make_Desc]"
-                      name="Make_Desc"
-                      truncationRowDisposition="FailComponent">
-                      <properties>
-                        <property
-                          dataType="System.Boolean"
-                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
-                          name="FastParse">false</property>
-                        <property
-                          dataType="System.Boolean"
-                          description="Indicates whether the data is in binary format."
-                          name="UseBinaryFormat">false</property>
-                      </properties>
-                    </outputColumn>
-                    <outputColumn
                       refId="Package\Mapping _ backup\Vendor_Mapping.Outputs[Flat File Source Output].Columns[Make_guid]"
                       dataType="guid"
                       errorOrTruncationOperation="Conversion"
@@ -18263,27 +17124,6 @@ VALUES(
                       </properties>
                     </outputColumn>
                     <outputColumn
-                      refId="Package\Mapping _ backup\Vendor_Mapping.Outputs[Flat File Source Output].Columns[Model_Desc]"
-                      dataType="wstr"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Mapping _ backup\Vendor_Mapping.Outputs[Flat File Source Output].ExternalColumns[Model_Desc]"
-                      length="4000"
-                      lineageId="Package\Mapping _ backup\Vendor_Mapping.Outputs[Flat File Source Output].Columns[Model_Desc]"
-                      name="Model_Desc"
-                      truncationRowDisposition="FailComponent">
-                      <properties>
-                        <property
-                          dataType="System.Boolean"
-                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
-                          name="FastParse">false</property>
-                        <property
-                          dataType="System.Boolean"
-                          description="Indicates whether the data is in binary format."
-                          name="UseBinaryFormat">false</property>
-                      </properties>
-                    </outputColumn>
-                    <outputColumn
                       refId="Package\Mapping _ backup\Vendor_Mapping.Outputs[Flat File Source Output].Columns[Model_guid]"
                       dataType="guid"
                       errorOrTruncationOperation="Conversion"
@@ -18314,13 +17154,8 @@ VALUES(
                     <externalMetadataColumn
                       refId="Package\Mapping _ backup\Vendor_Mapping.Outputs[Flat File Source Output].ExternalColumns[Make_name]"
                       dataType="wstr"
-                      length="100"
+                      length="50"
                       name="Make_name" />
-                    <externalMetadataColumn
-                      refId="Package\Mapping _ backup\Vendor_Mapping.Outputs[Flat File Source Output].ExternalColumns[Make_Desc]"
-                      dataType="wstr"
-                      length="4000"
-                      name="Make_Desc" />
                     <externalMetadataColumn
                       refId="Package\Mapping _ backup\Vendor_Mapping.Outputs[Flat File Source Output].ExternalColumns[Make_guid]"
                       dataType="guid"
@@ -18333,13 +17168,8 @@ VALUES(
                     <externalMetadataColumn
                       refId="Package\Mapping _ backup\Vendor_Mapping.Outputs[Flat File Source Output].ExternalColumns[Product_Model_Name]"
                       dataType="wstr"
-                      length="100"
+                      length="50"
                       name="Product_Model_Name" />
-                    <externalMetadataColumn
-                      refId="Package\Mapping _ backup\Vendor_Mapping.Outputs[Flat File Source Output].ExternalColumns[Model_Desc]"
-                      dataType="wstr"
-                      length="4000"
-                      name="Model_Desc" />
                     <externalMetadataColumn
                       refId="Package\Mapping _ backup\Vendor_Mapping.Outputs[Flat File Source Output].ExternalColumns[Model_guid]"
                       dataType="guid"
@@ -18450,28 +17280,6 @@ VALUES(
                       </properties>
                     </outputColumn>
                     <outputColumn
-                      refId="Package\Mapping _ backup\Vendor_Mapping 1.Outputs[Flat File Source Output].Columns[Make_Desc]"
-                      codePage="1252"
-                      dataType="str"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Mapping _ backup\Vendor_Mapping 1.Outputs[Flat File Source Output].ExternalColumns[Make_Desc]"
-                      length="4000"
-                      lineageId="Package\Mapping _ backup\Vendor_Mapping 1.Outputs[Flat File Source Output].Columns[Make_Desc]"
-                      name="Make_Desc"
-                      truncationRowDisposition="FailComponent">
-                      <properties>
-                        <property
-                          dataType="System.Boolean"
-                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
-                          name="FastParse">false</property>
-                        <property
-                          dataType="System.Boolean"
-                          description="Indicates whether the data is in binary format."
-                          name="UseBinaryFormat">false</property>
-                      </properties>
-                    </outputColumn>
-                    <outputColumn
                       refId="Package\Mapping _ backup\Vendor_Mapping 1.Outputs[Flat File Source Output].Columns[Make_guid]"
                       codePage="1252"
                       dataType="str"
@@ -18537,28 +17345,6 @@ VALUES(
                       </properties>
                     </outputColumn>
                     <outputColumn
-                      refId="Package\Mapping _ backup\Vendor_Mapping 1.Outputs[Flat File Source Output].Columns[Model_Desc]"
-                      codePage="1252"
-                      dataType="str"
-                      errorOrTruncationOperation="Conversion"
-                      errorRowDisposition="FailComponent"
-                      externalMetadataColumnId="Package\Mapping _ backup\Vendor_Mapping 1.Outputs[Flat File Source Output].ExternalColumns[Model_Desc]"
-                      length="4000"
-                      lineageId="Package\Mapping _ backup\Vendor_Mapping 1.Outputs[Flat File Source Output].Columns[Model_Desc]"
-                      name="Model_Desc"
-                      truncationRowDisposition="FailComponent">
-                      <properties>
-                        <property
-                          dataType="System.Boolean"
-                          description="Indicates whether the column uses the faster, locale-neutral parsing routines."
-                          name="FastParse">false</property>
-                        <property
-                          dataType="System.Boolean"
-                          description="Indicates whether the data is in binary format."
-                          name="UseBinaryFormat">false</property>
-                      </properties>
-                    </outputColumn>
-                    <outputColumn
                       refId="Package\Mapping _ backup\Vendor_Mapping 1.Outputs[Flat File Source Output].Columns[Model_guid]"
                       codePage="1252"
                       dataType="str"
@@ -18590,16 +17376,9 @@ VALUES(
                       precision="18" />
                     <externalMetadataColumn
                       refId="Package\Mapping _ backup\Vendor_Mapping 1.Outputs[Flat File Source Output].ExternalColumns[Make_name]"
-                      codePage="1252"
-                      dataType="str"
-                      length="100"
+                      dataType="wstr"
+                      length="50"
                       name="Make_name" />
-                    <externalMetadataColumn
-                      refId="Package\Mapping _ backup\Vendor_Mapping 1.Outputs[Flat File Source Output].ExternalColumns[Make_Desc]"
-                      codePage="1252"
-                      dataType="str"
-                      length="4000"
-                      name="Make_Desc" />
                     <externalMetadataColumn
                       refId="Package\Mapping _ backup\Vendor_Mapping 1.Outputs[Flat File Source Output].ExternalColumns[Make_guid]"
                       dataType="guid"
@@ -18611,16 +17390,9 @@ VALUES(
                       precision="18" />
                     <externalMetadataColumn
                       refId="Package\Mapping _ backup\Vendor_Mapping 1.Outputs[Flat File Source Output].ExternalColumns[Product_Model_Name]"
-                      codePage="1252"
-                      dataType="str"
-                      length="100"
+                      dataType="wstr"
+                      length="50"
                       name="Product_Model_Name" />
-                    <externalMetadataColumn
-                      refId="Package\Mapping _ backup\Vendor_Mapping 1.Outputs[Flat File Source Output].ExternalColumns[Model_Desc]"
-                      codePage="1252"
-                      dataType="str"
-                      length="4000"
-                      name="Model_Desc" />
                     <externalMetadataColumn
                       refId="Package\Mapping _ backup\Vendor_Mapping 1.Outputs[Flat File Source Output].ExternalColumns[Model_guid]"
                       dataType="guid"
@@ -18803,10 +17575,951 @@ VALUES(
       </DTS:ObjectData>
     </DTS:Executable>
     <DTS:Executable
+      DTS:refId="Package\Run Product Proc"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:Description="Data Flow Task"
+      DTS:DTSID="{A75B20AB-9042-4FAA-A4D3-E80D21CB436F}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Run Product Proc"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          version="1">
+          <components>
+            <component
+              refId="Package\Run Product Proc\Conditional Split"
+              componentClassID="Microsoft.ConditionalSplit"
+              contactInfo="Conditional Split;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Routes data rows to different outputs depending on the content of the data. Use conditions (SSIS expressions) to specify which rows are routed. For example, separate records that need to be cleaned from those that are ready to be loaded or route only a subset of records."
+              name="Conditional Split"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Run Product Proc\Conditional Split.Inputs[Conditional Split Input]"
+                  description="Input to the Conditional Split Transformation"
+                  name="Conditional Split Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Run Product Proc\Conditional Split.Inputs[Conditional Split Input].Columns[Product_Model_id]"
+                      cachedDataType="i4"
+                      cachedName="Product_Model_id"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_id]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Run Product Proc\Conditional Split.Outputs[New Products to create]"
+                  description="Output 1 of the Conditional Split Transformation"
+                  errorOrTruncationOperation="Computation"
+                  errorRowDisposition="FailComponent"
+                  exclusionGroup="1"
+                  name="New Products to create"
+                  synchronousInputId="Package\Run Product Proc\Conditional Split.Inputs[Conditional Split Input]"
+                  truncationRowDisposition="FailComponent">
+                  <properties>
+                    <property
+                      containsID="true"
+                      dataType="System.String"
+                      description="Specifies the expression. This expression version uses lineage identifiers instead of column names."
+                      name="Expression">[ISNULL](#{Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_id]})</property>
+                    <property
+                      containsID="true"
+                      dataType="System.String"
+                      description="Specifies the friendly version of the expression. This expression version uses column names."
+                      expressionType="Notify"
+                      name="FriendlyExpression">ISNULL(Product_Model_id)</property>
+                    <property
+                      dataType="System.Int32"
+                      description="Specifies the position of the condition in the list of conditions that the transformation evaluates. The evaluation order is from the lowest to the highest value."
+                      name="EvaluationOrder">0</property>
+                  </properties>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Run Product Proc\Conditional Split.Outputs[Existing Products to update]"
+                  description="Default Output of the Conditional Split Transformation"
+                  exclusionGroup="1"
+                  name="Existing Products to update"
+                  synchronousInputId="Package\Run Product Proc\Conditional Split.Inputs[Conditional Split Input]">
+                  <properties>
+                    <property
+                      dataType="System.Boolean"
+                      name="IsDefaultOut">true</property>
+                  </properties>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Run Product Proc\Conditional Split.Outputs[Conditional Split Error Output]"
+                  description="Error Output of the Conditional Split Transformation"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Conditional Split Error Output"
+                  synchronousInputId="Package\Run Product Proc\Conditional Split.Inputs[Conditional Split Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Run Product Proc\Conditional Split.Outputs[Conditional Split Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Run Product Proc\Conditional Split.Outputs[Conditional Split Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\Conditional Split.Outputs[Conditional Split Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Run Product Proc\Conditional Split.Outputs[Conditional Split Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Run Product Proc\OLE DB Command"
+              componentClassID="Microsoft.OLEDBCommand"
+              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
+              description="Runs an SQL statement for each row in a data flow. For example, call a 'new employee setup' stored procedure for each row in the 'new employees' table. Note: running an SQL statement for each row of a large data flow may take a long time."
+              name="OLE DB Command"
+              usesDispositions="true"
+              version="2">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">EXEC Shop.sp_UpdateProduct   
+	 @ProductID = ?	-- INT
+	,@UnitPrice =  ? -- MONEY, NULL
+	,@Quantity =   ?  -- INT, NULL</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Run Product Proc\OLE DB Command.Connections[OleDbConnection]"
+                  connectionManagerID="{453392D5-91D9-49E1-9CCC-A619C7E2ADA9}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[LV4788.T21]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Run Product Proc\OLE DB Command.Inputs[OLE DB Command Input]"
+                  errorOrTruncationOperation="Command Execution"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Command Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Run Product Proc\OLE DB Command.Inputs[OLE DB Command Input].Columns[Product_Model_id]"
+                      cachedDataType="i4"
+                      cachedName="Product_Model_id"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[@ProductID]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_id]" />
+                    <inputColumn
+                      refId="Package\Run Product Proc\OLE DB Command.Inputs[OLE DB Command Input].Columns[Unit_Price]"
+                      cachedDataType="i4"
+                      cachedName="Unit_Price"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[@UnitPrice]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Unit_Price]" />
+                    <inputColumn
+                      refId="Package\Run Product Proc\OLE DB Command.Inputs[OLE DB Command Input].Columns[Quantity]"
+                      cachedDataType="i4"
+                      cachedName="Quantity"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[@Quantity]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Quantity]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[@ProductID]"
+                      dataType="i4"
+                      name="@ProductID">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">81</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[@UnitPrice]"
+                      dataType="cy"
+                      name="@UnitPrice">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">81</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[@Quantity]"
+                      dataType="i4"
+                      name="@Quantity">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">81</property>
+                      </properties>
+                    </externalMetadataColumn>
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Run Product Proc\OLE DB Command.Outputs[OLE DB Command Output]"
+                  exclusionGroup="1"
+                  name="OLE DB Command Output"
+                  synchronousInputId="Package\Run Product Proc\OLE DB Command.Inputs[OLE DB Command Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Run Product Proc\OLE DB Command.Outputs[OLE DB Command Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Command Error Output"
+                  synchronousInputId="Package\Run Product Proc\OLE DB Command.Inputs[OLE DB Command Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Run Product Proc\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Run Product Proc\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Run Product Proc\OLE DB Command 1"
+              componentClassID="Microsoft.OLEDBCommand"
+              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
+              description="Runs an SQL statement for each row in a data flow. For example, call a 'new employee setup' stored procedure for each row in the 'new employees' table. Note: running an SQL statement for each row of a large data flow may take a long time."
+              name="OLE DB Command 1"
+              usesDispositions="true"
+              version="2">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">DECLARE @ProductID int = ?
+DECLARE @CategoryID int = ? 
+DECLARE @CategoryName NVARCHAR(MAX) =  ?	 
+DECLARE @CategoryDescription NVARCHAR(MAX) =  ?	 
+DECLARE @ProductName NVARCHAR(MAX) = ?    
+DECLARE @UnitPrice MONEY =  ?   
+DECLARE @Quantity INT =   ?   
+DECLARE @ProductDescription NVARCHAR(MAX) = ?
+DECLARE @CategoryGUID uniqueidentifier = ?
+DECLARE @ProductGUID uniqueidentifier = ?
+
+
+
+EXEC @ProductID = Shop.sp_CreateProduct   
+	 @CategoryID = @CategoryID  OUTPUT	-- INT, NULL
+	,@CategoryName =  @CategoryName	 -- NVARCHAR(255), NULL
+	,@CategoryDescription =  @CategoryDescription	 -- NVARCHAR(MAX), NULL
+	,@ProductName = @ProductName   -- NVARCHAR(255)
+	,@UnitPrice =  @UnitPrice  -- MONEY
+	,@Quantity =   @Quantity  -- INT
+	--,@IsActive = 1   -- INT, 1
+	,@Description = @ProductDescription
+
+INSERT INTO Staging.VendorDeliveryNewMapping(
+	 Make_id
+	,Make_Name
+--	,Make_Desc
+	,Make_Guid
+	,Product_Model_id
+	,Product_Model_Name
+--	,Model_Desc
+	,Model_Guid)
+VALUES(
+	  @CategoryID
+	 ,@CategoryName
+--	 ,@CategoryDescription
+	 ,@CategoryGUID
+	 ,@ProductID
+	 ,@ProductName
+--	 ,@ProductDescription
+	 ,@ProductGUID)</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Run Product Proc\OLE DB Command 1.Connections[OleDbConnection]"
+                  connectionManagerID="{453392D5-91D9-49E1-9CCC-A619C7E2ADA9}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[LV4788.T21]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input]"
+                  errorOrTruncationOperation="Command Execution"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Command Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Product_Model_id]"
+                      cachedDataType="i4"
+                      cachedName="Product_Model_id"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_id]" />
+                    <inputColumn
+                      refId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Make_id]"
+                      cachedDataType="i4"
+                      cachedName="Make_id"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_1]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_id]" />
+                    <inputColumn
+                      refId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Make_Name]"
+                      cachedDataType="nText"
+                      cachedName="Make_Name"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_2]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Name]" />
+                    <inputColumn
+                      refId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Make_Desc]"
+                      cachedDataType="nText"
+                      cachedName="Make_Desc"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_3]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Desc]" />
+                    <inputColumn
+                      refId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Product_Model_Name]"
+                      cachedDataType="nText"
+                      cachedName="Product_Model_Name"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_4]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_Name]" />
+                    <inputColumn
+                      refId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Unit_Price]"
+                      cachedDataType="i4"
+                      cachedName="Unit_Price"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_5]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Unit_Price]" />
+                    <inputColumn
+                      refId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Quantity]"
+                      cachedDataType="i4"
+                      cachedName="Quantity"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_6]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Quantity]" />
+                    <inputColumn
+                      refId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Model_Desc]"
+                      cachedDataType="nText"
+                      cachedName="Model_Desc"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_7]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Desc]" />
+                    <inputColumn
+                      refId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Make_Guid]"
+                      cachedDataType="guid"
+                      cachedName="Make_Guid"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_8]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Guid]" />
+                    <inputColumn
+                      refId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[Model_Guid]"
+                      cachedDataType="guid"
+                      cachedName="Model_Guid"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_9]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Guid]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      dataType="i4"
+                      name="Param_0">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">81</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_1]"
+                      dataType="i4"
+                      name="Param_1">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">81</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_2]"
+                      dataType="nText"
+                      name="Param_2">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_3]"
+                      dataType="nText"
+                      name="Param_3">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_4]"
+                      dataType="nText"
+                      name="Param_4">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_5]"
+                      dataType="cy"
+                      name="Param_5">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">81</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_6]"
+                      dataType="i4"
+                      name="Param_6">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">81</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_7]"
+                      dataType="nText"
+                      name="Param_7">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">193</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_8]"
+                      dataType="guid"
+                      name="Param_8">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_9]"
+                      dataType="guid"
+                      name="Param_9">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Run Product Proc\OLE DB Command 1.Outputs[OLE DB Command Output]"
+                  exclusionGroup="1"
+                  name="OLE DB Command Output"
+                  synchronousInputId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Run Product Proc\OLE DB Command 1.Outputs[OLE DB Command Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Command Error Output"
+                  synchronousInputId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Command 1.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Run Product Proc\OLE DB Command 1.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Command 1.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Run Product Proc\OLE DB Command 1.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Run Product Proc\OLE DB Source"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
+              description="OLE DB Source"
+              name="OLE DB Source"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the name of the database object used to open a rowset."
+                  name="OpenRowset">[Staging].[VendorDeliveryMapped]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the variable that contains the name of the database object used to open a rowset."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor">SELECT * FROM  Staging.VendorDeliveryMapped</property>
+                <property
+                  dataType="System.String"
+                  description="The variable that contains the SQL command to be executed."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forces the use of the DefaultCodePage property value when describing character data."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the mode used to access the database."
+                  name="AccessMode"
+                  typeConverter="AccessMode">2</property>
+                <property
+                  dataType="System.String"
+                  description="The mappings between the parameters in the SQL command and variables."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Run Product Proc\OLE DB Source.Connections[OleDbConnection]"
+                  connectionManagerID="{453392D5-91D9-49E1-9CCC-A619C7E2ADA9}:external"
+                  connectionManagerRefId="Project.ConnectionManagers[LV4788.T21]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output]"
+                  name="OLE DB Source Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[rowID]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[rowID]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[rowID]"
+                      name="rowID"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_id]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_id]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_id]"
+                      name="Make_id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_id]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Product_Model_id]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_id]"
+                      name="Product_Model_id"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[File_Name]"
+                      dataType="nText"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[File_Name]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[File_Name]"
+                      name="File_Name"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Load_Date]"
+                      dataType="nText"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Load_Date]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Load_Date]"
+                      name="Load_Date"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Name]"
+                      dataType="nText"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_Name]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Name]"
+                      name="Make_Name"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Desc]"
+                      dataType="nText"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_Desc]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Desc]"
+                      name="Make_Desc"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Guid]"
+                      dataType="guid"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_Guid]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Make_Guid]"
+                      name="Make_Guid"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_Name]"
+                      dataType="nText"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Product_Model_Name]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Product_Model_Name]"
+                      name="Product_Model_Name"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Desc]"
+                      dataType="nText"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Desc]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Desc]"
+                      name="Model_Desc"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Guid]"
+                      dataType="guid"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Guid]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Guid]"
+                      name="Model_Guid"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Specifications_1]"
+                      dataType="nText"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Specifications_1]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Specifications_1]"
+                      name="Model_Specifications_1"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Specifications_2]"
+                      dataType="nText"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Specifications_2]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Model_Specifications_2]"
+                      name="Model_Specifications_2"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Quantity]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Quantity]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Quantity]"
+                      name="Quantity"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Unit_Price]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversion"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Unit_Price]"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].Columns[Unit_Price]"
+                      name="Unit_Price"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[rowID]"
+                      dataType="i4"
+                      name="rowID" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_id]"
+                      dataType="i4"
+                      name="Make_id" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Product_Model_id]"
+                      dataType="i4"
+                      name="Product_Model_id" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[File_Name]"
+                      dataType="nText"
+                      name="File_Name" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Load_Date]"
+                      dataType="nText"
+                      name="Load_Date" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_Name]"
+                      dataType="nText"
+                      name="Make_Name" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_Desc]"
+                      dataType="nText"
+                      name="Make_Desc" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Make_Guid]"
+                      dataType="guid"
+                      name="Make_Guid" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Product_Model_Name]"
+                      dataType="nText"
+                      name="Product_Model_Name" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Desc]"
+                      dataType="nText"
+                      name="Model_Desc" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Guid]"
+                      dataType="guid"
+                      name="Model_Guid" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Specifications_1]"
+                      dataType="nText"
+                      name="Model_Specifications_1" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Model_Specifications_2]"
+                      dataType="nText"
+                      name="Model_Specifications_2" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Quantity]"
+                      dataType="i4"
+                      name="Quantity" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Unit_Price]"
+                      dataType="i4"
+                      name="Unit_Price" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_1]"
+                      dataType="nText"
+                      name="Add_Field_1" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_2]"
+                      dataType="nText"
+                      name="Add_Field_2" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_3]"
+                      dataType="nText"
+                      name="Add_Field_3" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_4]"
+                      dataType="nText"
+                      name="Add_Field_4" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_5]"
+                      dataType="nText"
+                      name="Add_Field_5" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_6]"
+                      dataType="nText"
+                      name="Add_Field_6" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_7]"
+                      dataType="nText"
+                      name="Add_Field_7" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_8]"
+                      dataType="nText"
+                      name="Add_Field_8" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_9]"
+                      dataType="nText"
+                      name="Add_Field_9" />
+                    <externalMetadataColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output].ExternalColumns[Add_Field_10]"
+                      dataType="nText"
+                      name="Add_Field_10" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output]"
+                  isErrorOut="true"
+                  name="OLE DB Source Error Output">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[rowID]"
+                      dataType="i4"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[rowID]"
+                      name="rowID" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_id]"
+                      dataType="i4"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_id]"
+                      name="Make_id" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Product_Model_id]"
+                      dataType="i4"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Product_Model_id]"
+                      name="Product_Model_id" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[File_Name]"
+                      dataType="nText"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[File_Name]"
+                      name="File_Name" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Load_Date]"
+                      dataType="nText"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Load_Date]"
+                      name="Load_Date" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_Name]"
+                      dataType="nText"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_Name]"
+                      name="Make_Name" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_Desc]"
+                      dataType="nText"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_Desc]"
+                      name="Make_Desc" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_Guid]"
+                      dataType="guid"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Make_Guid]"
+                      name="Make_Guid" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Product_Model_Name]"
+                      dataType="nText"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Product_Model_Name]"
+                      name="Product_Model_Name" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Desc]"
+                      dataType="nText"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Desc]"
+                      name="Model_Desc" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Guid]"
+                      dataType="guid"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Guid]"
+                      name="Model_Guid" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Specifications_1]"
+                      dataType="nText"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Specifications_1]"
+                      name="Model_Specifications_1" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Specifications_2]"
+                      dataType="nText"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Model_Specifications_2]"
+                      name="Model_Specifications_2" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Quantity]"
+                      dataType="i4"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Quantity]"
+                      name="Quantity" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Unit_Price]"
+                      dataType="i4"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[Unit_Price]"
+                      name="Unit_Price" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Run Product Proc.Paths[Existing Products to update]"
+              endId="Package\Run Product Proc\OLE DB Command.Inputs[OLE DB Command Input]"
+              name="Existing Products to update"
+              startId="Package\Run Product Proc\Conditional Split.Outputs[Existing Products to update]" />
+            <path
+              refId="Package\Run Product Proc.Paths[New Products to create]"
+              endId="Package\Run Product Proc\OLE DB Command 1.Inputs[OLE DB Command Input]"
+              name="New Products to create"
+              startId="Package\Run Product Proc\Conditional Split.Outputs[New Products to create]" />
+            <path
+              refId="Package\Run Product Proc.Paths[OLE DB Source Output]"
+              endId="Package\Run Product Proc\Conditional Split.Inputs[Conditional Split Input]"
+              name="OLE DB Source Output"
+              startId="Package\Run Product Proc\OLE DB Source.Outputs[OLE DB Source Output]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
       DTS:refId="Package\StartOperation"
       DTS:CreationName="Microsoft.ExecuteSQLTask"
       DTS:Description="Execute SQL Task"
-      DTS:Disabled="True"
       DTS:DTSID="{57B8AAD3-093D-4926-93C0-678191B3A17D}"
       DTS:ExecutableType="Microsoft.ExecuteSQLTask"
       DTS:LocaleID="-1"
@@ -18857,11 +18570,11 @@ VALUES(
     <DTS:PrecedenceConstraint
       DTS:refId="Package.PrecedenceConstraints[Constraint 1]"
       DTS:CreationName=""
-      DTS:DTSID="{498CC252-5E20-4E5E-9982-F90680D7FE13}"
-      DTS:From="Package\Data Flow Task"
+      DTS:DTSID="{3E8BD771-9DCE-46A4-939B-446BB1BD5F11}"
+      DTS:From="Package\Run Product Proc"
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint 1"
-      DTS:To="Package\CompleteOperation" />
+      DTS:To="Package\BCP Update MappingFile" />
     <DTS:PrecedenceConstraint
       DTS:refId="Package.PrecedenceConstraints[Constraint 2]"
       DTS:CreationName=""
@@ -18879,13 +18592,21 @@ VALUES(
       DTS:ObjectName="Constraint 3"
       DTS:To="Package\Foreach Loop Container" />
     <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint 4]"
+      DTS:CreationName=""
+      DTS:DTSID="{DB3965D1-B319-4209-A9B2-F19B990B08C4}"
+      DTS:From="Package\BCP Update MappingFile"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint 4"
+      DTS:To="Package\CompleteOperation" />
+    <DTS:PrecedenceConstraint
       DTS:refId="Package.PrecedenceConstraints[Constraint 5]"
       DTS:CreationName=""
       DTS:DTSID="{B1C2C642-ACDC-42B2-BED7-CC048D307030}"
       DTS:From="Package\Mapping"
       DTS:LogicalAnd="True"
       DTS:ObjectName="Constraint 5"
-      DTS:To="Package\Data Flow Task" />
+      DTS:To="Package\Run Product Proc" />
   </DTS:PrecedenceConstraints>
   <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
 <!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
@@ -18902,11 +18623,11 @@ VALUES(
         <NodeLayout
           Size="168.8,41.6"
           Id="Package\CompleteOperation"
-          TopLeft="265.624989445011,297.700002365909" />
+          TopLeft="122.291661807232,479.700003812315" />
         <NodeLayout
-          Size="150.4,41.6"
-          Id="Package\Data Flow Task"
-          TopLeft="594.351828234432,419.970371781573" />
+          Size="160,41.6"
+          Id="Package\Run Product Proc"
+          TopLeft="592.685161633993,403.503704984041" />
         <NodeLayout
           Size="216.8,41.6"
           Id="Package\Foreach Loop Container\Load Vendor files into Staging"
@@ -18944,40 +18665,6 @@ VALUES(
                   Capacity="5">
                   <mssgle:LineSegment
                     End="0,18.9833350569665" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <EdgeLayout
-          Id="Package.PrecedenceConstraints[Constraint 1]"
-          TopLeft="645.818494901099,419.970371781573">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-295.793505456087,-80.6703694156643"
-              Start="0,0"
-              End="-295.793505456087,-73.1703694156643">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,-28.7776448362594" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,-28.7776448362594"
-                    Point2="0,-32.7776448362594"
-                    Point3="-4,-32.7776448362594" />
-                  <mssgle:LineSegment
-                    End="-291.793505456087,-32.7776448362594" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-291.793505456087,-32.7776448362594"
-                    Point2="-295.793505456087,-32.7776448362594"
-                    Point3="-295.793505456087,-36.7776448362594" />
-                  <mssgle:LineSegment
-                    End="-295.793505456087,-73.1703694156643" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -19044,18 +18731,18 @@ VALUES(
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 5]"
-          TopLeft="672.292568548374,366.600002582867">
+          TopLeft="673.859235248155,366.600002582867">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,53.3703691987056"
+              EndConnector="0,36.9037024011741"
               Start="0,0"
-              End="0,45.8703691987056">
+              End="0,29.4037024011741">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,45.8703691987056" />
+                    End="0,29.4037024011741" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -19067,33 +18754,88 @@ VALUES(
         <NodeLayout
           Size="163.2,41.6"
           Id="Package\Mapping _ backup"
-          TopLeft="78.3333302206463,297.800001591047" />
+          TopLeft="29.1666655076873,248.400001198451" />
+        <NodeLayout
+          Size="196,41.6"
+          Id="Package\BCP Update MappingFile"
+          TopLeft="570.833310650455,475.800003781319" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 1]"
+          TopLeft="670.759236142224,445.103704984041">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,30.6962987972775"
+              Start="0,0"
+              End="0,23.1962987972775">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,23.1962987972775" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint 4]"
+          TopLeft="570.833310650455,498.550003796817">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-279.741648843223,0"
+              Start="0,0"
+              End="-272.241648843223,0">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="-272.241648843223,0" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <AnnotationLayout
+          Text="s"
+          ParentId="Package"
+          FontInfo="{assembly:Null}"
+          Size="33.6,60"
+          Id="6febb98e-de6f-4153-bf30-1399ff14d7c4"
+          TopLeft="154.999993840854,34.6666669421726" />
       </GraphLayout>
     </LayoutInfo>
   </Package>
   <TaskHost
-    design-time-name="Package\Data Flow Task">
+    design-time-name="Package\Run Product Proc">
     <LayoutInfo>
       <GraphLayout
         Capacity="8" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
           Size="176,41.6"
-          Id="Package\Data Flow Task\OLE DB Command 1"
+          Id="Package\Run Product Proc\OLE DB Command 1"
           TopLeft="243,231.6" />
         <NodeLayout
           Size="152,41.6"
-          Id="Package\Data Flow Task\OLE DB Source"
+          Id="Package\Run Product Proc\OLE DB Source"
           TopLeft="405,24" />
         <NodeLayout
           Size="153.6,41.6"
-          Id="Package\Data Flow Task\Conditional Split"
+          Id="Package\Run Product Proc\Conditional Split"
           TopLeft="407,107" />
         <NodeLayout
           Size="167.2,41.6"
-          Id="Package\Data Flow Task\OLE DB Command"
+          Id="Package\Run Product Proc\OLE DB Command"
           TopLeft="524,229" />
         <EdgeLayout
-          Id="Package\Data Flow Task.Paths[OLE DB Source Output]"
+          Id="Package\Run Product Proc.Paths[OLE DB Source Output]"
           TopLeft="482.4,65.6">
           <EdgeLayout.Curve>
             <mssgle:Curve
@@ -19115,7 +18857,7 @@ VALUES(
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
-          Id="Package\Data Flow Task.Paths[New Products to create]"
+          Id="Package\Run Product Proc.Paths[New Products to create]"
           TopLeft="459.533333333333,148.6">
           <EdgeLayout.Curve>
             <mssgle:Curve
@@ -19151,7 +18893,7 @@ VALUES(
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
-          Id="Package\Data Flow Task.Paths[Existing Products to update]"
+          Id="Package\Run Product Proc.Paths[Existing Products to update]"
           TopLeft="508.066666666667,148.6">
           <EdgeLayout.Curve>
             <mssgle:Curve
@@ -19190,7 +18932,7 @@ VALUES(
     </LayoutInfo>
   </TaskHost>
   <PipelineComponentMetadata
-    design-time-name="Package\Data Flow Task\OLE DB Source">
+    design-time-name="Package\Run Product Proc\OLE DB Source">
     <Properties>
       <Property>
         <Name>DataSourceViewID</Name>

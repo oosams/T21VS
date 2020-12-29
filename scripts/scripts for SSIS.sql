@@ -1,49 +1,57 @@
-USE MASTER
-GO
-USE T21
-GO
- 
-----------bcp
 
-sp_configure 'show advanced options', '1';
-RECONFIGURE;
-GO
-sp_configure 'xp_cmdshell', '1';
-RECONFIGURE;
-GO
------table for testing bcp-----------
-DROP TABLE IF EXISTS   [Shop].[Products11] 
-SELECT * INTO [Shop].[Products11]
-FROM [Shop].[Products]
-DELETE [Shop].[Products11]
+-----------run proc from SSIS----------------------------
+
+EXEC Shop.sp_UpdateProduct   
+	 @ProductID = ?		-- INT
+	,@UnitPrice =  ? -- MONEY, NULL
+	,@Quantity =   ? -- INT, NULL
 
 
-DECLARE @EXE NVARCHAR(255) = 'call "C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\BCP.EXE" '
-DECLARE @Tableout NVARCHAR(255) = '"[T21].[Shop].[Products]"'
-DECLARE @Tablein NVARCHAR(255) = '"[T21].[Shop].[Products11]"'
-DECLARE @File NVARCHAR(255) = ' d:\work\21\bcp\Products.csv '
+----------------------------------------------------
+
+DECLARE @ProductID int = ?
+DECLARE @CategoryID int = ? 
+DECLARE @CategoryName NVARCHAR(255) =  ?	 
+DECLARE @CategoryDescription NVARCHAR(255) =  ?	 
+DECLARE @ProductName NVARCHAR(255) = ?    
+DECLARE @UnitPrice MONEY =  ?   
+DECLARE @Quantity INT =   ?   
+DECLARE @ProductDescription NVARCHAR(MAX) = ?
+DECLARE @CategoryGUID uniqueidentifier = ?
+DECLARE @ProductGUID uniqueidentifier = ?
 
 
 
- 
--- out
-	DECLARE @bcp_cmd NVARCHAR(2000) = @EXE + @Tableout + ' out ' + @File + ' -c -t "," -r "\n" -T -S LV4788 -U SOFTSERVE\osams'
-	EXEC master..xp_cmdSHELL @bcp_cmd
+EXEC @ProductID = Shop.sp_CreateProduct   
+	 @CategoryID = @CategoryID  OUTPUT	-- INT, NULL
+	,@CategoryName =  @CategoryName	 -- NVARCHAR(255), NULL
+	,@CategoryDescription =  @CategoryDescription	 -- NVARCHAR(MAX), NULL
+	,@ProductName = @ProductName   -- NVARCHAR(255)
+	,@UnitPrice =  @UnitPrice  -- MONEY
+	,@Quantity =   @Quantity  -- INT
+	--,@IsActive = 1   -- INT, 1
+	,@Description = @ProductDescription
 
--- in
-	SET @bcp_cmd = 'BCP ' + @Tablein + ' in ' + @File   + ' -c -t "," -r "\n" -T -S LV4788 -U SOFTSERVE\osams'
-	EXEC master..xp_cmdSHELL @bcp_cmd
+INSERT INTO Staging.VendorDeliveryNewMapping(
+	 Make_id
+	,Make_Name
+--	,Make_Desc
+	,Make_Guid
+	,Product_Model_id
+	,Product_Model_Name
+--	,Model_Desc
+	,Model_Guid)
+VALUES(
+	  @CategoryID
+	 ,@CategoryName
+--	 ,@CategoryDescription
+	 ,@CategoryGUID
+	 ,@ProductID
+	 ,@ProductName
+--	 ,@ProductDescription
+	 ,@ProductGUID)
 
 
-DROP TABLE IF EXISTS   [Shop].[Products11] ;
-GO
-sp_configure 'xp_cmdshell', '0';
-RECONFIGURE;
-GO		
-sp_configure 'show advanced options', '0';
-RECONFIGURE;
-GO
-		
 -----VENDOR MAPPING FILE------
 
 --SELECT * FROM  Staging.VendorDeliveryNewMapping 
@@ -112,5 +120,3 @@ SELECT
 FROM [T21].[Staging].[VendorDeliveryNewMapping]"'
 
  
-
-

@@ -114,11 +114,11 @@ DROP TABLE IF EXISTS Staging.VendorDeliveryNewMapping
 CREATE TABLE Staging.VendorDeliveryNewMapping(
 	 Make_id				INT
 	,Make_Name				NVARCHAR(MAX)	 
-	,Make_Desc				NVARCHAR(MAX)
+	--,Make_Desc				NVARCHAR(MAX)
 	,Make_Guid				uniqueidentifier
 	,Product_Model_id		INT			
 	,Product_Model_Name		NVARCHAR(MAX)			
-	,Model_Desc				NVARCHAR(MAX)
+	--,Model_Desc				NVARCHAR(MAX)
 	,Model_Guid				uniqueidentifier 
 )
 GO
