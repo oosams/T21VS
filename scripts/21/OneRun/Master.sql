@@ -1,6 +1,8 @@
 USE MASTER
 GO
 
+
+
 --:setvar path "D:\_Work\GitHub\T21VS\scripts\21\OneRun"
 :setvar path "c:\Users\osams\source\repos\T21\scripts\21\OneRun"
 
@@ -122,4 +124,56 @@ CREATE TABLE Staging.VendorDeliveryNewMapping(
 	,Model_Guid				uniqueidentifier 
 )
 GO
+ 
+
+-----For Excel Dynamic Input
+DROP TABLE IF EXISTS Staging.ExcelTest
+CREATE TABLE Staging.ExcelTest(
+	 Col1				NVARCHAR(MAX)
+	,Col2				NVARCHAR(MAX)	 
+	,Col3				NVARCHAR(MAX)
+	,Col4				NVARCHAR(MAX)
+	,Col5				NVARCHAR(MAX)
+	,Col6				NVARCHAR(MAX)
+	,Col7				NVARCHAR(MAX)
+	,Col8				NVARCHAR(MAX)
+	,Col9				NVARCHAR(MAX)
+	,Col10				NVARCHAR(MAX)
+	,Col11				NVARCHAR(MAX)
+	,Col12				NVARCHAR(MAX)	 
+	,Col13				NVARCHAR(MAX)
+	,Col14				NVARCHAR(MAX)
+	,Col15				NVARCHAR(MAX)
+	,Col16				NVARCHAR(MAX)
+	,Col17				NVARCHAR(MAX)
+	,Col18				NVARCHAR(MAX)
+	,Col19				NVARCHAR(MAX)
+	,Col20				NVARCHAR(MAX)
+	,Col21				NVARCHAR(MAX)
+	,Col22				NVARCHAR(MAX)	 
+	,Col23				NVARCHAR(MAX)
+	,Col24				NVARCHAR(MAX)
+	,Col25				NVARCHAR(MAX)
+	,Col26				NVARCHAR(MAX)
+	,Col27				NVARCHAR(MAX)
+	,Col28				NVARCHAR(MAX)
+	,Col29				NVARCHAR(MAX)
+	,Col30				NVARCHAR(MAX)
+)
+GO
+
+ -----For Excel Dynamic Input
+DROP TABLE IF EXISTS Staging.ExcelColumns
+CREATE TABLE Staging.ExcelColumns(
+	 Make_name					NVARCHAR(MAX)
+	,Make_guid					uniqueidentifier
+	,Product_Model_Name			NVARCHAR(MAX)
+	,Model_guid					uniqueidentifier
+	,Model_Specifications_1		NVARCHAR(MAX)		
+	,Model_Specifications_2		NVARCHAR(MAX)	
+	,Quantity					INT		
+	,Unit_Price					INT	
+)
+GO
+
  

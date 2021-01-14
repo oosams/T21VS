@@ -1,0 +1,28 @@
+﻿CREATE TABLE [Staging].[VendorDeliveryMapped] (
+    [rowID]                  INT              IDENTITY (1, 1) NOT NULL,
+    [Make_id]                INT              NULL,
+    [Product_Model_id]       INT              NULL,
+    [File_Name]              NVARCHAR (MAX)   NULL,
+    [Load_Date]              NVARCHAR (MAX)   NULL,
+    [Make_Name]              NVARCHAR (MAX)   NULL,
+    [Make_Desc]              NVARCHAR (MAX)   NULL,
+    [Make_Guid]              UNIQUEIDENTIFIER NULL,
+    [Product_Model_Name]     NVARCHAR (MAX)   NULL,
+    [Model_Desc]             NVARCHAR (MAX)   NULL,
+    [Model_Guid]             UNIQUEIDENTIFIER NULL,
+    [Model_Specifications_1] NVARCHAR (MAX)   NULL,
+    [Model_Specifications_2] NVARCHAR (MAX)   NULL,
+    [Quantity]               INT              NULL,
+    [Unit_Price]             INT              NULL,
+    [Add_Field_1]            NVARCHAR (MAX)   NULL,
+    [Add_Field_2]            NVARCHAR (MAX)   NULL,
+    [Add_Field_3]            NVARCHAR (MAX)   NULL,
+    [Add_Field_4]            NVARCHAR (MAX)   NULL,
+    [Add_Field_5]            NVARCHAR (MAX)   NULL,
+    [Add_Field_6]            NVARCHAR (MAX)   NULL,
+    [Add_Field_7]            NVARCHAR (MAX)   NULL,
+    [Add_Field_8]            NVARCHAR (MAX)   NULL,
+    [Add_Field_9]            NVARCHAR (MAX)   NULL,
+    [Add_Field_10]           NVARCHAR (MAX)   NULL
+);
+
