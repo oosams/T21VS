@@ -169,13 +169,13 @@ GO
 DROP TABLE IF EXISTS Staging.ExcelColumns
 CREATE TABLE Staging.ExcelColumns(
 	 Make_name					NVARCHAR(MAX)
-	,Make_guid					uniqueidentifier
+	,Make_guid					NVARCHAR(MAX)
 	,Product_Model_Name			NVARCHAR(MAX)
-	,Model_guid					uniqueidentifier
+	,Model_guid					NVARCHAR(MAX)
 	,Model_Specifications_1		NVARCHAR(MAX)		
 	,Model_Specifications_2		NVARCHAR(MAX)	
-	,Quantity					INT		
-	,Unit_Price					INT	
+	,Quantity					NVARCHAR(MAX)		
+	,Unit_Price					NVARCHAR(MAX)
 )
 GO
 

@@ -15,7 +15,6 @@ using System.Windows.Forms;
 using System.IO;
 using System.Data.OleDb;
 using System.Data.SqlClient;
-using System.Diagnostics;
 #endregion
 
 namespace ST_88386af6377947708c61e5210634026a
@@ -115,7 +114,7 @@ namespace ST_88386af6377947708c61e5210634026a
                 HDR = "NO";
                 ConStr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + fileFullPath + ";Extended Properties=\"Excel 12.0;HDR=" + HDR + ";IMEX=1\"";
                 OleDbConnection cnn = new OleDbConnection(ConStr);
-
+				 
 
 
                 //Get Sheet Name
@@ -136,82 +135,73 @@ namespace ST_88386af6377947708c61e5210634026a
                 DataTable dt = new DataTable();
                 adp.Fill(dt);
                 cnn.Close();
-
-                /////////////////////////////////////////
-                // TODO edit datatable or create new one.
-
-                DataTable clearData = new DataTable();
-                clearData.Columns.Add("Make_name");
-                clearData.Columns.Add("Make_guid");
-                clearData.Columns.Add("Product_Model_Name");
-                clearData.Columns.Add("Model_guid");
-                clearData.Columns.Add("Model_Specifications_1");
-                clearData.Columns.Add("Model_Specifications_2");
-                clearData.Columns.Add("Quantity");
-                clearData.Columns.Add("Unit_Price");
-                DataRow row;
-
-                int i = 0; //row in sourse dt
-                int j = 1; //column in sourse dt
-                int jj; //to keep column index from sourse dt
-                int r = 0; //row in target dt
-                int c = 0; //row in target dt
-                int cc; //to keep column index from target dt
-
-                Debug.WriteLine(dt.Rows[i][0]);
-                Debug.WriteLine(dt.Rows[10][0]);
-                Debug.WriteLine(dt.Rows[10][2]);
-
-                // find dataset start cell
-                while (dt.Rows[i][0] != DBNull.Value )
-                {
-                    i++;
-                }
-                i++;
-                while (dt.Rows[i][0] != DBNull.Value)
-                {
-                    i++;
-                }
-                i++;
-                while (dt.Rows[i][j] != DBNull.Value)
-                {
-                    j++;
-                }
-                j++;
-                i++;
-
-                // copy needed dataset to datatable
-                while (dt.Rows[i][j] != DBNull.Value)
-                {
-                    jj = j;
-                    cc = c;
-                    for (c = 0; c < clearData.Columns.Count; c++)
-                    {
-                        
-                        row = clearData.NewRow();
-                        clearData.Rows.Add(row);
-                        clearData.Rows[r][c] = dt.Rows[i][j];
+				
+				/////////////////////////////////////////
+				// TODO edit datatable or create new one.
+				
+				DataTable clearData = new DataTable();			
+				clearData.Columns.Add("Make_name");
+				clearData.Columns.Add("Make_guid");
+				clearData.Columns.Add("Product_Model_Name");
+				clearData.Columns.Add("Model_guid");
+				clearData.Columns.Add("Model_Specifications_1");
+				clearData.Columns.Add("Model_Specifications_2");
+				clearData.Columns.Add("Quantity");
+				clearData.Columns.Add("Unit_Price");
+				
+				int i = 0; //row in sourse dt
+				int j = 1; //column in sourse dt
+				int jj; //to keep column index from sourse dt
+				int r = 0; //row in target dt
+				int c = 0; //row in target dt
+				
+				MessageBox.Show(dt.Rows[0].Field<string>(0));
+				
+				// find dataset start cell
+				while (dt.Rows[i][0] != null) 
+				{
+					i++;
+				}
+				i++;
+				while (dt.Rows[i][0] != null) 
+				{
+					i++;
+				}				
+				i++;
+				while (dt.Rows[i][j] != null) 
+				{
+					j++;
+				}
+				j++;
+				i++;
+				
+				// copy needed dataset to datatable
+				while (dt.Rows[i][j] != null) 
+				{
+					jj = j;
+					for (c = 0; c < clearData.Columns.Count ; c++)
+					{ 
+						clearData.Rows[r][c] = dt.Rows[i][j];
                         jj++;
-                        cc++;
-                    }
-                    i++;
-                    r++;
-                }
-
-
-
-
-
+					}						
+					i++;
+					r++;
+				}				
+				
+				 
+				
+ 
+							
 
                 //Use the ADO.NET connection and Load the data from DataTable to SQL Table
                 SqlConnection myADONETConnection = new SqlConnection();
                 myADONETConnection = (SqlConnection)(Dts.Connections["T21"].AcquireConnection(Dts.Transaction) as SqlConnection);
-
-                //MessageBox.Show(myADONETConnection.ConnectionString, "ADO.NET Connection");
+				
+				//MessageBox.Show(myADONETConnection.ConnectionString, "ADO.NET Connection");
                 using (SqlBulkCopy BC = new SqlBulkCopy(myADONETConnection))
                 {
                     BC.DestinationTableName = TableName;
-                    //use when you will have appropriate column names
+					//use when you will have appropriate column names
                     //foreach (var column in dt.Columns)
                     //    BC.ColumnMappings.Add(column.ToString(), column.ToString());
                     BC.WriteToServer(clearData);
